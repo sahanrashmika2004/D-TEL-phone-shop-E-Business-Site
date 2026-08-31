@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>D-TEL | Premium Mobile & Accessories Hub</title>
-  <meta name="description" content="D-TEL - Shop genuine smartphones, fast chargers, back covers, tempered glass, and audio gear in Sri Lanka.">
-  
+  <meta name="description"
+    content="D-TEL - Shop genuine smartphones, fast chargers, back covers, tempered glass, and audio gear in Sri Lanka.">
+
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
-  
+
   <!-- Custom CSS for Dropdown Menu on Hover -->
   <style>
     /* Sub Nav Container Layout */
@@ -74,25 +76,30 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- TOP HEADER BAR (D-TEL Brand Logo) -->
   <header class="header-sticky">
     <div class="nav-container">
-      
+
       <!-- Store Logo: D-TEL Cellular -->
       <a href="index.html" class="brand-logo" id="brandLogoLink">
         <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
         <div>
-          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
-          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+          <span
+            style="font-size:2.1rem; font-weight:900; color:#ffffff; line-height:1; display:block; letter-spacing:0.5px;">D-<span
+              class="accent">TEL</span></span>
+          <span
+            style="font-size:0.85rem; font-weight:800; color:#fb7185; letter-spacing:2px; display:block; margin-top:3px;">CELLULAR</span>
         </div>
       </a>
 
       <!-- Search Bar -->
       <div class="search-bar-wrap">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..." aria-label="Search Products">
+        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..."
+          aria-label="Search Products">
       </div>
 
       <!-- Header Actions -->
@@ -182,15 +189,16 @@
   </header>
 
   <!-- HERO BANNER SECTION (5s Smooth Background Slideshow) -->
-  <section class="hero-section" style="max-width:1280px; margin:1.5rem auto; padding:0 1.5rem;">
+  <section class="hero-section" style="max-width:1680px; margin:1.5rem auto; padding:0 2rem;">
     <div class="hero-banner">
-      
+
       <!-- Background Image Slideshow Layer -->
       <div class="hero-slideshow">
         <div class="hero-slide-bg active" style="background-image: url('images/hero_slide_1.jpg');"></div>
         <div class="hero-slide-bg" style="background-image: url('images/hero_slide_2.jpg');"></div>
         <div class="hero-slide-bg" style="background-image: url('images/hero_slide_3.jpg');"></div>
         <div class="hero-slide-bg" style="background-image: url('images/hero_slide_4.jpg');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_5.jpg');"></div>
         <div class="hero-slide-overlay"></div>
       </div>
 
@@ -203,95 +211,109 @@
           Discover Premium Mobile Accessories & Tech Gear
         </h1>
         <p class="hero-desc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem;">
-          Explore original 20W fast chargers, protective armor cases, 9H privacy tempered glass, and high-performance power banks with islandwide delivery.
+          Explore original 20W fast chargers, protective armor cases, 9H privacy tempered glass, and high-performance
+          power banks with islandwide delivery.
         </p>
         <div style="display:flex; gap:1rem; flex-wrap:wrap;">
           <a href="shop.html" class="btn-primary" style="padding: 0.85rem 1.75rem; font-size: 1rem;">
             <i class="fas fa-shopping-bag"></i> Shop Catalog Now
           </a>
-          <a href="product-detail.html?id=prod_003" class="icon-btn" style="padding: 0.85rem 1.5rem; font-size: 1rem;">
-            <i class="fas fa-info-circle"></i> Featured Charger 20W
+          <a href="#mainCategories" class="icon-btn" style="padding: 0.85rem 1.5rem; font-size: 1rem;">
+            <i class="fas fa-th-large"></i> View Categories
           </a>
         </div>
       </div>
 
       <!-- Slide Dots Navigation -->
       <div class="hero-slide-dots">
-        <div class="hero-dot active" onclick="switchHeroSlide(0)"></div>
-        <div class="hero-dot" onclick="switchHeroSlide(1)"></div>
-        <div class="hero-dot" onclick="switchHeroSlide(2)"></div>
-        <div class="hero-dot" onclick="switchHeroSlide(3)"></div>
+        <div class="hero-dot active" onclick="selectHeroSlide(0)" title="Slide 1"></div>
+        <div class="hero-dot" onclick="selectHeroSlide(1)" title="Slide 2"></div>
+        <div class="hero-dot" onclick="selectHeroSlide(2)" title="Slide 3"></div>
+        <div class="hero-dot" onclick="selectHeroSlide(3)" title="Slide 4"></div>
+        <div class="hero-dot" onclick="selectHeroSlide(4)" title="Slide 5"></div>
       </div>
 
     </div>
   </section>
 
   <!-- SECTION 1: NEW ARRIVALS (Latest Products) -->
-  <section style="max-width:1280px; margin:3rem auto; padding:0 1.5rem;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
-      <div>
-        <h2 style="font-size:1.5rem; color:#ffffff;"><i class="fas fa-sparkles" style="color:var(--accent-cyan);"></i> NEW ARRIVALS (Latest Products)</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">Freshly stocked Apple, Samsung, Anker & Baseus devices</p>
+  <section class="section-container">
+    <div style="display:flex; align-items:center; text-align:center; margin-bottom:1.5rem;">
+      <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
+      <div style="padding:0 1.5rem;">
+        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-sparkles" style="color:var(--accent-cyan);"></i> NEW ARRIVALS (Latest Products)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Freshly stocked Apple, Samsung, Anker & Baseus devices</p>
+        <a href="shop.html" style="color:var(--accent-cyan); font-weight:600; font-size:0.85rem; display:inline-block; margin-top:0.4rem;">View All <i class="fas fa-arrow-right"></i></a>
       </div>
-      <a href="shop.html" style="color:var(--accent-cyan); font-weight:600; font-size:0.9rem;">View All <i class="fas fa-arrow-right"></i></a>
+      <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
     </div>
 
     <!-- Product Grid -->
-    <div class="products-grid" id="newArrivalsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1.5rem;">
+    <div class="products-grid" id="newArrivalsGrid">
       <!-- Populated by JavaScript -->
     </div>
   </section>
 
   <!-- SECTION 2: SPECIAL OFFERS & PROMOTIONS (Limited Time) -->
-  <section class="special-offers-section">
-    <div class="special-offers-header">
-      <div>
-        <h2><i class="fas fa-tag"></i> SPECIAL OFFERS & PROMOTIONS (Limited Time)</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem;">Exclusive limited time discounts with instant delivery</p>
+  <section class="special-offers-section section-container">
+    <div style="display:flex; align-items:center; text-align:center; margin-bottom:1.5rem;">
+      <div style="flex:1; border-bottom:1px solid rgba(244, 63, 94, 0.3);"></div>
+      <div style="padding:0 1.5rem;">
+        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-tag" style="color:var(--accent-rose);"></i> SPECIAL OFFERS & PROMOTIONS</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Exclusive limited time discounts with instant delivery</p>
+        <span style="display:inline-block; margin-top:0.5rem; background:rgba(244, 63, 94, 0.2); color:#fb7185; border:1px solid #fb7185; padding:0.25rem 0.75rem; border-radius:var(--radius-full); font-size:0.75rem; font-weight:700;">
+          <i class="fas fa-clock"></i> Limited Stock
+        </span>
       </div>
-      <span style="background:rgba(244, 63, 94, 0.2); color:#fb7185; border:1px solid #fb7185; padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.8rem; font-weight:700;">
-        <i class="fas fa-clock"></i> Limited Stock
-      </span>
+      <div style="flex:1; border-bottom:1px solid rgba(244, 63, 94, 0.3);"></div>
     </div>
 
     <!-- Offers Grid -->
-    <div class="products-grid" id="specialOffersGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1.5rem;">
+    <div class="products-grid" id="specialOffersGrid">
       <!-- Populated by JavaScript -->
     </div>
   </section>
 
   <!-- SECTION 3: EXPLORE POPULAR CATEGORIES -->
-  <section style="max-width:1280px; margin:3rem auto; padding:0 1.5rem;">
-    <div style="text-align:center; margin-bottom:2rem;">
-      <h2 style="font-size:1.6rem;"><i class="fas fa-th-large" style="color:var(--accent-blue);"></i> EXPLORE POPULAR CATEGORIES</h2>
-      <p style="color:var(--text-muted); font-size:0.9rem;">Quickly filter by target device type & category</p>
+  <section id="mainCategories" class="section-container" style="scroll-margin-top:100px;">
+    <div style="display:flex; align-items:center; text-align:center; margin-bottom:2rem;">
+      <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
+      <div style="padding:0 1.5rem;">
+        <h2 style="font-size:1.6rem; margin:0;"><i class="fas fa-th-large" style="color:var(--accent-blue);"></i> EXPLORE POPULAR CATEGORIES</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Quickly filter by target device type & category</p>
+      </div>
+      <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
     </div>
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1.5rem;">
-      
+
       <!-- Category 1: Smartphones -->
-      <a href="shop.html?category=Smartphones" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+      <a href="shop.html?category=Smartphones" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
         <i class="fas fa-mobile-alt" style="font-size:3rem; color:var(--accent-cyan); margin-bottom:1rem;"></i>
         <h3 style="font-size:1.2rem; color:#ffffff;">Smartphones</h3>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Apple, Samsung, Xiaomi</p>
       </a>
 
       <!-- Category 2: Fast Chargers -->
-      <a href="shop.html?category=Chargers" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+      <a href="shop.html?category=Chargers" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
         <i class="fas fa-bolt" style="font-size:3rem; color:var(--accent-amber); margin-bottom:1rem;"></i>
         <h3 style="font-size:1.2rem; color:#ffffff;">Fast Chargers</h3>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Anker, Baseus 20W & GaN</p>
       </a>
 
       <!-- Category 3: Wireless Earbuds -->
-      <a href="shop.html?category=Audio" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+      <a href="shop.html?category=Audio" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
         <i class="fas fa-headphones-alt" style="font-size:3rem; color:var(--accent-blue); margin-bottom:1rem;"></i>
         <h3 style="font-size:1.2rem; color:#ffffff;">Wireless Earbuds</h3>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">AirPods, JBL & Anker Sound</p>
       </a>
 
       <!-- Category 4: Screen Protectors -->
-      <a href="shop.html?category=Covers" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+      <a href="shop.html?category=Covers" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
         <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--accent-green); margin-bottom:1rem;"></i>
         <h3 style="font-size:1.2rem; color:#ffffff;">Screen Protectors</h3>
         <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">ESR 9H Privacy & Tempered Glass</p>
@@ -306,25 +328,32 @@
       <div class="trust-item"><i class="fas fa-truck-fast"></i> Islandwide Fast Delivery</div>
       <div class="trust-item"><i class="fas fa-award"></i> Genuine Warranty</div>
       <div class="trust-item"><i class="fas fa-shield-check"></i> Secure Cash on Delivery</div>
+      <div class="trust-item"><i class="fas fa-credit-card"></i> Secure Payments </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-container" style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
-      
+    <div class="footer-container"
+      style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+
       <!-- Col 1: D-TEL Address & Contacts -->
       <div class="footer-col">
         <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
           <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
           <div>
-            <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
-            <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+            <span style="font-size:1.8rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span
+                class="accent">TEL</span></span>
+            <span
+              style="font-size:0.75rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
           </div>
         </a>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Main Street, Colombo / Matara, Sri Lanka</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 077 123 4567</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: info@dtel.lk</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
+            style="color:#ef4444;"></i> 2nd Road,Piliyandala.</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
+            style="color:var(--accent-cyan);"></i> Phone: 0701948371</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
+            style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
         <div style="display:flex; gap:0.75rem; margin-top:1rem;">
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
@@ -336,10 +365,14 @@
       <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
         <ul style="list-style:none; padding:0; line-height:2;">
-          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a></li>
-          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases & Glass</a></li>
-          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast Chargers</a></li>
-          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a></li>
+          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a>
+          </li>
+          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases &
+              Glass</a></li>
+          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast
+              Chargers</a></li>
+          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a>
+          </li>
         </ul>
       </div>
 
@@ -357,15 +390,20 @@
       <!-- Col 4: Newsletter Sign Up -->
       <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
-        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
-        <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');" style="display:flex; flex-direction:column; gap:0.6rem;">
-          <input type="email" placeholder="enter email..." required style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
-          <button type="submit" class="btn-primary" style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates &
+          discounts</p>
+        <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');"
+          style="display:flex; flex-direction:column; gap:0.6rem;">
+          <input type="email" placeholder="enter email..." required
+            style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
+          <button type="submit" class="btn-primary"
+            style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
             SUBMIT
           </button>
         </form>
         <div style="margin-top:1rem; text-align:right;">
-          <span style="display:inline-block; background:var(--accent-blue); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:var(--radius-sm);">
+          <span
+            style="display:inline-block; background:var(--accent-blue); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:var(--radius-sm);">
             TOP WEB 2026
           </span>
         </div>
@@ -373,9 +411,11 @@
 
     </div>
 
-    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+    <div
+      style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
       <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
-      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
+      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a>
+      </div>
     </div>
   </footer>
 
@@ -391,13 +431,18 @@
       const slides = document.querySelectorAll('.hero-slide-bg');
       const dots = document.querySelectorAll('.hero-dot');
       if (!slides.length) return;
-      
+
       slides.forEach(s => s.classList.remove('active'));
       dots.forEach(d => d.classList.remove('active'));
-      
+
       currentSlideIdx = (idx + slides.length) % slides.length;
       slides[currentSlideIdx].classList.add('active');
       if (dots[currentSlideIdx]) dots[currentSlideIdx].classList.add('active');
+    }
+
+    function selectHeroSlide(idx) {
+      switchHeroSlide(idx);
+      startAutoSlideshow();
     }
 
     function startAutoSlideshow() {
@@ -407,17 +452,17 @@
       }, 5000);
     }
 
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
       startAutoSlideshow();
 
       // Render New Arrivals (4 items)
       const newArrivalsGrid = document.getElementById('newArrivalsGrid');
       if (newArrivalsGrid) {
-        const products = await StorageDB.getProducts(); // Database එකෙන් ගන්න (await)
-        newArrivalsGrid.innerHTML = products.slice(0, 4).map(p => `
+        const products = StorageDB.getProducts().slice(0, 4);
+        newArrivalsGrid.innerHTML = products.map(p => `
           <div class="product-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
             <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
-              <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;" onerror="this.src='images/cat-chargers.svg'">
+              <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;">
               <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
               <div style="color:var(--accent-cyan); font-size:1.1rem; font-weight:700; margin-bottom:0.75rem;">
                 Rs. ${p.price.toLocaleString()}
@@ -430,31 +475,31 @@
         `).join('');
       }
 
-      // Render Special Offers (Products with oldPrice)
+      // Render Special Offers
       const specialOffersGrid = document.getElementById('specialOffersGrid');
       if (specialOffersGrid) {
-        const products = await StorageDB.getProducts(); // Database එකෙන් ගන්න (await)
-        const offers = products.filter(p => p.oldPrice).slice(0, 4); // Discount ඇති ඒවා පෙන්වන්න
-        specialOffersGrid.innerHTML = offers.length > 0 ? offers.map(p => `
+        const offers = StorageDB.getProducts().slice(2, 6);
+        specialOffersGrid.innerHTML = offers.map(p => `
           <div class="product-card" style="background:var(--bg-primary); border:1px solid rgba(244, 63, 94, 0.3); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
             <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
               <div style="position:relative;">
                 <span style="position:absolute; top:0; left:0; background:var(--accent-rose); color:#fff; font-size:0.7rem; font-weight:800; padding:0.25rem 0.5rem; border-radius:4px;">OFFER</span>
-                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;" onerror="this.src='images/cat-chargers.svg'">
+                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;">
               </div>
               <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
               <div style="display:flex; justify-content:center; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
                 <span style="color:#fb7185; font-size:1.1rem; font-weight:700;">Rs. ${p.price.toLocaleString()}</span>
-                <span style="color:var(--text-dim); text-decoration:line-through; font-size:0.85rem;">Rs. ${p.oldPrice.toLocaleString()}</span>
+                <span style="color:var(--text-dim); text-decoration:line-through; font-size:0.85rem;">Rs. ${(p.oldPrice || p.price * 1.15).toLocaleString()}</span>
               </div>
             </a>
             <button class="btn-whatsapp" onclick="window.location.href='product-detail.html?id=${p.id}'" style="width:100%; padding:0.6rem; background:#fb7185; border:none; color:#ffffff;">
               <i class="fas fa-bolt"></i> Buy Now
             </button>
           </div>
-        `).join('') : '<p style="color:var(--text-muted); text-align:center;">No special offers available right now.</p>';
+        `).join('');
       }
     });
   </script>
 </body>
+
 </html>

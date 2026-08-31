@@ -1,18 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>D-TEL | Admin Control Dashboard</title>
-
+  
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+  
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
-
 <body style="background:var(--bg-primary);">
 
   <div class="admin-layout">
@@ -43,12 +41,10 @@
 
     <!-- ADMIN MAIN CONTENT -->
     <main class="admin-main">
-      <div
-        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
         <div>
           <h1>Store Control Dashboard</h1>
-          <p style="color:var(--text-muted); font-size:0.9rem;">ICT2142 E-Business Systems - Inventory & Order
-            Operations Panel</p>
+          <p style="color:var(--text-muted); font-size:0.9rem;">ICT2142 E-Business Systems - Inventory & Order Operations Panel</p>
         </div>
         <button class="btn-primary" onclick="window.openAddProductModal()">
           <i class="fas fa-plus-circle"></i> Add New Product
@@ -66,8 +62,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(59, 130, 246, 0.15); color:var(--accent-blue);"><i
-              class="fas fa-shopping-cart"></i></div>
+          <div class="stat-icon" style="background:rgba(59, 130, 246, 0.15); color:var(--accent-blue);"><i class="fas fa-shopping-cart"></i></div>
           <div>
             <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Orders</div>
             <div class="stat-number" id="statOrders">0</div>
@@ -75,8 +70,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--accent-green);"><i
-              class="fas fa-mobile-alt"></i></div>
+          <div class="stat-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--accent-green);"><i class="fas fa-mobile-alt"></i></div>
           <div>
             <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Active Listings</div>
             <div class="stat-number" id="statProducts">0</div>
@@ -84,8 +78,7 @@
         </div>
 
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(244, 63, 94, 0.15); color:var(--accent-rose);"><i
-              class="fas fa-exclamation-triangle"></i></div>
+          <div class="stat-icon" style="background:rgba(244, 63, 94, 0.15); color:var(--accent-rose);"><i class="fas fa-exclamation-triangle"></i></div>
           <div>
             <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Out of Stock Alerts</div>
             <div class="stat-number" id="statOutOfStock">0</div>
@@ -97,8 +90,7 @@
       <div id="productsSection" style="margin-bottom:3rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
           <h2>Product Inventory Management</h2>
-          <button class="btn-secondary" onclick="window.openAddProductModal()"><i class="fas fa-plus"></i> Add
-            Item</button>
+          <button class="btn-secondary" onclick="window.openAddProductModal()"><i class="fas fa-plus"></i> Add Item</button>
         </div>
 
         <div class="table-responsive">
@@ -157,5 +149,4 @@
   <script src="js/data.js"></script>
   <script src="js/admin.js"></script>
 </body>
-
 </html>
