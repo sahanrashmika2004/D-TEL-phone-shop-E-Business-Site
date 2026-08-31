@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-TEL | Admin Control Dashboard</title>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body style="background:var(--bg-primary);">
+
+  <div class="admin-layout">
+    <!-- ADMIN SIDEBAR -->
+    <aside class="admin-sidebar">
+      <a href="index.html" class="brand-logo" style="margin-bottom:2rem;">
+        <div class="logo-icon-box">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <span>D-<span class="accent">TEL</span></span>
+      </a>
+
+      <div class="admin-nav">
+        <a href="admin.html" class="admin-nav-item active">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#productsSection" class="admin-nav-item">
+          <i class="fas fa-boxes"></i> Inventory Catalog
+        </a>
+        <a href="#ordersSection" class="admin-nav-item">
+          <i class="fas fa-shopping-bag"></i> Customer Orders
+        </a>
+        <a href="index.html" class="admin-nav-item" style="margin-top:auto; color:var(--accent-cyan);">
+          <i class="fas fa-store"></i> View Live Store
+        </a>
+      </div>
+    </aside>
+
+    <!-- ADMIN MAIN CONTENT -->
+    <main class="admin-main">
+      <div
+        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1>Store Control Dashboard</h1>
+          <p style="color:var(--text-muted); font-size:0.9rem;">ICT2142 E-Business Systems - Inventory & Order
+            Operations Panel</p>
+        </div>
+        <button class="btn-primary" onclick="window.openAddProductModal()">
+          <i class="fas fa-plus-circle"></i> Add New Product
+        </button>
+      </div>
+
+      <!-- KPI STATS CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Sales Revenue</div>
+            <div class="stat-number" id="statRevenue">LKR 0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(59, 130, 246, 0.15); color:var(--accent-blue);"><i
+              class="fas fa-shopping-cart"></i></div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Total Orders</div>
+            <div class="stat-number" id="statOrders">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--accent-green);"><i
+              class="fas fa-mobile-alt"></i></div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Active Listings</div>
+            <div class="stat-number" id="statProducts">0</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(244, 63, 94, 0.15); color:var(--accent-rose);"><i
+              class="fas fa-exclamation-triangle"></i></div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); text-transform:uppercase;">Out of Stock Alerts</div>
+            <div class="stat-number" id="statOutOfStock">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCT INVENTORY MANAGEMENT TABLE -->
+      <div id="productsSection" style="margin-bottom:3rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <h2>Product Inventory Management</h2>
+          <button class="btn-secondary" onclick="window.openAddProductModal()"><i class="fas fa-plus"></i> Add
+            Item</button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Product Details</th>
+                <th>Connector / Specs</th>
+                <th>Price</th>
+                <th>Stock Status</th>
+                <th>Management Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminProductsTable">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CUSTOMER ORDERS TABLE -->
+      <div id="ordersSection">
+        <div style="margin-bottom:1rem;">
+          <h2>Incoming Customer Orders (COD & WhatsApp)</h2>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Customer & Address</th>
+                <th>Items Ordered</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status Control</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersTable">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ADD / EDIT PRODUCT MODAL -->
+  <div class="modal-overlay" id="productModalOverlay">
+    <div class="modal-card"></div>
+  </div>
+
+  <!-- Core Data & Admin Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
+</html>

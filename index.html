@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-TEL | Premium Mobile & Accessories Hub</title>
+  <meta name="description" content="D-TEL - Shop genuine smartphones, fast chargers, back covers, tempered glass, and audio gear in Sri Lanka.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+  
+  <!-- Custom CSS for Dropdown Menu on Hover -->
+  <style>
+    /* Sub Nav Container Layout */
+    .sub-nav-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    /* Dropdown Item Wrapper */
+    .nav-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    /* Dropdown Menu Box */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      background-color: var(--bg-secondary, #121826);
+      border: 1px solid var(--border-color, #1e293b);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      padding: 0.5rem 0;
+      z-index: 1000;
+    }
+
+    /* Show Dropdown Menu on Hover */
+    .nav-dropdown:hover .dropdown-menu {
+      display: block;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    /* Dropdown Item Links */
+    .dropdown-menu a {
+      color: var(--text-muted, #94a3b8);
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--accent-cyan, #38bdf8);
+      padding-left: 1.5rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HEADER BAR (D-TEL Brand Logo) -->
+  <header class="header-sticky">
+    <div class="nav-container">
+      
+      <!-- Store Logo: D-TEL Cellular -->
+      <a href="index.html" class="brand-logo" id="brandLogoLink">
+        <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+        <div>
+          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..." aria-label="Search Products">
+      </div>
+
+      <!-- Header Actions -->
+      <div class="nav-actions">
+        <a href="shop.html" class="icon-btn" title="Shop Catalog">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+
+        <button class="icon-btn wishlist-trigger" title="Wishlist">
+          <i class="far fa-heart"></i>
+          <span>Wishlist</span>
+          <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+        </button>
+
+        <a href="checkout.html" class="icon-btn cart-trigger" title="Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        </a>
+
+        <a href="admin.html" class="icon-btn" title="Sign In / Admin Portal">
+          <i class="fas fa-user-circle"></i>
+          <span>Sign In</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION LINKS BAR WITH HOVER DROPDOWN -->
+    <nav class="sub-nav-bar">
+      <div class="sub-nav-container">
+        <a href="index.html" class="sub-nav-link active">NEW ARRIVALS</a>
+
+        <!-- Dropdown 1: PHONE CASES -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Covers" class="sub-nav-link">
+            PHONE CASES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Covers&brand=iPhone"><i class="fab fa-apple"></i> iPhone Covers</a>
+            <a href="shop.html?category=Covers&brand=Samsung"><i class="fas fa-mobile"></i> Samsung Cases</a>
+            <a href="shop.html?category=Covers&sub=Glass"><i class="fas fa-shield-alt"></i> Tempered Glass</a>
+            <a href="shop.html?category=Covers&sub=Privacy"><i class="fas fa-user-shield"></i> Privacy Glass</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: CHARGERS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Chargers" class="sub-nav-link">
+            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
+            <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: AUDIO -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Audio" class="sub-nav-link">
+            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: POWER BANKS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Power" class="sub-nav-link">
+            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
+            <a href="shop.html?category=Power&sub=20000mAh"><i class="fas fa-battery-full"></i> 20000 mAh & Above</a>
+            <a href="shop.html?category=Power&sub=Wireless"><i class="fas fa-rss"></i> MagSafe Power Banks</a>
+          </div>
+        </div>
+
+        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
+        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO BANNER SECTION (5s Smooth Background Slideshow) -->
+  <section class="hero-section" style="max-width:1280px; margin:1.5rem auto; padding:0 1.5rem;">
+    <div class="hero-banner">
+      
+      <!-- Background Image Slideshow Layer -->
+      <div class="hero-slideshow">
+        <div class="hero-slide-bg active" style="background-image: url('images/hero_slide_1.jpg');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_2.jpg');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_3.jpg');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_4.jpg');"></div>
+        <div class="hero-slide-overlay"></div>
+      </div>
+
+      <!-- Hero Text Content -->
+      <div class="hero-content">
+        <span class="hero-tag">
+          <i class="fas fa-bolt"></i> D-TEL EXCLUSIVE MOBILE STORE
+        </span>
+        <h1 class="hero-title" style="font-size: 2.75rem; line-height: 1.15; margin-bottom: 1rem; color: #ffffff;">
+          Discover Premium Mobile Accessories & Tech Gear
+        </h1>
+        <p class="hero-desc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem;">
+          Explore original 20W fast chargers, protective armor cases, 9H privacy tempered glass, and high-performance power banks with islandwide delivery.
+        </p>
+        <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+          <a href="shop.html" class="btn-primary" style="padding: 0.85rem 1.75rem; font-size: 1rem;">
+            <i class="fas fa-shopping-bag"></i> Shop Catalog Now
+          </a>
+          <a href="product-detail.html?id=prod_003" class="icon-btn" style="padding: 0.85rem 1.5rem; font-size: 1rem;">
+            <i class="fas fa-info-circle"></i> Featured Charger 20W
+          </a>
+        </div>
+      </div>
+
+      <!-- Slide Dots Navigation -->
+      <div class="hero-slide-dots">
+        <div class="hero-dot active" onclick="switchHeroSlide(0)"></div>
+        <div class="hero-dot" onclick="switchHeroSlide(1)"></div>
+        <div class="hero-dot" onclick="switchHeroSlide(2)"></div>
+        <div class="hero-dot" onclick="switchHeroSlide(3)"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 1: NEW ARRIVALS (Latest Products) -->
+  <section style="max-width:1280px; margin:3rem auto; padding:0 1.5rem;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+      <div>
+        <h2 style="font-size:1.5rem; color:#ffffff;"><i class="fas fa-sparkles" style="color:var(--accent-cyan);"></i> NEW ARRIVALS (Latest Products)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Freshly stocked Apple, Samsung, Anker & Baseus devices</p>
+      </div>
+      <a href="shop.html" style="color:var(--accent-cyan); font-weight:600; font-size:0.9rem;">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="newArrivalsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1.5rem;">
+      <!-- Populated by JavaScript -->
+    </div>
+  </section>
+
+  <!-- SECTION 2: SPECIAL OFFERS & PROMOTIONS (Limited Time) -->
+  <section class="special-offers-section">
+    <div class="special-offers-header">
+      <div>
+        <h2><i class="fas fa-tag"></i> SPECIAL OFFERS & PROMOTIONS (Limited Time)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem;">Exclusive limited time discounts with instant delivery</p>
+      </div>
+      <span style="background:rgba(244, 63, 94, 0.2); color:#fb7185; border:1px solid #fb7185; padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.8rem; font-weight:700;">
+        <i class="fas fa-clock"></i> Limited Stock
+      </span>
+    </div>
+
+    <!-- Offers Grid -->
+    <div class="products-grid" id="specialOffersGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:1.5rem;">
+      <!-- Populated by JavaScript -->
+    </div>
+  </section>
+
+  <!-- SECTION 3: EXPLORE POPULAR CATEGORIES -->
+  <section style="max-width:1280px; margin:3rem auto; padding:0 1.5rem;">
+    <div style="text-align:center; margin-bottom:2rem;">
+      <h2 style="font-size:1.6rem;"><i class="fas fa-th-large" style="color:var(--accent-blue);"></i> EXPLORE POPULAR CATEGORIES</h2>
+      <p style="color:var(--text-muted); font-size:0.9rem;">Quickly filter by target device type & category</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1.5rem;">
+      
+      <!-- Category 1: Smartphones -->
+      <a href="shop.html?category=Smartphones" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+        <i class="fas fa-mobile-alt" style="font-size:3rem; color:var(--accent-cyan); margin-bottom:1rem;"></i>
+        <h3 style="font-size:1.2rem; color:#ffffff;">Smartphones</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Apple, Samsung, Xiaomi</p>
+      </a>
+
+      <!-- Category 2: Fast Chargers -->
+      <a href="shop.html?category=Chargers" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+        <i class="fas fa-bolt" style="font-size:3rem; color:var(--accent-amber); margin-bottom:1rem;"></i>
+        <h3 style="font-size:1.2rem; color:#ffffff;">Fast Chargers</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Anker, Baseus 20W & GaN</p>
+      </a>
+
+      <!-- Category 3: Wireless Earbuds -->
+      <a href="shop.html?category=Audio" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+        <i class="fas fa-headphones-alt" style="font-size:3rem; color:var(--accent-blue); margin-bottom:1rem;"></i>
+        <h3 style="font-size:1.2rem; color:#ffffff;">Wireless Earbuds</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">AirPods, JBL & Anker Sound</p>
+      </a>
+
+      <!-- Category 4: Screen Protectors -->
+      <a href="shop.html?category=Covers" class="category-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
+        <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--accent-green); margin-bottom:1rem;"></i>
+        <h3 style="font-size:1.2rem; color:#ffffff;">Screen Protectors</h3>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">ESR 9H Privacy & Tempered Glass</p>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-container">
+      <div class="trust-item"><i class="fas fa-truck-fast"></i> Islandwide Fast Delivery</div>
+      <div class="trust-item"><i class="fas fa-award"></i> Genuine Warranty</div>
+      <div class="trust-item"><i class="fas fa-shield-check"></i> Secure Cash on Delivery</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container" style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      
+      <!-- Col 1: D-TEL Address & Contacts -->
+      <div class="footer-col">
+        <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
+          <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+          <div>
+            <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+            <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+          </div>
+        </a>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Main Street, Colombo / Matara, Sri Lanka</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 077 123 4567</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: info@dtel.lk</p>
+        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <!-- Col 2: Shop By -->
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a></li>
+          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases & Glass</a></li>
+          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast Chargers</a></li>
+          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Information -->
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Information</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• About D-TEL</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Contact Us</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Return Policy</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Newsletter Sign Up -->
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
+        <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');" style="display:flex; flex-direction:column; gap:0.6rem;">
+          <input type="email" placeholder="enter email..." required style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
+          <button type="submit" class="btn-primary" style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
+            SUBMIT
+          </button>
+        </form>
+        <div style="margin-top:1rem; text-align:right;">
+          <span style="display:inline-block; background:var(--accent-blue); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:var(--radius-sm);">
+            TOP WEB 2026
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+      <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
+      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
+    </div>
+  </footer>
+
+  <!-- CORE SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let currentSlideIdx = 0;
+    let slideTimer = null;
+
+    function switchHeroSlide(idx) {
+      const slides = document.querySelectorAll('.hero-slide-bg');
+      const dots = document.querySelectorAll('.hero-dot');
+      if (!slides.length) return;
+      
+      slides.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      
+      currentSlideIdx = (idx + slides.length) % slides.length;
+      slides[currentSlideIdx].classList.add('active');
+      if (dots[currentSlideIdx]) dots[currentSlideIdx].classList.add('active');
+    }
+
+    function startAutoSlideshow() {
+      if (slideTimer) clearInterval(slideTimer);
+      slideTimer = setInterval(() => {
+        switchHeroSlide(currentSlideIdx + 1);
+      }, 5000);
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      startAutoSlideshow();
+
+      // Render New Arrivals (4 items)
+      const newArrivalsGrid = document.getElementById('newArrivalsGrid');
+      if (newArrivalsGrid) {
+        const products = await StorageDB.getProducts(); // Database එකෙන් ගන්න (await)
+        newArrivalsGrid.innerHTML = products.slice(0, 4).map(p => `
+          <div class="product-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
+            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
+              <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;" onerror="this.src='images/cat-chargers.svg'">
+              <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
+              <div style="color:var(--accent-cyan); font-size:1.1rem; font-weight:700; margin-bottom:0.75rem;">
+                Rs. ${p.price.toLocaleString()}
+              </div>
+            </a>
+            <button class="btn-primary" onclick="StorageDB.addToCart('${p.id}'); window.updateHeaderCounters(); alert('Item added to cart!');" style="width:100%; padding:0.6rem;">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        `).join('');
+      }
+
+      // Render Special Offers (Products with oldPrice)
+      const specialOffersGrid = document.getElementById('specialOffersGrid');
+      if (specialOffersGrid) {
+        const products = await StorageDB.getProducts(); // Database එකෙන් ගන්න (await)
+        const offers = products.filter(p => p.oldPrice).slice(0, 4); // Discount ඇති ඒවා පෙන්වන්න
+        specialOffersGrid.innerHTML = offers.length > 0 ? offers.map(p => `
+          <div class="product-card" style="background:var(--bg-primary); border:1px solid rgba(244, 63, 94, 0.3); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
+            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
+              <div style="position:relative;">
+                <span style="position:absolute; top:0; left:0; background:var(--accent-rose); color:#fff; font-size:0.7rem; font-weight:800; padding:0.25rem 0.5rem; border-radius:4px;">OFFER</span>
+                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;" onerror="this.src='images/cat-chargers.svg'">
+              </div>
+              <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
+              <div style="display:flex; justify-content:center; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
+                <span style="color:#fb7185; font-size:1.1rem; font-weight:700;">Rs. ${p.price.toLocaleString()}</span>
+                <span style="color:var(--text-dim); text-decoration:line-through; font-size:0.85rem;">Rs. ${p.oldPrice.toLocaleString()}</span>
+              </div>
+            </a>
+            <button class="btn-whatsapp" onclick="window.location.href='product-detail.html?id=${p.id}'" style="width:100%; padding:0.6rem; background:#fb7185; border:none; color:#ffffff;">
+              <i class="fas fa-bolt"></i> Buy Now
+            </button>
+          </div>
+        `).join('') : '<p style="color:var(--text-muted); text-align:center;">No special offers available right now.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

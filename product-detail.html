@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-TEL | Universal Fast Charger 20W</title>
+  <meta name="description" content="View technical specifications and buy original Universal Fast Charger 20W with 6 months D-TEL warranty.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- HEADER NAVBAR (D-TEL Brand Logo) -->
+  <header class="header-sticky">
+    <div class="nav-container">
+      
+      <!-- Store Logo: D-TEL Cellular -->
+      <a href="index.html" class="brand-logo">
+        <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+        <div>
+          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search product name, brand..." aria-label="Search Products">
+      </div>
+
+      <!-- Header Actions -->
+      <div class="nav-actions">
+        <a href="shop.html" class="icon-btn" title="Shop Catalog">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+
+        <button class="icon-btn wishlist-trigger" title="Wishlist">
+          <i class="far fa-heart"></i>
+          <span>Wishlist</span>
+          <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+        </button>
+
+        <a href="checkout.html" class="icon-btn cart-trigger" title="Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        </a>
+
+        <a href="admin.html" class="icon-btn" title="Sign In / Admin Portal">
+          <i class="fas fa-user-circle"></i>
+          <span>Sign In</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION LINKS BAR -->
+    <nav class="sub-nav-bar">
+      <div class="sub-nav-container">
+        <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
+        <a href="shop.html?category=Covers" class="sub-nav-link">PHONE CASES</a>
+        <a href="shop.html?category=Chargers" class="sub-nav-link active">CHARGERS</a>
+        <a href="shop.html?category=Audio" class="sub-nav-link">AUDIO</a>
+        <a href="shop.html?category=Power" class="sub-nav-link">POWER BANKS</a>
+        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
+        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- PRODUCT DETAIL MAIN CONTAINER -->
+  <main class="pdp-container">
+    
+    <!-- Breadcrumb Path -->
+    <nav class="breadcrumb-bar" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <i class="fas fa-chevron-right" style="font-size:0.7rem; color:var(--text-dim);"></i>
+      <a href="shop.html" id="pdpCategoryBreadcrumb">Chargers</a>
+      <i class="fas fa-chevron-right" style="font-size:0.7rem; color:var(--text-dim);"></i>
+      <a href="shop.html?category=Chargers" id="pdpSubCatBreadcrumb">Fast Chargers</a>
+      <i class="fas fa-chevron-right" style="font-size:0.7rem; color:var(--text-dim);"></i>
+      <span id="pdpTitleBreadcrumb" style="color:#ffffff; font-weight:600;">Universal Fast Charger 20W</span>
+    </nav>
+
+    <!-- 2-Column Product Showcase Grid -->
+    <div class="pdp-grid">
+      
+      <!-- Left Column: Main High-Res Image + 3 Thumbnails -->
+      <div>
+        <div class="pdp-gallery-main">
+          <img id="pdpMainImage" src="images/anker_charger.png" alt="Universal Fast Charger 20W" onerror="this.src='images/cat-chargers.svg'">
+          <div style="position:absolute; bottom:10px; right:15px; background:rgba(0,0,0,0.6); color:var(--text-muted); font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:4px;">
+            MAIN HIGH-RES IMAGE
+          </div>
+        </div>
+
+        <!-- 3 Thumbnails Gallery View 1, View 2, View 3 -->
+        <div class="pdp-thumbs">
+          <div class="thumb-card active" onclick="switchMainImage(this, 'images/anker_charger.png')">
+            <img src="images/anker_charger.png" alt="View 1" style="height:50px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+            <div>View 1</div>
+          </div>
+          <div class="thumb-card" onclick="switchMainImage(this, 'images/cat-chargers.svg')">
+            <img src="images/cat-chargers.svg" alt="View 2" style="height:50px; object-fit:contain;">
+            <div>View 2</div>
+          </div>
+          <div class="thumb-card" onclick="switchMainImage(this, 'images/hero_banner.jpg')">
+            <img src="images/hero_banner.jpg" alt="View 3" style="height:50px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+            <div>View 3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Details, Highlights Box, Qty, Add to Cart & Buy Now -->
+      <div>
+        <h1 id="pdpTitle" style="font-size:2.25rem; font-weight:800; color:var(--accent-blue); margin-bottom:0.75rem; line-height:1.2;">
+          Universal Fast Charger 20W
+        </h1>
+
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">
+          <span>Brand: <strong id="pdpBrand" style="color:#ffffff;">Anker</strong></span>
+          <span>|</span>
+          <span>Model: <strong id="pdpModel" style="color:#ffffff;">FC-20W</strong></span>
+          <span>|</span>
+          <span style="color:var(--accent-amber);"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <strong style="color:#ffffff;">(24 Reviews)</strong></span>
+        </div>
+
+        <!-- Pricing Display -->
+        <div style="display:flex; align-items:baseline; gap:1.25rem; margin-bottom:1.5rem;">
+          <div id="pdpPrice" style="font-size:2rem; font-weight:800; color:var(--accent-rose);">
+            Rs. 4,800.00
+          </div>
+          <div id="pdpOldPrice" style="font-size:1.1rem; color:var(--text-dim); text-decoration:line-through;">
+            Rs. 5,500.00
+          </div>
+        </div>
+
+        <!-- Green Highlighted Stock & Warranty Box -->
+        <div class="pdp-highlights-box">
+          <div><i class="fas fa-check-circle" style="color:var(--accent-green);"></i> In Stock (Ready to Ship from D-TEL)</div>
+          <div><i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i> 6 Months Company Warranty Included</div>
+          <div><i class="fas fa-truck-fast" style="color:var(--accent-blue);"></i> Fast Express Delivery Available</div>
+        </div>
+
+        <!-- Quantity Controls + CTA Buttons -->
+        <div style="display:flex; items-center; gap:1.25rem; flex-wrap:wrap; margin-top:2rem;">
+          
+          <!-- Qty Selector -->
+          <div style="display:flex; flex-direction:column; gap:0.35rem;">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Qty:</label>
+            <div class="qty-counter">
+              <button onclick="adjustPdpQty(-1)">-</button>
+              <input type="number" id="pdpQtyInput" value="1" min="1" max="50">
+              <button onclick="adjustPdpQty(1)">+</button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="flex:1; display:flex; gap:1rem; align-items:flex-end;">
+            <button class="btn-primary" id="pdpAddToCartBtn" style="flex:1; padding:0.85rem; background:var(--accent-blue); border:none; font-size:0.95rem;">
+              <i class="fas fa-cart-plus"></i> ADD TO CART
+            </button>
+
+            <button class="btn-whatsapp" id="pdpBuyNowBtn" style="flex:1; padding:0.85rem; background:var(--accent-green); border:none; color:#ffffff; font-size:0.95rem;">
+              <i class="fas fa-bolt"></i> BUY NOW
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TECHNICAL SPECIFICATIONS CARD -->
+    <section class="pdp-specs-box">
+      <h3 style="font-size:1.15rem; text-transform:uppercase; letter-spacing:0.5px; color:#ffffff; border-bottom:1px solid var(--border-color); padding-bottom:0.75rem; margin-bottom:1rem;">
+        TECHNICAL SPECIFICATIONS
+      </h3>
+      <div id="pdpSpecsText" style="color:var(--text-muted); font-size:0.95rem; line-height:1.8;">
+        Input: 100-240V ~ 0.6A | Output: 5V=3A / 9V=2.22A | Port Type: USB-C Power Delivery
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container" style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      
+      <div class="footer-col">
+        <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
+          <div class="logo-icon-box">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <span>D-<span class="accent">TEL</span></span>
+        </a>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Main Street, Colombo / Matara, Sri Lanka</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 077 123 4567</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: info@dtel.lk</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a></li>
+          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases & Glass</a></li>
+          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast Chargers</a></li>
+          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Information</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• About D-TEL</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Contact Us</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Return Policy</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
+        <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');" style="display:flex; flex-direction:column; gap:0.6rem;">
+          <input type="email" placeholder="enter email..." required style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
+          <button type="submit" class="btn-primary" style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
+            SUBMIT
+          </button>
+        </form>
+        <div style="margin-top:1rem; text-align:right;">
+          <span style="display:inline-block; background:var(--accent-blue); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:var(--radius-sm);">
+            TOP WEB 2026
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+      <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
+      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
+    </div>
+  </footer>
+
+  <!-- CORE SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let currentPdpProduct = null;
+
+    function switchMainImage(thumbEl, src) {
+      document.querySelectorAll('.thumb-card').forEach(t => t.classList.remove('active'));
+      thumbEl.classList.add('active');
+      const img = document.getElementById('pdpMainImage');
+      if (img) img.src = src;
+    }
+
+    function adjustPdpQty(delta) {
+      const input = document.getElementById('pdpQtyInput');
+      if (input) {
+        let val = parseInt(input.value) || 1;
+        val += delta;
+        if (val < 1) val = 1;
+        input.value = val;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const prodId = params.get('id') || "prod_003";
+      const products = StorageDB.getProducts();
+      currentPdpProduct = products.find(p => p.id === prodId) || products[2] || products[0];
+
+      if (currentPdpProduct) {
+        document.title = "D-TEL | " + currentPdpProduct.name;
+        document.getElementById('pdpTitleBreadcrumb').textContent = currentPdpProduct.name;
+        document.getElementById('pdpCategoryBreadcrumb').textContent = currentPdpProduct.category;
+        document.getElementById('pdpSubCatBreadcrumb').textContent = currentPdpProduct.category + " Accessories";
+
+        document.getElementById('pdpMainImage').src = currentPdpProduct.image;
+        document.getElementById('pdpTitle').textContent = currentPdpProduct.name;
+        document.getElementById('pdpBrand').textContent = currentPdpProduct.brand;
+        document.getElementById('pdpModel').textContent = currentPdpProduct.model || "FC-20W";
+        document.getElementById('pdpPrice').textContent = "Rs. " + currentPdpProduct.price.toLocaleString() + ".00";
+        document.getElementById('pdpOldPrice').textContent = "Rs. " + ((currentPdpProduct.oldPrice || currentPdpProduct.price * 1.15)).toLocaleString() + ".00";
+        document.getElementById('pdpSpecsText').textContent = currentPdpProduct.specs || "Input: 100-240V ~ 0.6A | Output: 5V=3A / 9V=2.22A | Port Type: USB-C Power Delivery";
+
+        document.getElementById('pdpAddToCartBtn').onclick = () => {
+          const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
+          for(let i=0; i<qty; i++) StorageDB.addToCart(currentPdpProduct.id);
+          window.updateHeaderCounters();
+          alert(`${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
+        };
+
+        document.getElementById('pdpBuyNowBtn').onclick = () => {
+          const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
+          for(let i=0; i<qty; i++) StorageDB.addToCart(currentPdpProduct.id);
+          window.location.href = 'checkout.html';
+        };
+      }
+    });
+  </script>
+</body>
+</html>

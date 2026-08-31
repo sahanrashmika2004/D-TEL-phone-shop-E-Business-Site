@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-TEL | Checkout & Payment</title>
+  <meta name="description" content="Complete your mobile accessories order with Cash on Delivery, Online Payment or Bank Transfer at D-TEL.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- HEADER NAVBAR (D-TEL Brand Logo) -->
+  <header class="header-sticky">
+    <div class="nav-container">
+      
+      <!-- Store Logo: D-TEL Cellular -->
+      <a href="index.html" class="brand-logo">
+        <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+        <div>
+          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrap">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search Products">
+      </div>
+
+      <!-- Header Actions -->
+      <div class="nav-actions">
+        <a href="shop.html" class="icon-btn" title="Shop Catalog">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+
+        <button class="icon-btn wishlist-trigger" title="Wishlist">
+          <i class="far fa-heart"></i>
+          <span>Wishlist</span>
+          <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+        </button>
+
+        <a href="checkout.html" class="icon-btn active cart-trigger" title="Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        </a>
+
+        <a href="admin.html" class="icon-btn" title="Sign In / Admin Portal">
+          <i class="fas fa-user-circle"></i>
+          <span>Sign In</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- NAVIGATION LINKS BAR -->
+    <nav class="sub-nav-bar">
+      <div class="sub-nav-container">
+        <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
+        <a href="shop.html?category=Covers" class="sub-nav-link">PHONE CASES</a>
+        <a href="shop.html?category=Chargers" class="sub-nav-link">CHARGERS</a>
+        <a href="shop.html?category=Audio" class="sub-nav-link">AUDIO</a>
+        <a href="shop.html?category=Power" class="sub-nav-link">POWER BANKS</a>
+        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
+        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- STEP NAVIGATION BAR -->
+  <div class="checkout-stepper">
+    <div class="stepper-step active" id="step1">
+      <i class="fas fa-shopping-cart"></i> 1. Cart Summary
+    </div>
+    <span class="stepper-arrow">--------></span>
+    <div class="stepper-step active" id="step2">
+      <i class="fas fa-map-marker-alt"></i> 2. Shipping Address
+    </div>
+    <span class="stepper-arrow">--------></span>
+    <div class="stepper-step active" id="step3">
+      <i class="fas fa-credit-card"></i> 3. Payment & Confirm
+    </div>
+  </div>
+
+  <!-- MAIN CHECKOUT CONTAINER -->
+  <main style="max-width:1280px; margin:0 auto 4rem; padding:0 1.5rem; display:grid; grid-template-columns:1fr 420px; gap:2rem;">
+    
+    <!-- LEFT COLUMN: Cart Items & Delivery Information Form -->
+    <div>
+      
+      <!-- 1. YOUR CART ITEMS Container -->
+      <section style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.75rem; margin-bottom:2rem;">
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:1.25rem; display:flex; justify-content:space-between; align-items:center;">
+          <span><i class="fas fa-list" style="color:var(--accent-cyan);"></i> YOUR CART ITEMS (<span id="checkoutCartCount">2</span>)</span>
+          <a href="shop.html" style="font-size:0.85rem; color:var(--accent-cyan);">+ Add More Items</a>
+        </h3>
+
+        <!-- Cart Items List Container -->
+        <div id="checkoutCartList" style="display:flex; flex-direction:column; gap:1rem;">
+          <!-- Dynamically Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- 2. DELIVERY INFORMATION Container -->
+      <section style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.75rem;">
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:1.25rem;">
+          <i class="fas fa-truck-ramp-box" style="color:var(--accent-blue);"></i> DELIVERY INFORMATION
+        </h3>
+
+        <form id="checkoutDeliveryForm" style="display:flex; flex-direction:column; gap:1.25rem;">
+          
+          <div>
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">Full Name:</label>
+            <input type="text" id="custName" placeholder="Customer Name" required style="background:var(--bg-primary);">
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div>
+              <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">Phone:</label>
+              <input type="tel" id="custPhone" placeholder="07X-XXXXXXX" required style="background:var(--bg-primary);">
+            </div>
+            <div>
+              <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">District:</label>
+              <select id="custDistrict" required style="background:var(--bg-primary);">
+                <option value="Colombo">Colombo</option>
+                <option value="Matara">Matara</option>
+                <option value="Galle">Galle</option>
+                <option value="Kandy">Kandy</option>
+                <option value="Gampaha">Gampaha</option>
+                <option value="Kalutara">Kalutara</option>
+                <option value="Kurunegala">Kurunegala</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">Delivery Address:</label>
+            <input type="text" id="custAddress" placeholder="Street Address" required style="background:var(--bg-primary);">
+          </div>
+
+          <div>
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.35rem;">City:</label>
+            <input type="text" id="custCity" placeholder="City" required style="background:var(--bg-primary);">
+          </div>
+
+          <!-- Promo Code Input -->
+          <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; margin-top:0.5rem;">
+            <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted); display:block; margin-bottom:0.5rem;">Promo Code:</label>
+            <div style="display:flex; gap:0.75rem;">
+              <input type="text" id="promoInput" placeholder="PROMO2026" value="PROMO2026" style="flex:1; text-transform:uppercase; letter-spacing:1px; font-weight:700; color:var(--accent-cyan);">
+              <button type="button" onclick="applyPromoCode()" class="btn-primary" style="padding:0.6rem 1.25rem; font-size:0.88rem;">
+                Apply
+              </button>
+            </div>
+            <div id="promoMessage" style="font-size:0.8rem; margin-top:0.35rem; color:var(--accent-green);">
+              Promo PROMO2026 applied! (Rs. 400 Discount)
+            </div>
+          </div>
+
+        </form>
+      </section>
+
+    </div>
+
+    <!-- RIGHT COLUMN: Order Summary Card & Payment Options -->
+    <div>
+      
+      <!-- ORDER SUMMARY BOX -->
+      <div class="order-summary-box">
+        
+        <div class="order-summary-title">
+          ORDER SUMMARY
+        </div>
+
+        <div class="summary-row">
+          <span>Items Subtotal:</span>
+          <span id="subtotalVal" style="font-weight:700; color:#ffffff;">Rs. 6,400.00</span>
+        </div>
+
+        <div class="summary-row discount">
+          <span>Discount:</span>
+          <span id="discountVal" style="font-weight:700;">-Rs. 400.00</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Delivery Fee:</span>
+          <span id="deliveryVal" style="font-weight:700; color:#ffffff;">Rs. 350.00</span>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total Amount:</span>
+          <span id="totalAmountVal" style="color:var(--accent-green);">Rs. 6,350.00</span>
+        </div>
+
+        <!-- PAYMENT OPTIONS CARD -->
+        <div class="payment-box">
+          <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;">
+            Payment Options:
+          </div>
+
+          <label class="payment-option-label">
+            <input type="radio" name="paymentOption" value="COD" checked>
+            <div>
+              <div style="font-weight:700; color:#ffffff;">(o) Cash on Delivery (COD)</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Pay cash upon doorstep courier arrival</div>
+            </div>
+          </label>
+
+          <label class="payment-option-label">
+            <input type="radio" name="paymentOption" value="Card">
+            <div>
+              <div style="font-weight:700; color:#ffffff;">( ) Online Card Payment</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Visa / Mastercard instant online debit</div>
+            </div>
+          </label>
+
+          <label class="payment-option-label">
+            <input type="radio" name="paymentOption" value="Bank">
+            <div>
+              <div style="font-weight:700; color:#ffffff;">( ) Bank Transfer</div>
+              <div style="font-size:0.75rem; color:var(--text-muted);">Direct deposit slip upload verification</div>
+            </div>
+          </label>
+        </div>
+
+        <!-- GREEN PLACE ORDER NOW BUTTON -->
+        <button type="button" onclick="submitFinalOrder()" class="btn-whatsapp" style="width:100%; padding:1rem; font-size:1.1rem; background:#16a34a; color:#ffffff; font-weight:800; letter-spacing:0.5px; border:none; box-shadow:0 4px 15px rgba(22, 163, 74, 0.4);">
+          <i class="fas fa-lock"></i> PLACE ORDER NOW
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- SUCCESSFUL ORDER MODAL OVERLAY -->
+  <div class="modal-overlay" id="orderSuccessModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:999; justify-content:center; align-items:center;">
+    <div style="background:var(--bg-secondary); border:1px solid var(--accent-green); border-radius:var(--radius-lg); padding:2.5rem; max-width:500px; width:90%; text-align:center;">
+      <i class="fas fa-check-circle" style="font-size:4rem; color:var(--accent-green); margin-bottom:1rem;"></i>
+      <h2 style="font-size:1.75rem; color:#ffffff; margin-bottom:0.5rem;">Order Placed Successfully!</h2>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;" id="orderModalDesc">
+        Your order reference has been registered with D-TEL Store.
+      </p>
+      <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <button class="btn-whatsapp" id="sendOrderWhatsAppBtn" style="width:100%; padding:0.85rem; font-size:1rem; background:#25D366; color:#ffffff;">
+          <i class="fab fa-whatsapp"></i> Send Order Receipt via WhatsApp
+        </button>
+        <button class="btn-primary" onclick="window.location.href='index.html'" style="width:100%; padding:0.85rem; font-size:1rem;">
+          Return to D-TEL Home
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-container" style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      
+      <div class="footer-col">
+        <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
+          <div class="logo-icon-box">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <span>D-<span class="accent">TEL</span></span>
+        </a>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Main Street, Colombo / Matara, Sri Lanka</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 077 123 4567</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: info@dtel.lk</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a></li>
+          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases & Glass</a></li>
+          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast Chargers</a></li>
+          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Information</h4>
+        <ul style="list-style:none; padding:0; line-height:2;">
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• About D-TEL</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Contact Us</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Return Policy</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Terms & Conditions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
+        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
+        <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');" style="display:flex; flex-direction:column; gap:0.6rem;">
+          <input type="email" placeholder="enter email..." required style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
+          <button type="submit" class="btn-primary" style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
+            SUBMIT
+          </button>
+        </form>
+        <div style="margin-top:1rem; text-align:right;">
+          <span style="display:inline-block; background:var(--accent-blue); color:#ffffff; font-size:0.75rem; font-weight:700; padding:0.3rem 0.75rem; border-radius:var(--radius-sm);">
+            TOP WEB 2026
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+      <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
+      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
+    </div>
+  </footer>
+
+  <!-- CORE SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    let appliedDiscount = 400;
+    let deliveryFee = 350;
+
+    function renderCheckoutItems() {
+      const cart = StorageDB.getCart();
+      const products = StorageDB.getProducts();
+      const container = document.getElementById('checkoutCartList');
+      const countEl = document.getElementById('checkoutCartCount');
+
+      if (cart.length === 0) {
+        StorageDB.addToCart("prod_003");
+        StorageDB.addToCart("prod_004");
+      }
+
+      const updatedCart = StorageDB.getCart();
+      if (countEl) countEl.textContent = updatedCart.reduce((sum, item) => sum + item.qty, 0);
+
+      let subtotal = 0;
+
+      container.innerHTML = updatedCart.map(item => {
+        const prod = products.find(p => p.id === item.id) || { name: "Item", price: 1600, image: "images/cat-chargers.svg" };
+        const itemTotal = prod.price * item.qty;
+        subtotal += itemTotal;
+
+        return `
+          <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem;">
+            <div style="display:flex; align-items:center; gap:1rem;">
+              <img src="${prod.image}" alt="${prod.name}" style="width:60px; height:60px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+              <div>
+                <h4 style="font-size:0.95rem; color:#ffffff;">${prod.name}</h4>
+                <div style="color:var(--text-muted); font-size:0.85rem; margin-top:0.2rem;">
+                  Qty: <strong style="color:#ffffff;">${item.qty}</strong> | Price: Rs. ${prod.price.toLocaleString()}
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:1rem;">
+              <span style="font-weight:700; color:var(--accent-cyan);">Rs. ${itemTotal.toLocaleString()}</span>
+              <button onclick="removeCheckoutItem('${item.id}')" style="background:rgba(244, 63, 94, 0.15); border:1px solid rgba(244, 63, 94, 0.3); color:var(--accent-rose); width:32px; height:32px; border-radius:6px; cursor:pointer;" title="Remove Item">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      calculateSummaryTotals(subtotal);
+    }
+
+    function calculateSummaryTotals(subtotal) {
+      const subtotalEl = document.getElementById('subtotalVal');
+      const discountEl = document.getElementById('discountVal');
+      const deliveryEl = document.getElementById('deliveryVal');
+      const totalEl = document.getElementById('totalAmountVal');
+
+      const total = subtotal - appliedDiscount + deliveryFee;
+
+      if (subtotalEl) subtotalEl.textContent = "Rs. " + subtotal.toLocaleString() + ".00";
+      if (discountEl) discountEl.textContent = "-Rs. " + appliedDiscount.toLocaleString() + ".00";
+      if (deliveryEl) deliveryEl.textContent = "Rs. " + deliveryFee.toLocaleString() + ".00";
+      if (totalEl) totalEl.textContent = "Rs. " + (total > 0 ? total : 0).toLocaleString() + ".00";
+    }
+
+    function removeCheckoutItem(id) {
+      StorageDB.removeFromCart(id);
+      renderCheckoutItems();
+      window.updateHeaderCounters();
+    }
+
+    function applyPromoCode() {
+      const input = document.getElementById('promoInput');
+      const msg = document.getElementById('promoMessage');
+      if (!input || !msg) return;
+
+      if (input.value.trim().toUpperCase() === 'PROMO2026') {
+        appliedDiscount = 400;
+        msg.style.color = 'var(--accent-green)';
+        msg.textContent = 'Promo PROMO2026 applied! (Rs. 400 Discount)';
+      } else {
+        appliedDiscount = 0;
+        msg.style.color = 'var(--accent-rose)';
+        msg.textContent = 'Invalid promo code. Use PROMO2026.';
+      }
+
+      renderCheckoutItems();
+    }
+
+    function submitFinalOrder() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const district = document.getElementById('custDistrict').value;
+      const city = document.getElementById('custCity').value.trim();
+
+      if (!name || !phone || !address || !city) {
+        alert("Please fill in your Delivery Information (Name, Phone, Address, City) before placing the order.");
+        return;
+      }
+
+      const modal = document.getElementById('orderSuccessModal');
+      const desc = document.getElementById('orderModalDesc');
+      const waBtn = document.getElementById('sendOrderWhatsAppBtn');
+
+      const totalTxt = document.getElementById('totalAmountVal').textContent;
+
+      if (desc) {
+        desc.textContent = `Thank you ${name}! Your order totaling ${totalTxt} has been placed via Cash on Delivery for ${city}, ${district}.`;
+      }
+
+      if (waBtn) {
+        waBtn.onclick = () => {
+          const waMsg = `Hi D-TEL! I placed an order.\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city}, ${district}\nTotal: ${totalTxt}`;
+          window.open(`https://wa.me/94771234567?text=${encodeURIComponent(waMsg)}`, '_blank');
+        };
+      }
+
+      if (modal) modal.style.display = 'flex';
+      StorageDB.clearCart();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCheckoutItems();
+    });
+  </script>
+</body>
+</html>
