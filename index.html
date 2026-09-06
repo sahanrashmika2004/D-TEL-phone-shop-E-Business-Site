@@ -71,8 +71,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -133,16 +140,19 @@
       <div class="sub-nav-container">
         <a href="index.html" class="sub-nav-link active">NEW ARRIVALS</a>
 
-        <!-- Dropdown 1: PHONE CASES -->
+        <!-- Dropdown 1: PHONE CASES & GLASS -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Covers" class="sub-nav-link">
-            PHONE CASES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
-            <a href="shop.html?category=Covers&brand=iPhone"><i class="fab fa-apple"></i> iPhone Covers</a>
-            <a href="shop.html?category=Covers&brand=Samsung"><i class="fas fa-mobile"></i> Samsung Cases</a>
-            <a href="shop.html?category=Covers&sub=Glass"><i class="fas fa-shield-alt"></i> Tempered Glass</a>
-            <a href="shop.html?category=Covers&sub=Privacy"><i class="fas fa-user-shield"></i> Privacy Glass</a>
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑
+              Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+
+              (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️
+              MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
           </div>
         </div>
 
@@ -154,7 +164,8 @@
           <div class="dropdown-menu">
             <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
             <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
-            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning
+              Cables</a>
           </div>
         </div>
 
@@ -165,7 +176,8 @@
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
-            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth
+              Speakers</a>
             <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
           </div>
         </div>
@@ -237,13 +249,17 @@
   </section>
 
   <!-- SECTION 1: NEW ARRIVALS (Latest Products) -->
-  <section class="section-container">
+  <section class="section-container" style="margin-top:2rem;">
     <div style="display:flex; align-items:center; text-align:center; margin-bottom:1.5rem;">
       <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
       <div style="padding:0 1.5rem;">
-        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-sparkles" style="color:var(--accent-cyan);"></i> NEW ARRIVALS (Latest Products)</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Freshly stocked Apple, Samsung, Anker & Baseus devices</p>
-        <a href="shop.html" style="color:var(--accent-cyan); font-weight:600; font-size:0.85rem; display:inline-block; margin-top:0.4rem;">View All <i class="fas fa-arrow-right"></i></a>
+        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-sparkles"
+            style="color:var(--accent-cyan);"></i> NEW ARRIVALS (Latest Products)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Freshly stocked Apple, Samsung, Anker,
+          Baseus & Google devices</p>
+        <a href="shop.html"
+          style="color:var(--accent-cyan); font-weight:600; font-size:0.85rem; display:inline-block; margin-top:0.4rem; text-decoration:none;">View
+          All In Shop <i class="fas fa-arrow-right"></i></a>
       </div>
       <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
     </div>
@@ -255,13 +271,16 @@
   </section>
 
   <!-- SECTION 2: SPECIAL OFFERS & PROMOTIONS (Limited Time) -->
-  <section class="special-offers-section section-container">
+  <section class="special-offers-section section-container" style="margin-top:2rem; margin-bottom:2rem;">
     <div style="display:flex; align-items:center; text-align:center; margin-bottom:1.5rem;">
       <div style="flex:1; border-bottom:1px solid rgba(244, 63, 94, 0.3);"></div>
       <div style="padding:0 1.5rem;">
-        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-tag" style="color:var(--accent-rose);"></i> SPECIAL OFFERS & PROMOTIONS</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Exclusive limited time discounts with instant delivery</p>
-        <span style="display:inline-block; margin-top:0.5rem; background:rgba(244, 63, 94, 0.2); color:#fb7185; border:1px solid #fb7185; padding:0.25rem 0.75rem; border-radius:var(--radius-full); font-size:0.75rem; font-weight:700;">
+        <h2 style="font-size:1.5rem; color:#ffffff; margin:0;"><i class="fas fa-tag"
+            style="color:var(--accent-rose);"></i> SPECIAL OFFERS & PROMOTIONS (Limited Time)</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Exclusive limited time discounts with
+          instant islandwide delivery</p>
+        <span
+          style="display:inline-block; margin-top:0.5rem; background:rgba(244, 63, 94, 0.2); color:#fb7185; border:1px solid #fb7185; padding:0.25rem 0.75rem; border-radius:var(--radius-full); font-size:0.75rem; font-weight:700;">
           <i class="fas fa-clock"></i> Limited Stock
         </span>
       </div>
@@ -275,48 +294,72 @@
   </section>
 
   <!-- SECTION 3: EXPLORE POPULAR CATEGORIES -->
-  <section id="mainCategories" class="section-container" style="scroll-margin-top:100px;">
+  <section id="mainCategories" class="section-container"
+    style="scroll-margin-top:100px; margin-top:2rem; margin-bottom:3rem;">
     <div style="display:flex; align-items:center; text-align:center; margin-bottom:2rem;">
       <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
       <div style="padding:0 1.5rem;">
-        <h2 style="font-size:1.6rem; margin:0;"><i class="fas fa-th-large" style="color:var(--accent-blue);"></i> EXPLORE POPULAR CATEGORIES</h2>
-        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Quickly filter by target device type & category</p>
+        <h2 style="font-size:1.6rem; margin:0;"><i class="fas fa-th-large" style="color:var(--accent-blue);"></i>
+          EXPLORE POPULAR CATEGORIES</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.3rem;">Click any category to browse phones,
+          chargers with wattage & ports, or glass tiers</p>
       </div>
       <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1.5rem;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem;">
 
       <!-- Category 1: Smartphones -->
       <a href="shop.html?category=Smartphones" class="category-card"
-        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
-        <i class="fas fa-mobile-alt" style="font-size:3rem; color:var(--accent-cyan); margin-bottom:1rem;"></i>
-        <h3 style="font-size:1.2rem; color:#ffffff;">Smartphones</h3>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Apple, Samsung, Xiaomi</p>
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-mobile-alt"
+          style="font-size:2.8rem; color:var(--accent-cyan); margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Smartphones</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">Apple, Samsung, Pixel, Xiaomi</p>
       </a>
 
       <!-- Category 2: Fast Chargers -->
       <a href="shop.html?category=Chargers" class="category-card"
-        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
-        <i class="fas fa-bolt" style="font-size:3rem; color:var(--accent-amber); margin-bottom:1rem;"></i>
-        <h3 style="font-size:1.2rem; color:#ffffff;">Fast Chargers</h3>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">Anker, Baseus 20W & GaN</p>
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-bolt"
+          style="font-size:2.8rem; color:var(--accent-amber); margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Fast Chargers</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">20W, 25W, 30W, 45W, 65W & Cables</p>
       </a>
 
-      <!-- Category 3: Wireless Earbuds -->
-      <a href="shop.html?category=Audio" class="category-card"
-        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
-        <i class="fas fa-headphones-alt" style="font-size:3rem; color:var(--accent-blue); margin-bottom:1rem;"></i>
-        <h3 style="font-size:1.2rem; color:#ffffff;">Wireless Earbuds</h3>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">AirPods, JBL & Anker Sound</p>
-      </a>
-
-      <!-- Category 4: Screen Protectors -->
+      <!-- Category 3: Screen Protectors -->
       <a href="shop.html?category=Covers" class="category-card"
-        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease;">
-        <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--accent-green); margin-bottom:1rem;"></i>
-        <h3 style="font-size:1.2rem; color:#ffffff;">Screen Protectors</h3>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.3rem;">ESR 9H Privacy & Tempered Glass</p>
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-shield-alt"
+          style="font-size:2.8rem; color:var(--accent-green); margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Screen Protectors</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">👑 Super D, ⭐ HD+, 🛡️ MTB</p>
+      </a>
+
+      <!-- Category 4: Wireless Audio -->
+      <a href="shop.html?category=Audio" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-headphones-alt"
+          style="font-size:2.8rem; color:var(--accent-blue); margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Wireless Audio</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">AirPods Pro, JBL & Speakers</p>
+      </a>
+
+      <!-- Category 5: Power Banks -->
+      <a href="shop.html?category=Power" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-battery-full" style="font-size:2.8rem; color:#c084fc; margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Power Banks</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">Baseus & Anker MagSafe</p>
+      </a>
+
+      <!-- Category 6: Accessories -->
+      <a href="shop.html?category=Accessories" class="category-card"
+        style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem 1.5rem; text-align:center; text-decoration:none; transition:all 0.3s ease; display:block;">
+        <i class="fas fa-plug"
+          style="font-size:2.8rem; color:var(--accent-amber); margin-bottom:1rem; display:block;"></i>
+        <h3 style="font-size:1.15rem; color:#ffffff; margin-bottom:0.3rem;">Accessories</h3>
+        <p style="color:var(--text-muted); font-size:0.82rem; margin:0;">Car Mounts, Hubs & AirTags</p>
       </a>
 
     </div>
@@ -455,48 +498,86 @@
     document.addEventListener('DOMContentLoaded', () => {
       startAutoSlideshow();
 
-      // Render New Arrivals (4 items)
+      // Render New Arrivals (4 latest products)
       const newArrivalsGrid = document.getElementById('newArrivalsGrid');
       if (newArrivalsGrid) {
         const products = StorageDB.getProducts().slice(0, 4);
-        newArrivalsGrid.innerHTML = products.map(p => `
-          <div class="product-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
-            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
-              <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;">
-              <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
-              <div style="color:var(--accent-cyan); font-size:1.1rem; font-weight:700; margin-bottom:0.75rem;">
-                Rs. ${p.price.toLocaleString()}
+        newArrivalsGrid.innerHTML = products.map(p => {
+          const brandMeta = BRAND_META[p.brand] || { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" };
+          return `
+            <div class="product-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
+              ${p.badge ? `<span class="card-badge" style="position:absolute; top:12px; left:12px; background:var(--accent-cyan); color:#000; font-size:0.7rem; font-weight:800; padding:0.2rem 0.5rem; border-radius:4px; z-index:2;">${p.badge}</span>` : ''}
+
+              <a href="product-detail.html?id=${p.id}" style="text-decoration:none; text-align:center; margin-bottom:1rem; display:block;">
+                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+              </a>
+
+              <div>
+                <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:var(--accent-cyan); font-weight:700; margin-bottom:0.25rem;">
+                  <span class="brand-logo-badge" style="width:16px; height:16px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color};"><i class="${brandMeta.icon}"></i></span>
+                  <span>${p.brand}</span>
+                  <span style="color:var(--text-dim);">•</span>
+                  <span style="color:var(--text-muted);">${p.category}</span>
+                </div>
+                <h4 style="font-size:0.95rem; color:#ffffff; margin-bottom:0.4rem; height:42px; overflow:hidden;">
+                  <a href="product-detail.html?id=${p.id}" style="color:#ffffff; text-decoration:none;">${p.name}</a>
+                </h4>
+                <div style="color:var(--accent-cyan); font-size:1.15rem; font-weight:800; margin-bottom:0.85rem;">
+                  Rs. ${p.price.toLocaleString()}
+                </div>
               </div>
-            </a>
-            <button class="btn-primary" onclick="StorageDB.addToCart('${p.id}'); window.updateHeaderCounters(); alert('Item added to cart!');" style="width:100%; padding:0.6rem;">
-              <i class="fas fa-cart-plus"></i> Add to Cart
-            </button>
-          </div>
-        `).join('');
+
+              <div style="display:flex; gap:0.5rem;">
+                <button class="btn-primary" onclick="StorageDB.addToCart('${p.id}'); window.updateHeaderCounters(); alert('${p.name} added to Cart!');" style="flex:1; padding:0.6rem; font-size:0.82rem;">
+                  <i class="fas fa-cart-plus"></i> Add
+                </button>
+                <a href="product-detail.html?id=${p.id}" class="btn-secondary" style="padding:0.6rem 0.85rem; font-size:0.82rem; text-decoration:none; text-align:center;">
+                  View
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
 
       // Render Special Offers
       const specialOffersGrid = document.getElementById('specialOffersGrid');
       if (specialOffersGrid) {
         const offers = StorageDB.getProducts().slice(2, 6);
-        specialOffersGrid.innerHTML = offers.map(p => `
-          <div class="product-card" style="background:var(--bg-primary); border:1px solid rgba(244, 63, 94, 0.3); border-radius:var(--radius-md); padding:1.25rem; text-align:center; display:flex; flex-direction:column; justify-content:space-between;">
-            <a href="product-detail.html?id=${p.id}" style="text-decoration:none;">
-              <div style="position:relative;">
-                <span style="position:absolute; top:0; left:0; background:var(--accent-rose); color:#fff; font-size:0.7rem; font-weight:800; padding:0.25rem 0.5rem; border-radius:4px;">OFFER</span>
-                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; margin-bottom:1rem;">
+        specialOffersGrid.innerHTML = offers.map(p => {
+          const brandMeta = BRAND_META[p.brand] || { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" };
+          return `
+            <div class="product-card" style="background:var(--bg-primary); border:1px solid rgba(244, 63, 94, 0.35); border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
+              <span style="position:absolute; top:12px; left:12px; background:var(--accent-rose); color:#fff; font-size:0.7rem; font-weight:800; padding:0.2rem 0.55rem; border-radius:4px; z-index:2;">
+                OFFER
+              </span>
+
+              <a href="product-detail.html?id=${p.id}" style="text-decoration:none; text-align:center; margin-bottom:1rem; display:block;">
+                <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+              </a>
+
+              <div>
+                <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:#fb7185; font-weight:700; margin-bottom:0.25rem;">
+                  <span class="brand-logo-badge" style="width:16px; height:16px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color};"><i class="${brandMeta.icon}"></i></span>
+                  <span>${p.brand}</span>
+                  <span style="color:var(--text-dim);">•</span>
+                  <span style="color:var(--text-muted);">${p.category}</span>
+                </div>
+                <h4 style="font-size:0.95rem; color:#ffffff; margin-bottom:0.4rem; height:42px; overflow:hidden;">
+                  <a href="product-detail.html?id=${p.id}" style="color:#ffffff; text-decoration:none;">${p.name}</a>
+                </h4>
+                <div style="display:flex; align-items:baseline; gap:0.5rem; margin-bottom:0.85rem;">
+                  <span style="color:#fb7185; font-size:1.15rem; font-weight:800;">Rs. ${p.price.toLocaleString()}</span>
+                  <span style="color:var(--text-dim); text-decoration:line-through; font-size:0.82rem;">Rs. ${(p.oldPrice || p.price * 1.15).toLocaleString()}</span>
+                </div>
               </div>
-              <h4 style="font-size:1rem; color:#ffffff; margin-bottom:0.5rem; height:42px; overflow:hidden;">${p.name}</h4>
-              <div style="display:flex; justify-content:center; align-items:center; gap:0.5rem; margin-bottom:0.75rem;">
-                <span style="color:#fb7185; font-size:1.1rem; font-weight:700;">Rs. ${p.price.toLocaleString()}</span>
-                <span style="color:var(--text-dim); text-decoration:line-through; font-size:0.85rem;">Rs. ${(p.oldPrice || p.price * 1.15).toLocaleString()}</span>
-              </div>
-            </a>
-            <button class="btn-whatsapp" onclick="window.location.href='product-detail.html?id=${p.id}'" style="width:100%; padding:0.6rem; background:#fb7185; border:none; color:#ffffff;">
-              <i class="fas fa-bolt"></i> Buy Now
-            </button>
-          </div>
-        `).join('');
+
+              <button class="btn-whatsapp" onclick="window.location.href='product-detail.html?id=${p.id}'" style="width:100%; padding:0.65rem; background:#fb7185; border:none; color:#ffffff; font-weight:700; font-size:0.85rem; border-radius:var(--radius-sm); cursor:pointer;">
+                <i class="fas fa-bolt"></i> Buy Now
+              </button>
+            </div>
+          `;
+        }).join('');
       }
     });
   </script>

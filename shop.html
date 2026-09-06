@@ -76,30 +76,122 @@
   <!-- MAIN CATALOG & SIDEBAR FILTER LAYOUT -->
   <main class="main-content">
     
-    <!-- LEFT SIDEBAR FILTERS (Real Brand Names: Apple, Samsung, Anker, Baseus, Xiaomi, ESR, JBL) -->
+    <!-- LEFT SIDEBAR FILTERS -->
     <aside class="filter-sidebar" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem;">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1.25rem;">
         <h3 style="font-size:1.1rem; color:#ffffff;"><i class="fas fa-filter" style="color:var(--accent-cyan);"></i> FILTERS</h3>
-        <button onclick="window.resetFilters()" style="background:none; border:none; color:var(--accent-cyan); font-size:0.85rem; cursor:pointer;">Reset</button>
+        <button onclick="window.resetFilters()" style="background:none; border:none; color:var(--accent-cyan); font-size:0.85rem; cursor:pointer;"><i class="fas fa-undo-alt"></i> Reset All</button>
       </div>
 
-      <!-- 1. Real Brand Checkboxes -->
+      <!-- 1. Category Quick Selector -->
       <div style="margin-bottom:1.5rem;">
-        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;">Brand</div>
-        <ul style="list-style:none; padding:0; display:flex; flex-direction:column; gap:0.55rem; font-size:0.88rem; color:var(--text-muted);">
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="Apple"> Apple</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="Samsung"> Samsung</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="Anker"> Anker</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="Baseus"> Baseus</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="Xiaomi"> Xiaomi</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="ESR"> ESR</label></li>
-          <li><label style="cursor:pointer;"><input type="checkbox" class="brand-checkbox" value="JBL"> JBL</label></li>
-        </ul>
+        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;"><i class="fas fa-th-large" style="color:var(--accent-cyan);"></i> Category</div>
+        <select id="categoryFilter" style="width:100%; padding:0.6rem 0.85rem; font-size:0.88rem; background:var(--bg-primary); border-radius:var(--radius-sm); color:#ffffff; border:1px solid var(--border-color);">
+          <option value="All">All Categories</option>
+          <option value="Smartphones">📱 Smartphones</option>
+          <option value="Chargers">⚡ Fast Chargers</option>
+          <option value="Covers">🛡️ Screen Protectors & Covers</option>
+          <option value="Audio">🎧 Audio & Wireless</option>
+          <option value="Power">🔋 Power Banks</option>
+          <option value="Accessories">🔌 Other Accessories</option>
+        </select>
       </div>
 
-      <!-- 2. Price Range Filter -->
+      <!-- 2. Dynamic Brand Checkboxes with Logos -->
+      <div style="margin-bottom:1.5rem;" id="brandFilterSection">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+          <span style="font-weight:700; font-size:0.9rem; color:#ffffff;"><i class="fas fa-tag" style="color:var(--accent-amber);"></i> Brands (<span id="activeCatLabel">All</span>)</span>
+        </div>
+        <div id="dynamicBrandList" style="display:flex; flex-direction:column; gap:0.55rem; font-size:0.88rem; max-height:220px; overflow-y:auto;">
+          <!-- Dynamically populated with brand logos based on selected category by JS -->
+        </div>
+      </div>
+
+      <!-- 3. Charger Wattage Filter (Shown ONLY for Chargers) -->
+      <div style="margin-bottom:1.5rem; background:rgba(245, 158, 11, 0.05); border:1px solid rgba(245, 158, 11, 0.2); border-radius:var(--radius-md); padding:1rem; display:none;" id="wattageSection">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <i class="fas fa-bolt" style="color:var(--accent-amber);"></i>
+          <span style="font-weight:700; font-size:0.88rem; color:#ffffff;">Charger Wattage (Power)</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:0.4rem;" id="wattagePillList">
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); font-size:0.82rem; color:#ffffff; cursor:pointer;">
+            <input type="checkbox" class="wattage-checkbox" value="20W" style="accent-color:var(--accent-amber);"> 20W
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); font-size:0.82rem; color:#ffffff; cursor:pointer;">
+            <input type="checkbox" class="wattage-checkbox" value="25W" style="accent-color:var(--accent-amber);"> 25W
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); font-size:0.82rem; color:#ffffff; cursor:pointer;">
+            <input type="checkbox" class="wattage-checkbox" value="30W" style="accent-color:var(--accent-amber);"> 30W
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); font-size:0.82rem; color:#ffffff; cursor:pointer;">
+            <input type="checkbox" class="wattage-checkbox" value="45W" style="accent-color:var(--accent-amber);"> 45W
+          </label>
+          <label style="display:inline-flex; align-items:center; gap:0.35rem; padding:0.35rem 0.65rem; background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); font-size:0.82rem; color:#ffffff; cursor:pointer;">
+            <input type="checkbox" class="wattage-checkbox" value="65W" style="accent-color:var(--accent-amber);"> 65W
+          </label>
+        </div>
+      </div>
+
+      <!-- 4. Charger & Cable Connector Type (Shown for Chargers / Accessories) -->
+      <div style="margin-bottom:1.5rem; background:rgba(59, 130, 246, 0.05); border:1px solid rgba(59, 130, 246, 0.2); border-radius:var(--radius-md); padding:1rem; display:none;" id="connectorSection">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <i class="fas fa-plug" style="color:var(--accent-blue);"></i>
+          <span style="font-weight:700; font-size:0.88rem; color:#ffffff;">Cable & Port Type</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.45rem; font-size:0.85rem;">
+          <label style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); cursor:pointer;">
+            <input type="checkbox" class="connector-checkbox" value="USB-C" style="accent-color:var(--accent-blue);"> Type-C (USB-C)
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); cursor:pointer;">
+            <input type="checkbox" class="connector-checkbox" value="Lightning" style="accent-color:var(--accent-blue);"> Apple Lightning
+          </label>
+          <label style="display:flex; align-items:center; gap:0.5rem; color:var(--text-muted); cursor:pointer;">
+            <input type="checkbox" class="connector-checkbox" value="Micro USB" style="accent-color:var(--accent-blue);"> Micro USB
+          </label>
+        </div>
+      </div>
+
+      <!-- 5. Screen Protector Quality Tiers (Super D, HD+, MTB - ONLY for Screen Protectors) -->
+      <div style="margin-bottom:1.5rem; background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:var(--radius-md); padding:1rem; display:none;" id="glassTierSection">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i>
+          <span style="font-weight:700; font-size:0.88rem; color:#ffffff;">Glass Quality Tiers</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.75rem;">Quality Ranking (Best to Budget):</p>
+        
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <!-- Super D (Tier 1 - Best) -->
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.45rem 0.65rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(244,63,94,0.3);">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <input type="checkbox" class="tier-checkbox" value="Super D" style="accent-color:var(--accent-rose);">
+              <span style="font-weight:700; font-size:0.85rem; color:#fb7185;">👑 Super D</span>
+            </div>
+            <span style="font-size:0.7rem; background:rgba(244,63,94,0.2); color:#fb7185; padding:0.15rem 0.4rem; border-radius:4px; font-weight:700;">BEST QUALITY</span>
+          </label>
+
+          <!-- HD+ (Tier 2 - High Quality) -->
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.45rem 0.65rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(59,130,246,0.3);">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <input type="checkbox" class="tier-checkbox" value="HD+" style="accent-color:var(--accent-blue);">
+              <span style="font-weight:700; font-size:0.85rem; color:#60a5fa;">⭐ HD+</span>
+            </div>
+            <span style="font-size:0.7rem; background:rgba(59,130,246,0.2); color:#60a5fa; padding:0.15rem 0.4rem; border-radius:4px; font-weight:700;">HIGH QUALITY</span>
+          </label>
+
+          <!-- MTB (Tier 3 - Standard) -->
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.45rem 0.65rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(16,185,129,0.3);">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <input type="checkbox" class="tier-checkbox" value="MTB" style="accent-color:var(--accent-green);">
+              <span style="font-weight:700; font-size:0.85rem; color:#34d399;">🛡️ MTB</span>
+            </div>
+            <span style="font-size:0.7rem; background:rgba(16,185,129,0.2); color:#34d399; padding:0.15rem 0.4rem; border-radius:4px; font-weight:700;">STANDARD</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 4. Price Range Filter -->
       <div style="margin-bottom:1.5rem;">
-        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.5rem;">Price Range</div>
+        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.5rem;"><i class="fas fa-coins" style="color:var(--accent-cyan);"></i> Price Range</div>
         <input type="range" id="priceRange" min="500" max="500000" step="5000" value="500000" style="width:100%; accent-color:var(--accent-cyan);">
         <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); margin-top:0.3rem;">
           <span>Rs. 500</span>
@@ -107,20 +199,20 @@
         </div>
       </div>
 
-      <!-- 3. Availability Filter -->
+      <!-- 5. Availability Filter -->
       <div style="margin-bottom:1.5rem;">
-        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;">Availability</div>
+        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;"><i class="fas fa-boxes" style="color:var(--accent-green);"></i> Availability</div>
         <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.88rem; color:var(--text-muted);">
-          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockInOnly" value="instock" checked style="accent-color:var(--accent-cyan);"> (o) In Stock Only</label>
-          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockAll" value="all" style="accent-color:var(--accent-cyan);"> ( ) All Items</label>
+          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockInOnly" value="instock" checked style="accent-color:var(--accent-cyan);"> In Stock Only</label>
+          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockAll" value="all" style="accent-color:var(--accent-cyan);"> All Items (Including Out of Stock)</label>
         </div>
       </div>
 
-      <!-- 4. Rating Filter -->
+      <!-- 6. Rating Filter -->
       <div style="margin-bottom:1rem;">
-        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;">Rating</div>
-        <label style="cursor:pointer; font-size:0.88rem; color:var(--text-muted);">
-          <input type="checkbox" id="rating4Plus" style="accent-color:var(--accent-cyan);"> [x] 4 Stars & above ★★★★☆
+        <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;"><i class="fas fa-star" style="color:var(--accent-amber);"></i> Customer Rating</div>
+        <label style="cursor:pointer; font-size:0.88rem; color:var(--text-muted); display:flex; align-items:center; gap:0.5rem;">
+          <input type="checkbox" id="rating4Plus" style="accent-color:var(--accent-cyan);"> 4 Stars & above ★★★★☆
         </label>
       </div>
 
@@ -129,23 +221,40 @@
     <!-- RIGHT CATALOG GRID & TOP BAR -->
     <section>
       
+      <!-- Top Category Quick-Pills Navigation Bar -->
+      <div style="display:flex; gap:0.6rem; overflow-x:auto; padding-bottom:0.85rem; margin-bottom:1rem; scrollbar-width:none;" class="category-pills-bar">
+        <button class="category-pill-btn active" onclick="window.selectCategoryPill('All')"><i class="fas fa-border-all"></i> All Products</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Smartphones')"><i class="fas fa-mobile-alt"></i> Smartphones</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Chargers')"><i class="fas fa-bolt"></i> Chargers</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Covers')"><i class="fas fa-shield-alt"></i> Cases & Protectors</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Audio')"><i class="fas fa-headphones"></i> Audio</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Power')"><i class="fas fa-battery-full"></i> Power Banks</button>
+        <button class="category-pill-btn" onclick="window.selectCategoryPill('Accessories')"><i class="fas fa-plug"></i> Accessories</button>
+      </div>
+
+      <!-- Dynamic Category Details Hero Banner -->
+      <div id="categoryDetailBanner" style="margin-bottom:1.5rem;">
+        <!-- Dynamically rendered by app.js -->
+      </div>
+
       <!-- Top Bar: Product Count, Sort Selector, Grid/List View Toggle -->
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1rem 1.5rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         
         <div style="font-weight:600; color:var(--text-main);" id="productCount">
-          Showing <span id="showingCountNum" style="color:var(--accent-cyan); font-weight:800;">12</span> Products
+          Showing <span id="showingCountNum" style="color:var(--accent-cyan); font-weight:800;">35</span> Products
         </div>
 
         <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
           
           <!-- Sort Dropdown -->
           <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.9rem;">
-            <label for="sortSelect" style="color:var(--text-muted); font-weight:600;">Sort:</label>
-            <select id="sortSelect" style="padding:0.4rem 0.85rem; font-size:0.88rem; width:auto; border-radius:var(--radius-sm);">
-              <option value="price-low">Price: Low to High v</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="rating">Highest Rated</option>
+            <label for="sortSelect" style="color:var(--text-muted); font-weight:600;">Sort By:</label>
+            <select id="sortSelect" style="padding:0.4rem 0.85rem; font-size:0.88rem; width:auto; border-radius:var(--radius-sm); background:var(--bg-primary); color:#ffffff; border:1px solid var(--border-color);">
               <option value="featured">Featured / Default</option>
+              <option value="tier-best">👑 Glass: Best Quality (Super D -> HD+ -> MTB)</option>
+              <option value="price-low">Price: Low to High ↑</option>
+              <option value="price-high">Price: High to Low ↓</option>
+              <option value="rating">Highest Rated ★</option>
             </select>
           </div>
 
@@ -164,7 +273,7 @@
       </div>
 
       <!-- Dynamic Product Grid Container -->
-      <div class="products-grid" id="catalogProductsGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:1.5rem;">
+      <div class="products-grid" id="catalogProductsGrid">
         <!-- Rendered by app.js -->
       </div>
 
@@ -172,48 +281,75 @@
 
   </main>
 
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-container">
+      <div class="trust-item"><i class="fas fa-truck-fast"></i> Islandwide Fast Delivery</div>
+      <div class="trust-item"><i class="fas fa-award"></i> Genuine Warranty</div>
+      <div class="trust-item"><i class="fas fa-shield-check"></i> Secure Cash on Delivery</div>
+      <div class="trust-item"><i class="fas fa-credit-card"></i> Secure Payments</div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
-    <div class="footer-container" style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
-      
+    <div class="footer-container"
+      style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+
+      <!-- Col 1: D-TEL Address & Contacts -->
       <div class="footer-col">
         <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
-          <div class="logo-icon-box">
-            <i class="fas fa-mobile-alt"></i>
+          <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+          <div>
+            <span style="font-size:1.8rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span
+                class="accent">TEL</span></span>
+            <span
+              style="font-size:0.75rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
           </div>
-          <span>D-<span class="accent">TEL</span></span>
         </a>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt" style="color:#ef4444;"></i> Main Street, Colombo / Matara, Sri Lanka</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 077 123 4567</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: info@dtel.lk</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
+            style="color:#ef4444;"></i> 2nd Road,Piliyandala.</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
+            style="color:var(--accent-cyan);"></i> Phone: 0701948371</p>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
+            style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
+        <div style="display:flex; gap:0.75rem; margin-top:1rem;">
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
+          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
+        </div>
       </div>
 
+      <!-- Col 2: Shop By -->
       <div class="footer-col">
-        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
-        <ul style="list-style:none; padding:0; line-height:2;">
-          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a></li>
-          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases & Glass</a></li>
-          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.85rem;">• Fast Chargers</a></li>
-          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.85rem;">• Audio & Power</a></li>
+        <h4 style="font-size:1.1rem; margin-bottom:1.25rem; color:#ffffff;">Shop By</h4>
+        <ul style="list-style:none; padding:0; line-height:2.2;">
+          <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.9rem;">• New Arrivals</a></li>
+          <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.9rem;">• Phone Cases & Glass</a></li>
+          <li><a href="shop.html?category=Chargers" style="color:var(--text-muted); font-size:0.9rem;">• Fast Chargers</a></li>
+          <li><a href="shop.html?category=Audio" style="color:var(--text-muted); font-size:0.9rem;">• Audio & Sound</a></li>
+          <li><a href="shop.html?category=Power" style="color:var(--text-muted); font-size:0.9rem;">• Power Banks</a></li>
         </ul>
       </div>
 
+      <!-- Col 3: Information -->
       <div class="footer-col">
-        <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Information</h4>
-        <ul style="list-style:none; padding:0; line-height:2;">
-          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• About D-TEL</a></li>
-          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Contact Us</a></li>
-          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Return Policy</a></li>
-          <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Terms & Conditions</a></li>
+        <h4 style="font-size:1.1rem; margin-bottom:1.25rem; color:#ffffff;">Information</h4>
+        <ul style="list-style:none; padding:0; line-height:2.2;">
+          <li><a href="#" style="color:var(--text-muted); font-size:0.9rem;">• About D-TEL</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.9rem;">• Contact Us</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.9rem;">• Return Policy</a></li>
+          <li><a href="#" style="color:var(--text-muted); font-size:0.9rem;">• Terms & Conditions</a></li>
         </ul>
       </div>
 
+      <!-- Col 4: Newsletter -->
       <div class="footer-col">
-        <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
-        <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
+        <h4 style="font-size:1.1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
+        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">Sign up for exclusive updates & discounts</p>
         <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');" style="display:flex; flex-direction:column; gap:0.6rem;">
-          <input type="email" placeholder="enter email..." required style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
-          <button type="submit" class="btn-primary" style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
+          <input type="email" placeholder="enter email..." required style="padding:0.65rem 0.9rem; font-size:0.85rem; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-sm); color:#ffffff;">
+          <button type="submit" class="btn-primary" style="padding:0.65rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800; border-radius:var(--radius-sm); border:none; cursor:pointer;">
             SUBMIT
           </button>
         </form>
