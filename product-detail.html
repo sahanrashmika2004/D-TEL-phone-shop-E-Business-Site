@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
 </head>
 <body>
 
@@ -201,9 +201,9 @@
   </div>
 
   <!-- FOOTER -->
-  <footer>
+  <footer style="width:100%; background:var(--bg-primary); border-top:1px solid var(--border-color);">
     <div class="footer-container"
-      style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      style="width:100%; max-width:100%; margin:0; padding:3.5rem clamp(1.5rem, 4vw, 4.5rem) 2.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:2.5rem; box-sizing:border-box;">
 
       <!-- Col 1: D-TEL Address & Contacts -->
       <div class="footer-col">
@@ -216,16 +216,16 @@
               style="font-size:0.75rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
           </div>
         </a>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
+        <p class="store-live-address" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
             style="color:#ef4444;"></i> 2nd Road,Piliyandala.</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
+        <p class="store-live-phone" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
             style="color:var(--accent-cyan);"></i> Phone: 0701948371</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
+        <p class="store-live-email" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
             style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
         <div style="display:flex; gap:0.75rem; margin-top:1rem;">
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://wa.me/94701948371" class="store-live-whatsapp-link" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
 
@@ -271,15 +271,17 @@
 
     </div>
 
-    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+    <div style="width:100%; max-width:100%; margin:0; padding:1.25rem clamp(1.5rem, 4vw, 4.5rem); border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.82rem; color:var(--text-dim); box-sizing:border-box;">
       <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
       <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
     </div>
   </footer>
 
   <!-- CORE SCRIPTS -->
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/data.js?v=20260929_private_cart"></script>
+  <script src="js/api-client.js?v=20260929_private_cart"></script>
+  <script src="js/auth.js?v=20260929_private_cart"></script>
+  <script src="js/app.js?v=20260929_private_cart"></script>
 
   <script>
     let currentPdpProduct = null;
@@ -301,11 +303,49 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);
       const prodId = params.get('id') || "prod_003";
       const products = StorageDB.getProducts();
-      currentPdpProduct = products.find(p => p.id === prodId) || products[2] || products[0];
+      
+      // Try local product first
+      currentPdpProduct = products.find(p => p.id === prodId || p.numericId == prodId || p.id === `prod_${prodId}`);
+
+      // Try fetching from MySQL backend if numeric ID
+      if (!currentPdpProduct && typeof ApiClient !== "undefined" && !isNaN(parseInt(prodId.replace('prod_', '')))) {
+        try {
+          const numericId = parseInt(prodId.replace('prod_', ''));
+          const dbProd = await ApiClient.getProductById(numericId);
+          if (dbProd) {
+            currentPdpProduct = {
+              id: `prod_${dbProd.product_id}`,
+              numericId: dbProd.product_id,
+              name: dbProd.product_name,
+              category: dbProd.category_name || "Smartphones",
+              brand: dbProd.brand || "D-TEL",
+              model: dbProd.model || "",
+              price: parseFloat(dbProd.price),
+              stock: parseInt(dbProd.stock),
+              description: dbProd.description,
+              specs: dbProd.specs,
+              image: dbProd.image || "images/cat-chargers.svg",
+              image_2: dbProd.image_2 || null,
+              image_3: dbProd.image_3 || null,
+              image2: dbProd.image_2 || null,
+              image3: dbProd.image_3 || null,
+              connector: dbProd.connector || "USB-C",
+              rating: 4.9,
+              reviewsCount: 15
+            };
+          }
+        } catch (e) {
+          console.warn("Could not fetch product from MySQL API:", e);
+        }
+      }
+
+      if (!currentPdpProduct) {
+        currentPdpProduct = products[2] || products[0];
+      }
 
       if (currentPdpProduct) {
         document.title = "D-TEL | " + currentPdpProduct.name;
@@ -313,33 +353,37 @@
         document.getElementById('pdpCategoryBreadcrumb').textContent = currentPdpProduct.category;
         document.getElementById('pdpSubCatBreadcrumb').textContent = currentPdpProduct.category + " Accessories";
 
-        document.getElementById('pdpMainImage').src = currentPdpProduct.image;
+        const view1 = currentPdpProduct.image || "images/cat-chargers.svg";
+        const view2 = currentPdpProduct.image_2 || currentPdpProduct.image2 || view1;
+        const view3 = currentPdpProduct.image_3 || currentPdpProduct.image3 || view1;
+
+        document.getElementById('pdpMainImage').src = view1;
         document.getElementById('pdpTitle').textContent = currentPdpProduct.name;
         
-        // Update thumbnails
+        // Update 3 thumbnails gallery
         const thumbsWrap = document.querySelector('.pdp-thumbs');
         if (thumbsWrap) {
           thumbsWrap.innerHTML = `
-            <div class="thumb-card active" onclick="switchMainImage(this, '${currentPdpProduct.image}')">
-              <img src="${currentPdpProduct.image}" alt="View 1" style="height:50px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
-              <div>Main View</div>
+            <div class="thumb-card active" onclick="switchMainImage(this, '${view1}')">
+              <img src="${view1}" alt="View 1" style="height:50px; object-fit:contain;" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+              <div>View 1 (Main)</div>
             </div>
-            <div class="thumb-card" onclick="switchMainImage(this, '${currentPdpProduct.image}')">
-              <img src="${currentPdpProduct.image}" alt="View 2" style="height:50px; object-fit:contain; filter:brightness(1.1);" onerror="this.src='images/cat-chargers.svg'">
-              <div>Detail View</div>
+            <div class="thumb-card" onclick="switchMainImage(this, '${view2}')">
+              <img src="${view2}" alt="View 2" style="height:50px; object-fit:contain; ${view2 === view1 ? 'filter:brightness(1.1);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+              <div>View 2 (Detail)</div>
             </div>
-            <div class="thumb-card" onclick="switchMainImage(this, '${currentPdpProduct.image}')">
-              <img src="${currentPdpProduct.image}" alt="View 3" style="height:50px; object-fit:contain; transform:scale(0.9);" onerror="this.src='images/cat-chargers.svg'">
-              <div>Angle View</div>
+            <div class="thumb-card" onclick="switchMainImage(this, '${view3}')">
+              <img src="${view3}" alt="View 3" style="height:50px; object-fit:contain; ${view3 === view1 ? 'transform:scale(0.9);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+              <div>View 3 (Angle)</div>
             </div>
           `;
         }
         
-        const bMeta = typeof BRAND_META !== 'undefined' ? BRAND_META[currentPdpProduct.brand] : null;
+        const bMeta = typeof getBrandMeta === 'function' ? getBrandMeta(currentPdpProduct.brand) : ((typeof BRAND_META !== 'undefined') ? BRAND_META[currentPdpProduct.brand] : null);
         if (bMeta) {
-          document.getElementById('pdpBrandWrap').innerHTML = `Brand: <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.75rem; background:${bMeta.bg}; color:${bMeta.color};"><i class="${bMeta.icon}"></i></span> <strong style="color:#ffffff;">${currentPdpProduct.brand}</strong>`;
+          document.getElementById('pdpBrandWrap').innerHTML = `Brand: <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.75rem; background:${bMeta.bg}; color:${bMeta.color};"><i class="${bMeta.icon}"></i></span> <strong style="color:#ffffff;">${bMeta.name || currentPdpProduct.brand}</strong>`;
         } else {
-          document.getElementById('pdpBrand').textContent = currentPdpProduct.brand;
+          document.getElementById('pdpBrand').textContent = currentPdpProduct.brand || "D-TEL";
         }
 
         const tierWrap = document.getElementById('pdpTierBadgeWrap');
@@ -364,14 +408,34 @@
 
         document.getElementById('pdpAddToCartBtn').onclick = () => {
           const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
-          for(let i=0; i<qty; i++) StorageDB.addToCart(currentPdpProduct.id);
-          window.updateHeaderCounters();
-          alert(`${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
+          const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
+          if (!user && typeof Auth !== 'undefined') {
+            Auth.openModal('customer', () => {
+              StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+              if (window.updateHeaderCounters) window.updateHeaderCounters();
+              alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
+            }, '⚠️ Please Sign In or Register to add this product to your cart.');
+            return;
+          }
+          StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+          if (window.updateHeaderCounters) window.updateHeaderCounters();
+          alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
         };
 
+        // Buy Now Button directly proceeds to Checkout
         document.getElementById('pdpBuyNowBtn').onclick = () => {
           const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
-          for(let i=0; i<qty; i++) StorageDB.addToCart(currentPdpProduct.id);
+          const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
+          if (!user && typeof Auth !== 'undefined') {
+            Auth.openModal('customer', () => {
+              StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+              if (window.updateHeaderCounters) window.updateHeaderCounters();
+              window.location.href = 'checkout.html';
+            }, '⚠️ Please Sign In or Register to proceed with Buy Now.');
+            return;
+          }
+          StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+          if (window.updateHeaderCounters) window.updateHeaderCounters();
           window.location.href = 'checkout.html';
         };
       }

@@ -9,18 +9,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Custom Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
 </head>
 <body style="background:var(--bg-primary);">
 
   <div class="admin-layout">
     <!-- ADMIN SIDEBAR -->
     <aside class="admin-sidebar">
-      <a href="index.html" class="brand-logo" style="margin-bottom:2rem;">
-        <div class="logo-icon-box">
-          <i class="fas fa-mobile-alt"></i>
+      <a href="index.html" class="brand-logo" style="margin-bottom:2rem; text-decoration:none; display:flex; align-items:center; gap:0.75rem;">
+        <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img" style="width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--accent-cyan);">
+        <div>
+          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
         </div>
-        <span>D-<span class="accent">TEL</span></span>
       </a>
 
       <div class="admin-nav">
@@ -33,8 +34,14 @@
         <a href="#ordersSection" class="admin-nav-item">
           <i class="fas fa-shopping-bag"></i> Customer Orders
         </a>
+        <a href="#storeSettingsSection" class="admin-nav-item">
+          <i class="fas fa-map-marked-alt"></i> Store & Location Settings
+        </a>
         <a href="index.html" class="admin-nav-item" style="margin-top:auto; color:var(--accent-cyan);">
           <i class="fas fa-store"></i> View Live Store
+        </a>
+        <a href="#" class="admin-nav-item" onclick="event.preventDefault(); Auth.logout();" style="color:var(--accent-rose);">
+          <i class="fas fa-sign-out-alt"></i> Sign Out Admin
         </a>
       </div>
     </aside>
@@ -112,7 +119,7 @@
       </div>
 
       <!-- CUSTOMER ORDERS TABLE -->
-      <div id="ordersSection">
+      <div id="ordersSection" style="margin-bottom:3rem;">
         <div style="margin-bottom:1rem;">
           <h2>Incoming Customer Orders (COD & WhatsApp)</h2>
         </div>
@@ -137,6 +144,94 @@
         </div>
       </div>
 
+      <!-- STORE & LOCATION SETTINGS SECTION -->
+      <div id="storeSettingsSection" style="margin-bottom:3rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem; box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+              <i class="fas fa-store-alt" style="color:var(--accent-cyan);"></i> Store Details & Location Management
+            </h2>
+            <p style="color:var(--text-muted); font-size:0.85rem;">Update store address, phone numbers, email, opening hours & Google Maps location pin live across website</p>
+          </div>
+          <span style="background:rgba(6, 182, 212, 0.15); color:var(--accent-cyan); border:1px solid rgba(6, 182, 212, 0.3); padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.8rem; font-weight:700;">
+            <i class="fas fa-broadcast-tower"></i> Live Store Sync
+          </span>
+        </div>
+
+        <form id="storeSettingsForm" onsubmit="window.handleSaveStoreSettings(event)">
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.25rem; margin-bottom:1.5rem;">
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-signature" style="color:var(--accent-blue);"></i> Store Name</label>
+              <input type="text" id="settingStoreName" class="form-input" required placeholder="D-TEL Cellular">
+            </div>
+
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-phone-alt" style="color:var(--accent-green);"></i> Primary Phone Number</label>
+              <input type="text" id="settingPhone" class="form-input" required placeholder="070 194 8371">
+            </div>
+
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fab fa-whatsapp" style="color:#22c55e;"></i> WhatsApp Ordering Number</label>
+              <input type="text" id="settingWhatsapp" class="form-input" required placeholder="0701948371">
+            </div>
+
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-envelope" style="color:var(--accent-amber);"></i> Official Contact Email</label>
+              <input type="email" id="settingEmail" class="form-input" required placeholder="dtel@gmail.com">
+            </div>
+
+            <div style="grid-column: 1 / -1;">
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-map-marker-alt" style="color:var(--accent-rose);"></i> Store Physical Address</label>
+              <input type="text" id="settingAddress" class="form-input" required placeholder="2nd Road, Piliyandala, Sri Lanka" oninput="window.updateAdminMapPreviewFromInput()">
+            </div>
+
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-clock" style="color:var(--accent-cyan);"></i> Business Opening Hours</label>
+              <input type="text" id="settingHours" class="form-input" required placeholder="Mon - Sat: 9:00 AM - 8:30 PM | Sunday: 10:00 AM - 6:00 PM">
+            </div>
+
+            <div>
+              <label style="font-size:0.85rem; font-weight:700; color:#fff; display:block; margin-bottom:0.4rem;"><i class="fas fa-globe-asia" style="color:var(--accent-blue);"></i> City / Region</label>
+              <input type="text" id="settingCity" class="form-input" required placeholder="Piliyandala, Colombo District">
+            </div>
+          </div>
+
+          <!-- MAP PREVIEW & LOCATION SECTION -->
+          <div style="margin-bottom:1.5rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+              <h4 style="color:#fff; font-size:0.95rem; display:flex; align-items:center; gap:0.5rem; margin:0;">
+                <i class="fas fa-map-pin" style="color:var(--accent-rose);"></i> Interactive Location & Google Maps Preview
+              </h4>
+              <span style="font-size:0.8rem; color:var(--text-muted);">Updates in real-time when address or city is edited</span>
+            </div>
+
+            <!-- Map Iframe container -->
+            <div style="border-radius:10px; overflow:hidden; border:1px solid var(--border-color); height:280px; width:100%; position:relative;">
+              <iframe id="settingMapIframe" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://maps.google.com/maps?q=2nd%20Road,%20Piliyandala,%20Sri%20Lanka&t=&z=14&ie=UTF8&iwloc=&output=embed"></iframe>
+            </div>
+            
+            <div style="display:flex; gap:0.75rem; margin-top:1rem; align-items:center; flex-wrap:wrap;">
+              <button type="button" class="btn-secondary" onclick="window.refreshAdminMapPreview()" style="font-size:0.85rem; padding:0.5rem 1rem;">
+                <i class="fas fa-sync-alt"></i> Refresh Map Location Pin
+              </button>
+              <a id="settingLiveMapLink" href="https://maps.google.com/?q=2nd+Road,+Piliyandala,+Sri+Lanka" target="_blank" class="btn-secondary" style="font-size:0.85rem; padding:0.5rem 1rem; color:var(--accent-cyan); text-decoration:none;">
+                <i class="fas fa-external-link-alt"></i> Open in Google Maps
+              </a>
+            </div>
+          </div>
+
+          <!-- SUBMIT ACTION -->
+          <div style="display:flex; justify-content:flex-end; gap:1rem; align-items:center; flex-wrap:wrap;">
+            <span id="saveStoreSettingsAlert" style="font-size:0.9rem; font-weight:700; color:var(--accent-green); display:none;">
+              <i class="fas fa-check-circle"></i> Store settings saved & applied across website!
+            </span>
+            <button type="submit" id="saveStoreSettingsBtn" class="btn-primary" style="padding:0.75rem 2rem; font-size:0.95rem; font-weight:700; display:inline-flex; align-items:center; gap:0.5rem;">
+              <i class="fas fa-save"></i> Save Store Information & Location
+            </button>
+          </div>
+        </form>
+      </div>
+
     </main>
   </div>
 
@@ -146,7 +241,9 @@
   </div>
 
   <!-- Core Data & Admin Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/admin.js"></script>
+  <script src="js/data.js?v=20260929_private_cart"></script>
+  <script src="js/api-client.js?v=20260929_private_cart"></script>
+  <script src="js/auth.js?v=20260929_private_cart"></script>
+  <script src="js/admin.js?v=20260929_private_cart"></script>
 </body>
 </html>

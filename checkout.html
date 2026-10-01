@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
 </head>
 <body>
 
@@ -113,6 +113,16 @@
           <i class="fas fa-truck-ramp-box" style="color:var(--accent-blue);"></i> DELIVERY INFORMATION
         </h3>
 
+        <!-- Customer Auth Status Banner in Checkout -->
+        <div id="checkoutAuthStatusBanner" style="background:rgba(6,182,212,0.08); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-md); padding:0.85rem 1rem; margin-bottom:1.25rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; font-size:0.85rem;">
+          <div id="checkoutAuthText" style="color:var(--text-main);">
+            <i class="fas fa-user-circle" style="color:var(--accent-cyan);"></i> Checking login status...
+          </div>
+          <button type="button" id="checkoutAuthActionBtn" class="demo-fill-btn" onclick="Auth.openModal('customer', () => renderCheckoutUserDetails())" style="font-size:0.8rem; padding:0.35rem 0.75rem;">
+            Sign In with Password
+          </button>
+        </div>
+
         <form id="checkoutDeliveryForm" style="display:flex; flex-direction:column; gap:1.25rem;">
           
           <div>
@@ -199,39 +209,138 @@
         </div>
 
         <!-- PAYMENT OPTIONS CARD -->
-        <div class="payment-box">
-          <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;">
-            Payment Options:
+        <div class="payment-box" style="background:rgba(17, 24, 39, 0.95); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin:1.25rem 0;">
+          <div style="font-weight:700; font-size:0.95rem; color:#ffffff; margin-bottom:0.85rem; display:flex; align-items:center; justify-content:space-between;">
+            <span><i class="fas fa-wallet" style="color:var(--accent-cyan); margin-right:6px;"></i> Select Payment Method:</span>
+            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">100% Secure Checkout</span>
           </div>
 
-          <label class="payment-option-label">
-            <input type="radio" name="paymentOption" value="COD" checked>
-            <div>
-              <div style="font-weight:700; color:#ffffff;">(o) Cash on Delivery (COD)</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Pay cash upon doorstep courier arrival</div>
+          <!-- 1. Cash on Delivery (COD) -->
+          <div class="payment-card-option" id="cardOptionCOD" onclick="switchPaymentMethod('COD')" style="border:1px solid var(--accent-green); background:rgba(16, 185, 129, 0.08); border-radius:var(--radius-sm); padding:0.85rem 1rem; margin-bottom:0.75rem; cursor:pointer; transition:all 0.2s ease;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <input type="radio" name="paymentOption" id="payCOD" value="Cash on Delivery" checked style="accent-color:var(--accent-green); width:18px; height:18px; cursor:pointer;">
+              <div style="flex:1;">
+                <div style="font-weight:700; color:#ffffff; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-truck" style="color:var(--accent-green);"></i> Cash on Delivery (COD)
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Pay in cash upon doorstep delivery</div>
+              </div>
             </div>
-          </label>
+            <!-- COD Sub-box -->
+            <div id="sectionCOD" style="margin-top:0.75rem; padding:0.75rem; background:rgba(16, 185, 129, 0.12); border:1px solid rgba(16, 185, 129, 0.3); border-radius:6px; font-size:0.82rem; color:var(--text-muted); display:block;">
+              <div style="color:#6ee7b7; font-weight:700; margin-bottom:0.25rem;"><i class="fas fa-check-circle"></i> Cash on Delivery Selected</div>
+              <div>Pay in cash directly to our courier agent when your package arrives at your doorstep. Islandwide 1-2 day fast delivery.</div>
+            </div>
+          </div>
 
-          <label class="payment-option-label">
-            <input type="radio" name="paymentOption" value="Card">
-            <div>
-              <div style="font-weight:700; color:#ffffff;">( ) Online Card Payment</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Visa / Mastercard instant online debit</div>
+          <!-- 2. Online Card Payment -->
+          <div class="payment-card-option" id="cardOptionCard" onclick="switchPaymentMethod('Card')" style="border:1px solid var(--border-color); background:var(--bg-primary); border-radius:var(--radius-sm); padding:0.85rem 1rem; margin-bottom:0.75rem; cursor:pointer; transition:all 0.2s ease;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <input type="radio" name="paymentOption" id="payCard" value="Online Card Payment" style="accent-color:var(--accent-cyan); width:18px; height:18px; cursor:pointer;">
+              <div style="flex:1;">
+                <div style="font-weight:700; color:#ffffff; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-credit-card" style="color:var(--accent-blue);"></i> Online Card Payment
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Visa / Mastercard / Amex / UnionPay Instant Debit</div>
+              </div>
             </div>
-          </label>
+            <!-- Card Sub-box -->
+            <div id="sectionCard" style="margin-top:0.85rem; padding:0.85rem; background:rgba(59, 130, 246, 0.08); border:1px solid rgba(59, 130, 246, 0.35); border-radius:6px; font-size:0.82rem; display:none;" onclick="event.stopPropagation()">
+              <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.65rem;">
+                <div style="color:#93c5fd; font-weight:700; font-size:0.85rem;"><i class="fas fa-credit-card"></i> Select Card Type:</div>
+                <div id="detectedCardBrand" style="font-size:0.78rem; font-weight:700; color:var(--accent-cyan); background:rgba(6,182,212,0.15); padding:2px 8px; border-radius:4px;">
+                  <i class="fab fa-cc-visa"></i> Visa
+                </div>
+              </div>
 
-          <label class="payment-option-label">
-            <input type="radio" name="paymentOption" value="Bank">
-            <div>
-              <div style="font-weight:700; color:#ffffff;">( ) Bank Transfer</div>
-              <div style="font-size:0.75rem; color:var(--text-muted);">Direct deposit slip upload verification</div>
+              <!-- Card Brand Selector Chips -->
+              <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.4rem; margin-bottom:0.75rem;">
+                <button type="button" class="card-brand-chip active" data-brand="Visa" onclick="selectCardBrand('Visa')" style="background:rgba(255,255,255,0.06); border:1px solid var(--accent-cyan); border-radius:6px; padding:0.4rem 0.2rem; color:#fff; font-weight:700; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:3px;">
+                  <i class="fab fa-cc-visa" style="color:#60a5fa; font-size:1.1rem;"></i> Visa
+                </button>
+                <button type="button" class="card-brand-chip" data-brand="Mastercard" onclick="selectCardBrand('Mastercard')" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-color); border-radius:6px; padding:0.4rem 0.2rem; color:#fff; font-weight:700; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:3px;">
+                  <i class="fab fa-cc-mastercard" style="color:#f97316; font-size:1.1rem;"></i> Master
+                </button>
+                <button type="button" class="card-brand-chip" data-brand="Amex" onclick="selectCardBrand('Amex')" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-color); border-radius:6px; padding:0.4rem 0.2rem; color:#fff; font-weight:700; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:3px;">
+                  <i class="fab fa-cc-amex" style="color:#38bdf8; font-size:1.1rem;"></i> Amex
+                </button>
+                <button type="button" class="card-brand-chip" data-brand="UnionPay" onclick="selectCardBrand('UnionPay')" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-color); border-radius:6px; padding:0.4rem 0.2rem; color:#fff; font-weight:700; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:3px;">
+                  <i class="fas fa-credit-card" style="color:#34d399; font-size:1rem;"></i> UnionPay
+                </button>
+              </div>
+
+              <!-- Card Input Fields -->
+              <div style="display:flex; flex-direction:column; gap:0.55rem;">
+                <div>
+                  <label style="display:block; font-size:0.75rem; color:#93c5fd; margin-bottom:3px; font-weight:600;">Card Number:</label>
+                  <input type="text" id="cardNumInput" placeholder="4532 •••• •••• 8821" maxlength="19" oninput="formatCardNumber(this)" style="width:100%; padding:0.6rem 0.75rem; font-size:0.9rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); border-radius:6px; color:#fff; letter-spacing:1.5px; font-family:monospace;">
+                </div>
+                <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:0.45rem;">
+                  <div>
+                    <label style="display:block; font-size:0.75rem; color:#93c5fd; margin-bottom:3px; font-weight:600;">Name on Card:</label>
+                    <input type="text" id="cardHolderInput" placeholder="K. Silva" style="width:100%; padding:0.6rem 0.65rem; font-size:0.82rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); border-radius:6px; color:#fff;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:0.75rem; color:#93c5fd; margin-bottom:3px; font-weight:600;">Expiry:</label>
+                    <input type="text" id="cardExpInput" placeholder="MM/YY" maxlength="5" oninput="formatCardExpiry(this)" style="width:100%; padding:0.6rem 0.65rem; font-size:0.82rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); border-radius:6px; color:#fff; text-align:center;">
+                  </div>
+                  <div>
+                    <label style="display:block; font-size:0.75rem; color:#93c5fd; margin-bottom:3px; font-weight:600;">CVV:</label>
+                    <input type="password" id="cardCvvInput" placeholder="•••" maxlength="4" style="width:100%; padding:0.6rem 0.65rem; font-size:0.82rem; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); border-radius:6px; color:#fff; text-align:center;">
+                  </div>
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.72rem; color:var(--text-muted); margin-top:4px;">
+                  <span><i class="fas fa-lock" style="color:var(--accent-cyan);"></i> 256-Bit SSL Encrypted</span>
+                  <span style="color:#34d399;"><i class="fas fa-shield-check"></i> 3D Secure Protected</span>
+                </div>
+              </div>
             </div>
-          </label>
+          </div>
+
+          <!-- 3. Bank Direct Deposit -->
+          <div class="payment-card-option" id="cardOptionBank" onclick="switchPaymentMethod('Bank')" style="border:1px solid var(--border-color); background:var(--bg-primary); border-radius:var(--radius-sm); padding:0.85rem 1rem; margin-bottom:0.75rem; cursor:pointer; transition:all 0.2s ease;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <input type="radio" name="paymentOption" id="payBank" value="Bank Transfer" style="accent-color:var(--accent-amber); width:18px; height:18px; cursor:pointer;">
+              <div style="flex:1;">
+                <div style="font-weight:700; color:#ffffff; font-size:0.95rem; display:flex; align-items:center; gap:6px;">
+                  <i class="fas fa-university" style="color:var(--accent-amber);"></i> Bank Direct Deposit
+                </div>
+                <div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Direct bank deposit / transfer & attach slip</div>
+              </div>
+            </div>
+            <!-- Bank Sub-box -->
+            <div id="sectionBank" style="margin-top:0.85rem; padding:0.85rem; background:rgba(245, 158, 11, 0.08); border:1px solid rgba(245, 158, 11, 0.35); border-radius:6px; font-size:0.82rem; display:none;" onclick="event.stopPropagation()">
+              <div style="color:#fcd34d; font-weight:700; margin-bottom:0.4rem;"><i class="fas fa-university"></i> D-TEL Official Bank Account Details</div>
+              <div style="font-size:0.8rem; color:#ffffff; line-height:1.6; background:rgba(0,0,0,0.3); padding:0.6rem 0.75rem; border-radius:6px; margin-bottom:0.65rem;">
+                <div>• <strong>Bank:</strong> Commercial Bank of Ceylon</div>
+                <div>• <strong>Account Name:</strong> D-TEL Cellular (Pvt) Ltd</div>
+                <div>• <strong>Account Number:</strong> <span style="color:var(--accent-cyan); font-weight:800; font-size:0.95rem; letter-spacing:0.5px;">8004561230</span></div>
+                <div>• <strong>Branch:</strong> Matara / Colombo 03</div>
+              </div>
+
+              <!-- PDF / Image Slip Upload Dropzone -->
+              <div style="border-top:1px dashed rgba(245,158,11,0.3); padding-top:0.65rem;">
+                <label style="display:block; font-weight:700; color:#fde68a; margin-bottom:0.35rem; font-size:0.82rem;">
+                  <i class="fas fa-file-invoice" style="margin-right:4px;"></i> Upload Deposit Slip / PDF Receipt *
+                </label>
+                
+                <input type="file" id="bankSlipFileInput" accept=".pdf,image/*" style="display:none;" onchange="handleBankSlipUpload(this)">
+                <div id="bankSlipDropzone" onclick="document.getElementById('bankSlipFileInput').click()" style="border:2px dashed rgba(245,158,11,0.5); border-radius:8px; padding:0.9rem 0.5rem; text-align:center; background:rgba(0,0,0,0.35); cursor:pointer; transition:all 0.2s ease;">
+                  <div id="bankSlipPreviewArea">
+                    <i class="fas fa-cloud-arrow-up" style="font-size:1.8rem; color:#f59e0b; margin-bottom:0.3rem; display:block;"></i>
+                    <div style="font-size:0.88rem; color:#ffffff; font-weight:700;">Click to Browse & Upload Bank Slip (PDF / Photo)</div>
+                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Supports PDF, JPG, JPEG, PNG (Max 10MB)</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <!-- GREEN PLACE ORDER NOW BUTTON -->
-        <button type="button" onclick="submitFinalOrder()" class="btn-whatsapp" style="width:100%; padding:1rem; font-size:1.1rem; background:#16a34a; color:#ffffff; font-weight:800; letter-spacing:0.5px; border:none; box-shadow:0 4px 15px rgba(22, 163, 74, 0.4);">
-          <i class="fas fa-lock"></i> PLACE ORDER NOW
+        <button type="button" onclick="submitFinalOrder()" class="btn-whatsapp" style="width:100%; padding:1rem; font-size:1.1rem; background:#16a34a; color:#ffffff; font-weight:800; letter-spacing:0.5px; border:none; box-shadow:0 4px 15px rgba(22, 163, 74, 0.4); cursor:pointer;">
+          <i class="fas fa-check-circle"></i> PLACE ORDER NOW
         </button>
 
       </div>
@@ -270,9 +379,9 @@
   </div>
 
   <!-- FOOTER -->
-  <footer>
+  <footer style="width:100%; background:var(--bg-primary); border-top:1px solid var(--border-color);">
     <div class="footer-container"
-      style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      style="width:100%; max-width:100%; margin:0; padding:3.5rem clamp(1.5rem, 4vw, 4.5rem) 2.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:2.5rem; box-sizing:border-box;">
 
       <!-- Col 1: D-TEL Address & Contacts -->
       <div class="footer-col">
@@ -285,16 +394,16 @@
               style="font-size:0.75rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
           </div>
         </a>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
+        <p class="store-live-address" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
             style="color:#ef4444;"></i> 2nd Road,Piliyandala.</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
+        <p class="store-live-phone" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
             style="color:var(--accent-cyan);"></i> Phone: 0701948371</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
+        <p class="store-live-email" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
             style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
         <div style="display:flex; gap:0.75rem; margin-top:1rem;">
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://wa.me/94701948371" class="store-live-whatsapp-link" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
 
@@ -340,19 +449,185 @@
 
     </div>
 
-    <div style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+    <div style="width:100%; max-width:100%; margin:0; padding:1.25rem clamp(1.5rem, 4vw, 4.5rem); border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.82rem; color:var(--text-dim); box-sizing:border-box;">
       <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
       <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
     </div>
   </footer>
 
   <!-- CORE SCRIPTS -->
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/data.js?v=20260929_private_cart"></script>
+  <script src="js/api-client.js?v=20260929_private_cart"></script>
+  <script src="js/auth.js?v=20260929_private_cart"></script>
+  <script src="js/app.js?v=20260929_private_cart"></script>
 
   <script>
     let appliedDiscount = 400;
     let deliveryFee = 350;
+    let selectedPaymentMethod = "Cash on Delivery";
+    let selectedCardBrand = "Visa";
+    window.uploadedBankSlip = null;
+
+    function selectCardBrand(brand) {
+      selectedCardBrand = brand;
+      document.querySelectorAll('.card-brand-chip').forEach(el => {
+        el.classList.toggle('active', el.dataset.brand === brand);
+      });
+      const brandBadge = document.getElementById('detectedCardBrand');
+      if (brandBadge) {
+        brandBadge.innerHTML = `<i class="${brand === 'Visa' ? 'fab fa-cc-visa' : brand === 'Mastercard' ? 'fab fa-cc-mastercard' : brand === 'Amex' ? 'fab fa-cc-amex' : 'fas fa-credit-card'}"></i> ${brand}`;
+      }
+    }
+
+    function formatCardNumber(input) {
+      let val = input.value.replace(/\D/g, '').substring(0, 16);
+      let formatted = val.match(/.{1,4}/g)?.join(' ') || val;
+      input.value = formatted;
+
+      // Auto detect brand
+      if (val.startsWith('4')) selectCardBrand('Visa');
+      else if (val.startsWith('5') || val.startsWith('2')) selectCardBrand('Mastercard');
+      else if (val.startsWith('3')) selectCardBrand('Amex');
+    }
+
+    function formatCardExpiry(input) {
+      let val = input.value.replace(/\D/g, '').substring(0, 4);
+      if (val.length >= 2) {
+        input.value = val.substring(0, 2) + '/' + val.substring(2);
+      } else {
+        input.value = val;
+      }
+    }
+
+    function handleBankSlipUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      const file = input.files[0];
+      const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+      const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.uploadedBankSlip = {
+          name: file.name,
+          size: `${sizeMb} MB`,
+          type: isPdf ? 'pdf' : 'image',
+          dataUri: e.target.result
+        };
+
+        const previewArea = document.getElementById('bankSlipPreviewArea');
+        if (previewArea) {
+          previewArea.innerHTML = `
+            <div style="background:rgba(16,185,129,0.12); border:1px solid var(--accent-green); border-radius:8px; padding:0.75rem; display:flex; align-items:center; justify-content:space-between; gap:0.75rem; text-align:left;">
+              <div style="display:flex; align-items:center; gap:0.75rem; overflow:hidden;">
+                <div style="width:40px; height:40px; border-radius:6px; background:${isPdf ? 'rgba(239,68,68,0.2)' : 'rgba(6,182,212,0.2)'}; color:${isPdf ? '#ef4444' : 'var(--accent-cyan)'}; display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0;">
+                  <i class="${isPdf ? 'fas fa-file-pdf' : 'fas fa-file-image'}"></i>
+                </div>
+                <div style="overflow:hidden;">
+                  <div style="font-weight:700; color:#fff; font-size:0.85rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${file.name}</div>
+                  <div style="font-size:0.75rem; color:#6ee7b7;"><i class="fas fa-check-circle"></i> ${isPdf ? 'PDF Deposit Receipt' : 'Bank Slip Image'} (${sizeMb} MB) Attached</div>
+                </div>
+              </div>
+              <button type="button" onclick="event.stopPropagation(); removeBankSlip();" style="background:rgba(244,63,94,0.15); border:1px solid rgba(244,63,94,0.3); color:var(--accent-rose); border-radius:6px; padding:0.35rem 0.6rem; font-size:0.75rem; cursor:pointer; flex-shrink:0;">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeBankSlip() {
+      window.uploadedBankSlip = null;
+      const fileInput = document.getElementById('bankSlipFileInput');
+      if (fileInput) fileInput.value = "";
+      const previewArea = document.getElementById('bankSlipPreviewArea');
+      if (previewArea) {
+        previewArea.innerHTML = `
+          <i class="fas fa-cloud-arrow-up" style="font-size:1.6rem; color:#f59e0b; margin-bottom:0.25rem; display:block;"></i>
+          <div style="font-size:0.85rem; color:#ffffff; font-weight:700;">Click to Upload Bank Deposit Slip / PDF Receipt</div>
+          <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">Supports PDF, JPG, PNG receipts (Max 10MB)</div>
+        `;
+      }
+    }
+
+    function switchPaymentMethod(method) {
+      selectedPaymentMethod = (method === 'Card') ? "Online Card Payment" : (method === 'Bank') ? "Bank Transfer" : "Cash on Delivery";
+
+      const codRadio = document.getElementById('payCOD');
+      const cardRadio = document.getElementById('payCard');
+      const bankRadio = document.getElementById('payBank');
+
+      if (codRadio) codRadio.checked = (method === 'COD');
+      if (cardRadio) cardRadio.checked = (method === 'Card');
+      if (bankRadio) bankRadio.checked = (method === 'Bank');
+
+      const optCOD = document.getElementById('cardOptionCOD');
+      const optCard = document.getElementById('cardOptionCard');
+      const optBank = document.getElementById('cardOptionBank');
+
+      const secCOD = document.getElementById('sectionCOD');
+      const secCard = document.getElementById('sectionCard');
+      const secBank = document.getElementById('sectionBank');
+
+      if (optCOD) {
+        optCOD.style.borderColor = (method === 'COD') ? 'var(--accent-green)' : 'var(--border-color)';
+        optCOD.style.background = (method === 'COD') ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-primary)';
+      }
+      if (optCard) {
+        optCard.style.borderColor = (method === 'Card') ? 'var(--accent-cyan)' : 'var(--border-color)';
+        optCard.style.background = (method === 'Card') ? 'rgba(6, 182, 212, 0.08)' : 'var(--bg-primary)';
+      }
+      if (optBank) {
+        optBank.style.borderColor = (method === 'Bank') ? 'var(--accent-amber)' : 'var(--border-color)';
+        optBank.style.background = (method === 'Bank') ? 'rgba(245, 158, 11, 0.08)' : 'var(--bg-primary)';
+      }
+
+      if (secCOD) secCOD.style.display = (method === 'COD') ? 'block' : 'none';
+      if (secCard) secCard.style.display = (method === 'Card') ? 'block' : 'none';
+      if (secBank) secBank.style.display = (method === 'Bank') ? 'block' : 'none';
+    }
+
+    function renderCheckoutUserDetails() {
+      const user = Auth.getUser();
+      const banner = document.getElementById('checkoutAuthStatusBanner');
+      const text = document.getElementById('checkoutAuthText');
+      const btn = document.getElementById('checkoutAuthActionBtn');
+
+      const nameInput = document.getElementById('custName');
+      const phoneInput = document.getElementById('custPhone');
+      const addressInput = document.getElementById('custAddress');
+
+      if (user) {
+        if (banner) {
+          banner.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          banner.style.background = 'rgba(16, 185, 129, 0.08)';
+        }
+        if (text) text.innerHTML = `<i class="fas fa-check-circle" style="color:var(--accent-green);"></i> Logged in as <strong style="color:#ffffff;">${user.name}</strong> (${user.email || user.username || ''}) • Details auto-filled!`;
+        if (btn) {
+          btn.textContent = "Switch Account";
+          btn.onclick = () => Auth.openModal('customer', () => renderCheckoutUserDetails());
+        }
+
+        // Auto pre-fill
+        if (nameInput && !nameInput.value) nameInput.value = user.name || '';
+        if (phoneInput && !phoneInput.value) phoneInput.value = user.phone || '0771234567';
+        if (addressInput && !addressInput.value) addressInput.value = user.address || 'No 45, Temple Road, Colombo 03';
+      } else {
+        if (banner) {
+          banner.style.borderColor = 'rgba(244, 63, 94, 0.4)';
+          banner.style.background = 'rgba(244, 63, 94, 0.08)';
+        }
+        if (text) text.innerHTML = `<i class="fas fa-exclamation-triangle" style="color:var(--accent-rose);"></i> <span>You are currently not signed in. <strong style="color:#ffffff;">Sign in</strong> to auto-fill details and complete order.</span>`;
+        if (btn) {
+          btn.textContent = "Sign In / Register";
+          btn.style.background = "linear-gradient(135deg, var(--accent-cyan), var(--accent-blue))";
+          btn.style.color = "#ffffff";
+          btn.style.borderColor = "transparent";
+          btn.onclick = () => Auth.openModal('customer', () => renderCheckoutUserDetails(), '⚠️ Please Sign In or Register to continue checkout.');
+        }
+      }
+    }
 
     function renderCheckoutItems() {
       const cart = StorageDB.getCart();
@@ -360,35 +635,60 @@
       const container = document.getElementById('checkoutCartList');
       const countEl = document.getElementById('checkoutCartCount');
 
-      if (cart.length === 0) {
-        StorageDB.addToCart("prod_003");
-        StorageDB.addToCart("prod_004");
-      }
+      if (countEl) countEl.textContent = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
 
-      const updatedCart = StorageDB.getCart();
-      if (countEl) countEl.textContent = updatedCart.reduce((sum, item) => sum + item.qty, 0);
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center; padding:3rem 1.5rem; background:var(--bg-primary); border-radius:var(--radius-md); border:1px dashed var(--border-color);">
+            <i class="fas fa-shopping-cart" style="font-size:3rem; color:var(--text-dim); margin-bottom:1rem;"></i>
+            <h4 style="font-size:1.1rem; color:#fff; margin-bottom:0.5rem;">Your shopping cart is empty</h4>
+            <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.25rem;">Browse our genuine catalog to add chargers, cases, audio & smartphones.</p>
+            <a href="shop.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; text-decoration:none; padding:0.65rem 1.25rem;">
+              <i class="fas fa-store"></i> Browse Store Catalog
+            </a>
+          </div>
+        `;
+        calculateSummaryTotals(0);
+        return;
+      }
 
       let subtotal = 0;
 
-      container.innerHTML = updatedCart.map(item => {
-        const prod = products.find(p => p.id === item.id) || { name: "Item", price: 1600, image: "images/cat-chargers.svg" };
-        const itemTotal = prod.price * item.qty;
+      container.innerHTML = cart.map(item => {
+        const prodId = item.id || item.productId;
+        const prod = products.find(p => p.id === prodId || p.numericId == prodId || p.id === item.productId || p.id === item.id) || item;
+        const itemName = prod.name || item.name || "Mobile Product";
+        const itemPrice = Number(prod.price || item.price || 0);
+        const itemImg = prod.image || item.image || "images/cat-chargers.svg";
+        const itemBrand = prod.brand || item.brand || "D-TEL";
+        const itemTotal = itemPrice * (item.qty || 1);
         subtotal += itemTotal;
 
         return `
-          <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem;">
-            <div style="display:flex; align-items:center; gap:1rem;">
-              <img src="${prod.image}" alt="${prod.name}" style="width:60px; height:60px; object-fit:contain;" onerror="this.src='images/cat-chargers.svg'">
+          <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:1rem; flex:1; min-width:240px;">
+              <img src="${itemImg}" alt="${itemName}" style="width:65px; height:65px; object-fit:contain; background:var(--bg-secondary); border-radius:8px; padding:4px;" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
               <div>
-                <h4 style="font-size:0.95rem; color:#ffffff;">${prod.name}</h4>
-                <div style="color:var(--text-muted); font-size:0.85rem; margin-top:0.2rem;">
-                  Qty: <strong style="color:#ffffff;">${item.qty}</strong> | Price: Rs. ${prod.price.toLocaleString()}
+                <h4 style="font-size:0.95rem; color:#ffffff; line-height:1.3;">${itemName}</h4>
+                <div style="color:var(--text-muted); font-size:0.82rem; margin-top:0.25rem; display:flex; align-items:center; gap:0.5rem;">
+                  <span style="background:rgba(255,255,255,0.06); padding:1px 5px; border-radius:4px; font-weight:600;">${itemBrand}</span>
+                  <span>•</span>
+                  <span>Unit: <strong style="color:var(--accent-cyan);">Rs. ${itemPrice.toLocaleString()}</strong></span>
                 </div>
               </div>
             </div>
-            <div style="display:flex; align-items:center; gap:1rem;">
-              <span style="font-weight:700; color:var(--accent-cyan);">Rs. ${itemTotal.toLocaleString()}</span>
-              <button onclick="removeCheckoutItem('${item.id}')" style="background:rgba(244, 63, 94, 0.15); border:1px solid rgba(244, 63, 94, 0.3); color:var(--accent-rose); width:32px; height:32px; border-radius:6px; cursor:pointer;" title="Remove Item">
+            
+            <div style="display:flex; align-items:center; gap:1.25rem;">
+              <!-- Quantity Controls -->
+              <div class="qty-counter" style="display:inline-flex; align-items:center; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm);">
+                <button type="button" onclick="changeItemQty('${prodId}', ${(item.qty || 1) - 1})" style="background:none; border:none; color:#fff; padding:0.35rem 0.65rem; font-size:1rem; cursor:pointer;">-</button>
+                <span style="padding:0.35rem 0.5rem; font-weight:700; font-size:0.9rem; min-width:24px; text-align:center;">${item.qty || 1}</span>
+                <button type="button" onclick="changeItemQty('${prodId}', ${(item.qty || 1) + 1})" style="background:none; border:none; color:#fff; padding:0.35rem 0.65rem; font-size:1rem; cursor:pointer;">+</button>
+              </div>
+
+              <span style="font-weight:800; font-size:1.05rem; color:var(--accent-cyan); min-width:110px; text-align:right;">Rs. ${itemTotal.toLocaleString()}</span>
+              
+              <button type="button" onclick="removeCheckoutItem('${prodId}')" style="background:rgba(244, 63, 94, 0.15); border:1px solid rgba(244, 63, 94, 0.3); color:var(--accent-rose); width:34px; height:34px; border-radius:6px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;" title="Remove Item">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </div>
@@ -411,6 +711,12 @@
       if (discountEl) discountEl.textContent = "-Rs. " + appliedDiscount.toLocaleString() + ".00";
       if (deliveryEl) deliveryEl.textContent = "Rs. " + deliveryFee.toLocaleString() + ".00";
       if (totalEl) totalEl.textContent = "Rs. " + (total > 0 ? total : 0).toLocaleString() + ".00";
+    }
+
+    function changeItemQty(id, newQty) {
+      StorageDB.updateCartQty(id, newQty);
+      renderCheckoutItems();
+      window.updateHeaderCounters();
     }
 
     function removeCheckoutItem(id) {
@@ -437,7 +743,13 @@
       renderCheckoutItems();
     }
 
-    function submitFinalOrder() {
+    async function submitFinalOrder() {
+      const cart = StorageDB.getCart();
+      if (cart.length === 0) {
+        alert("Your shopping cart is empty! Please add items before placing an order.");
+        return;
+      }
+
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
       const address = document.getElementById('custAddress').value.trim();
@@ -445,32 +757,112 @@
       const city = document.getElementById('custCity').value.trim();
 
       if (!name || !phone || !address || !city) {
-        alert("Please fill in your Delivery Information (Name, Phone, Address, City) before placing the order.");
+        alert("Please fill in your Delivery Information (Full Name, Phone, Address, City) to place the order.");
         return;
+      }
+
+      const user = Auth.getUser();
+      if (!user) {
+        Auth.openModal('customer', () => {
+          renderCheckoutUserDetails();
+          submitFinalOrder();
+        }, '⚠️ Please Sign In or Register to confirm and place your order.');
+        return;
+      }
+
+      // Card Payment Validation
+      let cardLast4 = "";
+      if (selectedPaymentMethod === "Online Card Payment") {
+        const cardNum = document.getElementById('cardNumInput') ? document.getElementById('cardNumInput').value.replace(/\s+/g, '') : '';
+        const cardExp = document.getElementById('cardExpInput') ? document.getElementById('cardExpInput').value.trim() : '';
+        const cardCvv = document.getElementById('cardCvvInput') ? document.getElementById('cardCvvInput').value.trim() : '';
+
+        if (!cardNum || cardNum.length < 15 || !cardExp || !cardCvv) {
+          alert(`Please complete your ${selectedCardBrand} Card Details (Card Number, Expiry MM/YY, and CVV) to proceed with Online Payment.`);
+          return;
+        }
+        cardLast4 = cardNum.slice(-4);
+      }
+
+      // Bank Transfer Deposit Validation
+      if (selectedPaymentMethod === "Bank Transfer" && !window.uploadedBankSlip) {
+        if (!confirm("You haven't uploaded a deposit slip yet. Do you want to proceed and send your bank slip photo via WhatsApp after placing the order?")) {
+          return;
+        }
+      }
+
+      const totalTxt = document.getElementById('totalAmountVal') ? document.getElementById('totalAmountVal').textContent : "Rs. 0.00";
+      const rawTotal = parseFloat(totalTxt.replace(/[^0-9.]/g, '')) || 0;
+
+      // Save order to Local Storage & MySQL API
+      const orderPayload = {
+        customerName: name,
+        phone: phone,
+        address: `${address}, ${city}, ${district}`,
+        delivery_address: `${address}, ${city}, ${district}`,
+        user_id: user ? (user.user_id || 1) : 1,
+        total: rawTotal,
+        total_amount: rawTotal,
+        paymentMethod: selectedPaymentMethod,
+        payment_method: selectedPaymentMethod,
+        cardBrand: selectedPaymentMethod === "Online Card Payment" ? selectedCardBrand : null,
+        cardLast4: cardLast4,
+        bankSlip: window.uploadedBankSlip ? window.uploadedBankSlip.name : null,
+        status: "Pending",
+        items: cart
+      };
+
+      StorageDB.addOrder(orderPayload);
+
+      if (typeof ApiClient !== "undefined" && ApiClient.placeOrder) {
+        try {
+          await ApiClient.placeOrder(orderPayload);
+        } catch (e) {
+          console.warn("MySQL placeOrder skipped:", e);
+        }
       }
 
       const modal = document.getElementById('orderSuccessModal');
       const desc = document.getElementById('orderModalDesc');
       const waBtn = document.getElementById('sendOrderWhatsAppBtn');
 
-      const totalTxt = document.getElementById('totalAmountVal').textContent;
+      const paymentDetailLabel = selectedPaymentMethod === "Online Card Payment" 
+        ? `${selectedCardBrand} (•••• ${cardLast4})` 
+        : selectedPaymentMethod === "Bank Transfer" 
+          ? `Bank Transfer ${window.uploadedBankSlip ? '(Slip Attached: ' + window.uploadedBankSlip.name + ')' : '(Pending Slip)'}`
+          : "Cash on Delivery (COD)";
 
       if (desc) {
-        desc.textContent = `Thank you ${name}! Your order totaling ${totalTxt} has been placed via Cash on Delivery for ${city}, ${district}.`;
+        desc.innerHTML = `Thank you <strong>${name}</strong>!<br>Your order totaling <strong style="color:var(--accent-green);">${totalTxt}</strong> has been confirmed via <strong style="color:var(--accent-cyan);">${paymentDetailLabel}</strong> for <strong>${city}, ${district}</strong>.`;
       }
 
       if (waBtn) {
         waBtn.onclick = () => {
-          const waMsg = `Hi D-TEL! I placed an order.\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city}, ${district}\nTotal: ${totalTxt}`;
+          const itemsSummary = cart.map(i => `${i.name || 'Item'} (x${i.qty || 1})`).join(", ");
+          const slipNote = window.uploadedBankSlip ? `\nBank Slip Attached: ${window.uploadedBankSlip.name}` : "";
+          const waMsg = `Hi D-TEL! I placed an order.\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city}, ${district}\nItems: ${itemsSummary}\nPayment: ${paymentDetailLabel}${slipNote}\nTotal: ${totalTxt}`;
           window.open(`https://wa.me/94771234567?text=${encodeURIComponent(waMsg)}`, '_blank');
         };
       }
 
       if (modal) modal.style.display = 'flex';
       StorageDB.clearCart();
+      window.uploadedBankSlip = null;
+      window.updateHeaderCounters();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      renderCheckoutItems();
+      renderCheckoutUserDetails();
+      switchPaymentMethod('COD');
+    });
+
+    window.addEventListener('userUpdated', () => {
+      renderCheckoutItems();
+      renderCheckoutUserDetails();
+    });
+
+    window.addEventListener('cartUpdated', () => {
       renderCheckoutItems();
     });
   </script>

@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
 
   <!-- Custom CSS for Dropdown Menu on Hover -->
   <style>
@@ -376,12 +376,12 @@
   </div>
 
   <!-- FOOTER -->
-  <footer>
+  <footer style="width:100%; background:var(--bg-primary); border-top:1px solid var(--border-color);">
     <div class="footer-container"
-      style="max-width:1280px; margin:0 auto; padding:3rem 1.5rem 2rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:2rem;">
+      style="width:100%; max-width:100%; margin:0; padding:3.5rem clamp(1.5rem, 4vw, 4.5rem) 2.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:2.5rem; align-items:start; box-sizing:border-box;">
 
-      <!-- Col 1: D-TEL Address & Contacts -->
-      <div class="footer-col">
+      <!-- Col 1: D-TEL Brand, Address & Contacts -->
+      <div class="footer-col" style="min-width:240px;">
         <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
           <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
           <div>
@@ -391,23 +391,58 @@
               style="font-size:0.75rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
           </div>
         </a>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-map-marker-alt"
-            style="color:#ef4444;"></i> 2nd Road,Piliyandala.</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-phone-alt"
-            style="color:var(--accent-cyan);"></i> Phone: 0701948371</p>
-        <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i class="fas fa-envelope"
-            style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
+        <p class="store-live-address" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.6rem;"><i
+            class="fas fa-map-marker-alt" style="color:#ef4444;"></i> 2nd Road, Piliyandala, Sri Lanka</p>
+        <p class="store-live-phone" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.6rem;"><i
+            class="fas fa-phone-alt" style="color:var(--accent-cyan);"></i> Phone: 070 194 8371</p>
+        <p class="store-live-hours" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.6rem;"><i
+            class="fas fa-clock" style="color:var(--accent-amber);"></i> Mon - Sat: 9:00 AM - 8:30 PM</p>
+        <p class="store-live-email" style="color:var(--text-muted); font-size:0.85rem; margin-bottom:0.75rem;"><i
+            class="fas fa-envelope" style="color:var(--accent-blue);"></i> Email: dtel@gmail.com</p>
+
+        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+          <a id="storeDirectMapLink" href="https://maps.google.com/?q=2nd+Road,+Piliyandala,+Sri+Lanka" target="_blank"
+            class="btn-primary"
+            style="padding:0.45rem 0.85rem; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; border-radius:var(--radius-sm);">
+            <i class="fas fa-directions"></i> Directions
+          </a>
+          <a href="https://wa.me/94701948371?text=Hi%20D-TEL!%20I%20would%20like%20directions%20to%20your%20store."
+            target="_blank" class="store-live-whatsapp-link btn-secondary"
+            style="padding:0.45rem 0.85rem; font-size:0.8rem; text-decoration:none; display:inline-flex; align-items:center; gap:0.35rem; color:#22c55e; border-color:rgba(34,197,94,0.4); border-radius:var(--radius-sm);">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+
         <div style="display:flex; gap:0.75rem; margin-top:1rem;">
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-facebook"></i></a>
           <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-instagram"></i></a>
-          <a href="#" style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://wa.me/94701948371" class="store-live-whatsapp-link"
+            style="color:var(--text-muted); font-size:1.1rem;"><i class="fab fa-whatsapp"></i></a>
         </div>
       </div>
 
-      <!-- Col 2: Shop By -->
+      <!-- Col 2: Showroom Live Map -->
+      <div class="footer-col" style="min-width:240px;">
+        <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff; display:flex; align-items:center; gap:0.4rem;">
+          <i class="fas fa-map-marked-alt" style="color:var(--accent-cyan);"></i> Showroom Map
+        </h4>
+        <div
+          style="border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border-color); height:200px; position:relative; background:#090d16; box-shadow:0 4px 20px rgba(0,0,0,0.25);">
+          <div
+            style="position:absolute; top:6px; left:6px; z-index:2; background:rgba(9,13,22,0.85); backdrop-filter:blur(4px); padding:3px 8px; border-radius:12px; font-size:0.7rem; color:#fff; border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; gap:4px;">
+            <i class="fas fa-map-pin" style="color:#ef4444;"></i> <span id="storeLocationMapText">2nd Road,
+              Piliyandala</span>
+          </div>
+          <iframe id="storeLocationMapIframe" width="100%" height="100%" style="border:0;" allowfullscreen=""
+            loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://maps.google.com/maps?q=2nd%20Road,%20Piliyandala,%20Sri%20Lanka&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
+        </div>
+      </div>
+
+      <!-- Col 3: Shop By -->
       <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Shop By</h4>
-        <ul style="list-style:none; padding:0; line-height:2;">
+        <ul style="list-style:none; padding:0; line-height:2.2;">
           <li><a href="shop.html?sort=newest" style="color:var(--text-muted); font-size:0.85rem;">• New Arrivals</a>
           </li>
           <li><a href="shop.html?category=Covers" style="color:var(--text-muted); font-size:0.85rem;">• Phone Cases &
@@ -419,10 +454,10 @@
         </ul>
       </div>
 
-      <!-- Col 3: Information -->
+      <!-- Col 4: Information -->
       <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:1rem; color:#ffffff;">Information</h4>
-        <ul style="list-style:none; padding:0; line-height:2;">
+        <ul style="list-style:none; padding:0; line-height:2.2;">
           <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• About D-TEL</a></li>
           <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Contact Us</a></li>
           <li><a href="#" style="color:var(--text-muted); font-size:0.85rem;">• Return Policy</a></li>
@@ -430,15 +465,15 @@
         </ul>
       </div>
 
-      <!-- Col 4: Newsletter Sign Up -->
-      <div class="footer-col">
+      <!-- Col 5: Newsletter Sign Up -->
+      <div class="footer-col" style="min-width:220px;">
         <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
         <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates &
           discounts</p>
         <form onsubmit="event.preventDefault(); alert('Subscribed to D-TEL updates!');"
           style="display:flex; flex-direction:column; gap:0.6rem;">
           <input type="email" placeholder="enter email..." required
-            style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05);">
+            style="padding:0.6rem 0.85rem; font-size:0.85rem; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-sm); color:#fff;">
           <button type="submit" class="btn-primary"
             style="padding:0.6rem; font-size:0.85rem; text-transform:uppercase; letter-spacing:1px; background:#ffffff; color:#090d16; font-weight:800;">
             SUBMIT
@@ -455,7 +490,7 @@
     </div>
 
     <div
-      style="max-width:1280px; margin:0 auto; padding:1.25rem 1.5rem; border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.8rem; color:var(--text-dim);">
+      style="width:100%; max-width:100%; margin:0; padding:1.25rem clamp(1.5rem, 4vw, 4.5rem); border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.82rem; color:var(--text-dim); box-sizing:border-box;">
       <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
       <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a>
       </div>
@@ -463,8 +498,10 @@
   </footer>
 
   <!-- CORE SCRIPTS -->
-  <script src="js/data.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/data.js?v=20260929_private_cart"></script>
+  <script src="js/api-client.js?v=20260929_private_cart"></script>
+  <script src="js/auth.js?v=20260929_private_cart"></script>
+  <script src="js/app.js?v=20260929_private_cart"></script>
 
   <script>
     let currentSlideIdx = 0;
@@ -503,7 +540,7 @@
       if (newArrivalsGrid) {
         const products = StorageDB.getProducts().slice(0, 4);
         newArrivalsGrid.innerHTML = products.map(p => {
-          const brandMeta = BRAND_META[p.brand] || { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" };
+          const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { name: p.brand, icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
           return `
             <div class="product-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
               ${p.badge ? `<span class="card-badge" style="position:absolute; top:12px; left:12px; background:var(--accent-cyan); color:#000; font-size:0.7rem; font-weight:800; padding:0.2rem 0.5rem; border-radius:4px; z-index:2;">${p.badge}</span>` : ''}
@@ -515,7 +552,7 @@
               <div>
                 <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:var(--accent-cyan); font-weight:700; margin-bottom:0.25rem;">
                   <span class="brand-logo-badge" style="width:16px; height:16px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color};"><i class="${brandMeta.icon}"></i></span>
-                  <span>${p.brand}</span>
+                  <span>${brandMeta.name || p.brand}</span>
                   <span style="color:var(--text-dim);">•</span>
                   <span style="color:var(--text-muted);">${p.category}</span>
                 </div>
@@ -528,7 +565,7 @@
               </div>
 
               <div style="display:flex; gap:0.5rem;">
-                <button class="btn-primary" onclick="StorageDB.addToCart('${p.id}'); window.updateHeaderCounters(); alert('${p.name} added to Cart!');" style="flex:1; padding:0.6rem; font-size:0.82rem;">
+                <button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="flex:1; padding:0.6rem; font-size:0.82rem;">
                   <i class="fas fa-cart-plus"></i> Add
                 </button>
                 <a href="product-detail.html?id=${p.id}" class="btn-secondary" style="padding:0.6rem 0.85rem; font-size:0.82rem; text-decoration:none; text-align:center;">
@@ -545,7 +582,7 @@
       if (specialOffersGrid) {
         const offers = StorageDB.getProducts().slice(2, 6);
         specialOffersGrid.innerHTML = offers.map(p => {
-          const brandMeta = BRAND_META[p.brand] || { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" };
+          const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { name: p.brand, icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
           return `
             <div class="product-card" style="background:var(--bg-primary); border:1px solid rgba(244, 63, 94, 0.35); border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
               <span style="position:absolute; top:12px; left:12px; background:var(--accent-rose); color:#fff; font-size:0.7rem; font-weight:800; padding:0.2rem 0.55rem; border-radius:4px; z-index:2;">
@@ -559,7 +596,7 @@
               <div>
                 <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:#fb7185; font-weight:700; margin-bottom:0.25rem;">
                   <span class="brand-logo-badge" style="width:16px; height:16px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color};"><i class="${brandMeta.icon}"></i></span>
-                  <span>${p.brand}</span>
+                  <span>${brandMeta.name || p.brand}</span>
                   <span style="color:var(--text-dim);">•</span>
                   <span style="color:var(--text-muted);">${p.category}</span>
                 </div>

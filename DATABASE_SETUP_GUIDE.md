@@ -40,20 +40,22 @@
 | File / Endpoint | Method | Purpose |
 | :--- | :--- | :--- |
 | `api/db.php` | - | PDO MySQL connection setup (`localhost`, `root`, `techzone_db`) |
-| `api/products.php` | `GET`, `POST`, `PUT`, `DELETE` | Product CRUD & filtering |
+| `api/products.php` | `GET`, `POST`, `PUT`, `DELETE` | Product CRUD, multi-image views (image, image_2, image_3) & category filtering |
+| `api/upload.php`   | `POST` | Direct image file upload to `images/uploads/` |
 | `api/categories.php`| `GET` | Categories list |
-| `api/auth.php` | `POST` | `?action=login`, `?action=register`, `?action=admin_login` |
-| `api/cart.php` | `GET`, `POST`, `PUT`, `DELETE` | Cart management (add, update qty, clear) |
-| `api/orders.php` | `GET`, `POST`, `PUT` | Place order (with items & payment), update status |
-| `api/admin.php` | `GET` | Dashboard statistics (revenue, total orders, stock) |
+| `api/auth.php`     | `POST` | `?action=login`, `?action=register`, `?action=admin_login` |
+| `api/cart.php`     | `GET`, `POST`, `PUT`, `DELETE` | Cart management (add, update qty, clear) |
+| `api/orders.php`   | `GET`, `POST`, `PUT` | Place order (with items & payment), update status |
+| `api/admin.php`    | `GET` | Dashboard statistics (revenue, total orders, stock) |
 
 ---
 
 ## 🔑 4. Default Login Credentials (පරීක්ෂා කිරීමට)
 
-- **Admin Login:**
-  - Email: `admin@techzone.lk`
-  - Password: `admin123`
-- **Customer Login:**
-  - Email: `kasun@gmail.com`
+- **Admin Login (පරිපාලක පිවිසුම):**
+  - Email / Username: `dtel@gmail.com` (or `admin`)
+  - Password: `Dtel@123`
+- **Customer Login (පාරිභෝගික පිවිසුම):**
+  - Google Sign In: ඕනෑම Google Email & Password එකකින්
+  - Email Login: `kasun@gmail.com` (හෝ ලියාපදිංචි වන පෞද්ගලික ඊමේල්)
   - Password: `user123`

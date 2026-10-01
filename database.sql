@@ -67,10 +67,15 @@ CREATE TABLE `product` (
     `category_id` INT NOT NULL,
     `admin_id` INT DEFAULT 1,
     `product_name` VARCHAR(255) NOT NULL,
+    `brand` VARCHAR(100) DEFAULT 'Generic',
+    `model` VARCHAR(100) DEFAULT NULL,
     `price` DECIMAL(12,2) NOT NULL,
     `stock` INT NOT NULL DEFAULT 0,
     `description` TEXT DEFAULT NULL,
+    `specs` TEXT DEFAULT NULL,
     `image` VARCHAR(255) DEFAULT 'images/cat-chargers.svg',
+    `image_2` VARCHAR(255) DEFAULT NULL,
+    `image_3` VARCHAR(255) DEFAULT NULL,
     `status` ENUM('active', 'inactive', 'out_of_stock') DEFAULT 'active',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -152,9 +157,9 @@ CREATE TABLE `payment` (
 -- SEED INITIAL SAMPLE DATA
 -- ====================================================================
 
--- 1. Default Admin Account (password: admin123)
+-- 1. Default Admin Account (Email: dtel@gmail.com, Password: Dtel@123)
 INSERT INTO `admin` (`admin_id`, `name`, `email`, `password`, `unit_price`) VALUES
-(1, 'System Administrator', 'admin@techzone.lk', 'admin123', 0.00);
+(1, 'D-TEL Admin', 'dtel@gmail.com', 'Dtel@123', 0.00);
 
 -- 2. Default Demo User (password: user123)
 INSERT INTO `user` (`user_id`, `name`, `email`, `phone`, `password`, `address`) VALUES
