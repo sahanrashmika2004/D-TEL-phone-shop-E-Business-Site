@@ -30,7 +30,7 @@
       <!-- Search Bar -->
       <div class="search-bar-wrap">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search product name, brand..." aria-label="Search Products">
+        <input type="text" id="searchInput" placeholder="Search product name, brand..." aria-label="Search Products" autocomplete="off">
       </div>
 
       <!-- Header Actions -->
@@ -143,7 +143,6 @@
 
         <!-- Green Highlighted Stock & Warranty Box -->
         <div class="pdp-highlights-box">
-          <div><i class="fas fa-check-circle" style="color:var(--accent-green);"></i> In Stock (Ready to Ship from D-TEL)</div>
           <div><i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i> 6 Months Company Warranty Included</div>
           <div><i class="fas fa-truck-fast" style="color:var(--accent-blue);"></i> Fast Express Delivery Available</div>
         </div>
@@ -388,23 +387,56 @@
 
         const tierWrap = document.getElementById('pdpTierBadgeWrap');
         if (tierWrap) {
-          if (currentPdpProduct.qualityTier) {
+          let badgeHtml = "";
+          if (currentPdpProduct.qualityGrade === "Original") {
+            badgeHtml = `
+              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(2,132,199,0.2), rgba(37,99,235,0.25)); color:#38bdf8; border:1px solid #0284c7; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(2,132,199,0.3);">
+                <i class="fas fa-crown"></i> 👑 100% Original Brand Authentic Product
+              </span>
+            `;
+          } else if (currentPdpProduct.qualityGrade === "High Grade") {
+            badgeHtml = `
+              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.25)); color:#a78bfa; border:1px solid #7c3aed; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(124,58,237,0.3);">
+                <i class="fas fa-star"></i> ⭐ High Grade Premium Quality
+              </span>
+            `;
+          } else if (currentPdpProduct.qualityGrade === "Budget") {
+            badgeHtml = `
+              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(5,150,105,0.2), rgba(16,185,129,0.25)); color:#34d399; border:1px solid #059669; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(5,150,105,0.3);">
+                <i class="fas fa-tag"></i> 🏷️ Budget / Low-Cost Standard Grade
+              </span>
+            `;
+          } else if (currentPdpProduct.qualityTier) {
             const tierColor = currentPdpProduct.qualityTier === 'Super D' ? '#fb7185' : currentPdpProduct.qualityTier === 'HD+' ? '#60a5fa' : '#34d399';
             const tierBg = currentPdpProduct.qualityTier === 'Super D' ? 'rgba(244,63,94,0.15)' : currentPdpProduct.qualityTier === 'HD+' ? 'rgba(59,130,246,0.15)' : 'rgba(16,185,129,0.15)';
-            tierWrap.innerHTML = `
+            badgeHtml = `
               <span style="display:inline-flex; align-items:center; gap:0.4rem; background:${tierBg}; color:${tierColor}; border:1px solid ${tierColor}; padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.82rem; font-weight:800;">
                 <i class="fas fa-crown"></i> ${currentPdpProduct.badge || currentPdpProduct.qualityTier + ' Quality'}
               </span>
             `;
-          } else {
-            tierWrap.innerHTML = "";
           }
+          tierWrap.innerHTML = badgeHtml;
+        }
+
+        // Update Warranty highlight in highlights box
+        const highlightsBox = document.querySelector('.pdp-highlights-box');
+        if (highlightsBox) {
+          const warrantyText = currentPdpProduct.qualityGrade === 'Original'
+            ? '1 Year Official Brand Warranty (TRCSL / Genxt Supported)'
+            : currentPdpProduct.qualityGrade === 'High Grade'
+            ? '6 Months Comprehensive Warranty Included'
+            : '1 Month Direct Replacement Warranty (Low-Cost Grade)';
+          
+          highlightsBox.innerHTML = `
+            <div><i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i> ${warrantyText}</div>
+            <div><i class="fas fa-truck-fast" style="color:var(--accent-blue);"></i> Islandwide Express Doorstep Delivery Available</div>
+          `;
         }
 
         document.getElementById('pdpModel').textContent = currentPdpProduct.model || "FC-20W";
         document.getElementById('pdpPrice').textContent = "Rs. " + currentPdpProduct.price.toLocaleString() + ".00";
-        document.getElementById('pdpOldPrice').textContent = "Rs. " + ((currentPdpProduct.oldPrice || currentPdpProduct.price * 1.15)).toLocaleString() + ".00";
-        document.getElementById('pdpSpecsText').textContent = currentPdpProduct.specs || "Premium Quality Grade Guaranteed";
+        document.getElementById('pdpOldPrice').textContent = "Rs. " + ((currentPdpProduct.oldPrice || Math.round(currentPdpProduct.price * 1.15))).toLocaleString() + ".00";
+        document.getElementById('pdpSpecsText').textContent = currentPdpProduct.specs || (currentPdpProduct.qualityGrade === 'Budget' ? "Economical Replacement Quality" : "100% Genuine Brand Product Guaranteed");
 
         document.getElementById('pdpAddToCartBtn').onclick = () => {
           const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;

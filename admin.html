@@ -34,6 +34,9 @@
         <a href="#ordersSection" class="admin-nav-item">
           <i class="fas fa-shopping-bag"></i> Customer Orders
         </a>
+        <a href="#customersSection" class="admin-nav-item">
+          <i class="fas fa-users"></i> Customer Accounts
+        </a>
         <a href="#storeSettingsSection" class="admin-nav-item">
           <i class="fas fa-map-marked-alt"></i> Store & Location Settings
         </a>
@@ -93,6 +96,25 @@
         </div>
       </div>
 
+      <!-- PERSISTENT OUT-OF-STOCK NOTIFICATIONS (ADMIN ONLY) -->
+      <section id="stockAlertPanel" aria-live="polite" style="display:none; margin:0 0 2rem; border:1px solid rgba(244,63,94,0.45); background:rgba(244,63,94,0.08); border-radius:16px; padding:1rem 1.15rem; box-shadow:0 8px 28px rgba(0,0,0,0.16);">
+        <div style="display:flex; align-items:flex-start; gap:0.85rem;">
+          <div style="width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:rgba(244,63,94,0.16); color:var(--accent-rose); flex:none;">
+            <i class="fas fa-bell"></i>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+              <div>
+                <h3 style="margin:0; color:#fff; font-size:1rem;">Stock Notifications</h3>
+                <p style="margin:0.2rem 0 0; color:var(--text-muted); font-size:0.8rem;">These alerts stay here until the product stock is updated above 0.</p>
+              </div>
+              <span id="stockAlertCount" class="status-pill out-of-stock">0 Out of Stock</span>
+            </div>
+            <div id="stockAlertList" style="margin-top:0.8rem; display:grid; gap:0.5rem;"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- PRODUCT INVENTORY MANAGEMENT TABLE -->
       <div id="productsSection" style="margin-bottom:3rem;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
@@ -120,25 +142,84 @@
 
       <!-- CUSTOMER ORDERS TABLE -->
       <div id="ordersSection" style="margin-bottom:3rem;">
-        <div style="margin-bottom:1rem;">
-          <h2>Incoming Customer Orders (COD & WhatsApp)</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2>Customer Orders & Fulfillment</h2>
+            <p style="color:var(--text-muted); font-size:0.85rem;">View order submissions, customer contact info, delivery address & update payment/shipping status</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <input type="text" id="orderSearchInput" placeholder="Search customer, phone, ID..." style="padding:0.45rem 0.85rem; font-size:0.85rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm); color:#fff; width:220px;" oninput="window.filterAdminOrders()">
+            <button class="btn-secondary" onclick="window.refreshAdminOrders()" title="Refresh Orders from Database">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter tabs for order statuses -->
+        <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+          <button class="order-filter-pill active" onclick="window.setOrderFilter('all', this)">All Orders (<span id="countFilterAll">0</span>)</button>
+          <button class="order-filter-pill" onclick="window.setOrderFilter('Pending', this)">Pending (<span id="countFilterPending">0</span>)</button>
+          <button class="order-filter-pill" onclick="window.setOrderFilter('Processing', this)">Processing (<span id="countFilterProcessing">0</span>)</button>
+          <button class="order-filter-pill" onclick="window.setOrderFilter('Shipped', this)">Shipped (<span id="countFilterShipped">0</span>)</button>
+          <button class="order-filter-pill" onclick="window.setOrderFilter('Completed', this)">Completed (<span id="countFilterCompleted">0</span>)</button>
+          <button class="order-filter-pill" onclick="window.setOrderFilter('Cancelled', this)">Cancelled (<span id="countFilterCancelled">0</span>)</button>
         </div>
 
         <div class="table-responsive">
           <table class="data-table">
             <thead>
               <tr>
-                <th>Order ID</th>
-                <th>Date</th>
-                <th>Customer & Address</th>
+                <th>Order #</th>
+                <th>Date & Time</th>
+                <th>Customer Name & Contact</th>
+                <th>Delivery Address</th>
                 <th>Items Ordered</th>
                 <th>Total</th>
                 <th>Payment</th>
                 <th>Status Control</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="adminOrdersTable">
               <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CUSTOMER ACCOUNTS / READ-ONLY DIRECTORY -->
+      <div id="customersSection" style="margin-bottom:3rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem; box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; gap:1rem; flex-wrap:wrap;">
+          <div>
+            <h2 style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+              <i class="fas fa-users" style="color:var(--accent-blue);"></i> Registered Customer Accounts
+            </h2>
+            <p style="color:var(--text-muted); font-size:0.85rem;">View customer accounts registered on the D-TEL website. Customer details are display-only here; they cannot be edited or deleted from this panel.</p>
+          </div>
+          <div style="display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+            <span id="adminCustomerCount" style="background:rgba(59,130,246,.12); color:var(--accent-blue); border:1px solid rgba(59,130,246,.25); padding:.45rem .8rem; border-radius:999px; font-weight:700; font-size:.82rem;">0 Customers</span>
+            <button class="btn-secondary" type="button" onclick="window.refreshAdminCustomers()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+        </div>
+        <div style="display:flex; gap:.75rem; margin-bottom:1rem; flex-wrap:wrap;">
+          <input id="customerSearchInput" type="text" placeholder="Search name, email or phone..." oninput="window.filterAdminCustomers()" style="padding:.6rem .85rem; flex:1; min-width:240px; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-sm); color:#fff;">
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Registered</th>
+                <th>Orders</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminCustomersTable">
+              <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:2rem;">Loading customer accounts...</td></tr>
             </tbody>
           </table>
         </div>
@@ -240,10 +321,44 @@
     <div class="modal-card"></div>
   </div>
 
+  <!-- CUSTOMER ORDER FULL DETAILS & FULFILLMENT MODAL -->
+  <div class="modal-overlay" id="orderDetailsModalOverlay">
+    <div class="modal-card" style="max-width:860px; width:95%; max-height:92vh; overflow-y:auto; padding:2rem;"></div>
+  </div>
+
+  <!-- CUSTOMER ACCOUNT FULL DETAILS MODAL -->
+  <div class="modal-overlay" id="customerDetailsModalOverlay">
+    <div class="modal-card" style="max-width:760px; width:95%; max-height:90vh; overflow-y:auto; padding:2rem;"></div>
+  </div>
+
+  <style>
+
+    .customer-readonly-field { background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:.85rem 1rem; }
+    .customer-readonly-field small { display:block; color:var(--text-muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.3rem; }
+    .customer-readonly-field strong { display:block; color:#fff; font-size:.9rem; font-weight:700; overflow-wrap:anywhere; }
+    .order-filter-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .order-filter-pill:hover, .order-filter-pill.active {
+      background: var(--accent-cyan);
+      color: #040814;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+    }
+  </style>
+
   <!-- Core Data & Admin Scripts -->
-  <script src="js/data.js?v=20260929_private_cart"></script>
-  <script src="js/api-client.js?v=20260929_private_cart"></script>
-  <script src="js/auth.js?v=20260929_private_cart"></script>
-  <script src="js/admin.js?v=20260929_private_cart"></script>
+  <script src="js/data.js?v=20261003_v4"></script>
+  <script src="js/api-client.js?v=20261003_v4"></script>
+  <script src="js/auth.js?v=20261003_v4"></script>
+  <script src="js/admin.js?v=20261003_v4"></script>
 </body>
 </html>

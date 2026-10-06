@@ -1,61 +1,56 @@
-# 🗄️ TechZone E-Business System - MySQL Database Setup Guide
+# D-TEL Mobile Shop - Database & Login Setup
 
-ඔබ ලබා දුන් **ER Diagram** එකට අනුව **MySQL Database Schema (`database.sql`)** සහ **PHP Backend API** සාදා අවසන් කර ඇත.
+## 1. Start the server
+Use XAMPP/WAMP (or another PHP + MySQL server):
+- Start **Apache**
+- Start **MySQL**
+- Put the whole `D-TEL-Mobile-Shop-PayHere` folder inside the server web root (for XAMPP: `htdocs`).
 
----
+**Do not open `index.html` directly with `file://`.** PHP and MySQL only work when the project is served through Apache.
 
-## 📊 1. ER Diagram Table Mapping (වගු සම්බන්ධතා)
+## 2. Create the database
+Open phpMyAdmin and import:
 
-| Entity / Table | Primary Key | Foreign Keys | Relationship / Details |
-| :--- | :--- | :--- | :--- |
-| **`user`** | `user_id` | - | Customer profile, login details |
-| **`admin`** | `admin_id` | - | Admin account, manage products & orders |
-| **`category`** | `category_id` | - | Categories (Smartphones, Chargers, etc.) |
-| **`product`** | `product_id` | `category_id`, `admin_id` | Products catalog with stock, price, image |
-| **`cart`** | `cart_id` | `user_id` (1:1) | User's active shopping cart |
-| **`cart_item`** | `cart_item_id` | `cart_id`, `product_id` (M:1) | Items in user cart with qty & subtotal |
-| **`order`** | `order_id` | `user_id` (1:M) | Customer orders with total, status, delivery |
-| **`order_item`** | `order_item_id` | `order_id`, `product_id` (M:1) | Ordered product items, unit price & subtotal |
-| **`payment`** | `payment_id` | `order_id` (1:1 / 1:M) | Payment record (Method, Payment Status) |
+`database.sql`
 
----
+The script creates the database:
 
-## 🚀 2. How to Setup & Import Database in XAMPP / MySQL (පියවරෙන් පියවර)
+`dtel_mobile_shop`
 
-### පියවර 1: XAMPP Start කරන්න
-1. **XAMPP Control Panel** open කරන්න.
-2. **Apache** සහ **MySQL** දෙකම **Start** කරන්න.
+and all required tables/data.
 
-### පියවර 2: phpMyAdmin වෙත යන්න
-1. Browser එකේ `http://localhost/phpmyadmin` වෙත යන්න.
-2. උඩ Menu එකෙන් **Import** tab එක click කරන්න.
-3. **Choose File** click කර ඔබගේ project folder එකේ ඇති `database.sql` file එක select කරන්න.
-4. පහල ඇති **Import / Go** button එක click කරන්න.
-5. සාර්ථකව `techzone_db` database එක සහ tables 9 ම නිර්මාණය වේ!
+## 3. Default database login accounts
+Customer:
+- Email: `kasun@gmail.com`
+- Password: `user123`
 
----
+Admin:
+- Email: `dtel@gmail.com`
+- Password: `Dtel@123`
 
-## 🔌 3. Backend API Endpoints (`api/`)
+## 4. Open the website
+If the folder is directly inside XAMPP `htdocs`, open:
 
-| File / Endpoint | Method | Purpose |
-| :--- | :--- | :--- |
-| `api/db.php` | - | PDO MySQL connection setup (`localhost`, `root`, `techzone_db`) |
-| `api/products.php` | `GET`, `POST`, `PUT`, `DELETE` | Product CRUD, multi-image views (image, image_2, image_3) & category filtering |
-| `api/upload.php`   | `POST` | Direct image file upload to `images/uploads/` |
-| `api/categories.php`| `GET` | Categories list |
-| `api/auth.php`     | `POST` | `?action=login`, `?action=register`, `?action=admin_login` |
-| `api/cart.php`     | `GET`, `POST`, `PUT`, `DELETE` | Cart management (add, update qty, clear) |
-| `api/orders.php`   | `GET`, `POST`, `PUT` | Place order (with items & payment), update status |
-| `api/admin.php`    | `GET` | Dashboard statistics (revenue, total orders, stock) |
+`http://localhost/D-TEL-Mobile-Shop-PayHere-FIXED-v2/D-TEL-Mobile-Shop-PayHere/`
 
----
+Then use **Sign In**.
 
-## 🔑 4. Default Login Credentials (පරීක්ෂා කිරීමට)
+## 5. Database credentials
+The default configuration uses:
+- Host: `127.0.0.1`
+- Database: `dtel_mobile_shop`
+- User: `root`
+- Password: `1234` (configured in `api/config.local.php`)
 
-- **Admin Login (පරිපාලක පිවිසුම):**
-  - Email / Username: `dtel@gmail.com` (or `admin`)
-  - Password: `Dtel@123`
-- **Customer Login (පාරිභෝගික පිවිසුම):**
-  - Google Sign In: ඕනෑම Google Email & Password එකකින්
-  - Email Login: `kasun@gmail.com` (හෝ ලියාපදිංචි වන පෞද්ගලික ඊමේල්)
-  - Password: `user123`
+If your MySQL root account has a different password, edit `api/config.local.php`.
+
+## 6. Test the connection
+With Apache/MySQL running, open:
+
+`http://localhost/D-TEL-Mobile-Shop-PayHere-FIXED-v2/D-TEL-Mobile-Shop-PayHere/api/health.php`
+
+You should receive JSON with:
+
+`"status":"success"`
+
+If it reports a database error, check MySQL is running and the credentials in `api/config.local.php`.

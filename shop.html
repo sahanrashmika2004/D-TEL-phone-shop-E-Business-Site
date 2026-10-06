@@ -30,7 +30,7 @@
       <!-- Search Bar -->
       <div class="search-bar-wrap">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products">
+        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products" autocomplete="off">
       </div>
 
       <!-- Header Actions -->
@@ -97,7 +97,39 @@
         </select>
       </div>
 
-      <!-- 2. Dynamic Brand Checkboxes with Logos -->
+      <!-- 2. Quality Tier / Grade Filter (Original vs Budget) -->
+      <div style="margin-bottom:1.5rem; background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.2); border-radius:var(--radius-md); padding:1rem;" id="qualityGradeSection">
+        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <i class="fas fa-award" style="color:var(--accent-cyan);"></i>
+          <span style="font-weight:700; font-size:0.88rem; color:#ffffff;">Quality & Condition Grade</span>
+        </div>
+        <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.65rem;">Filter by Authentic Brand vs Low-Cost:</p>
+        <div style="display:flex; flex-direction:column; gap:0.45rem; font-size:0.85rem;">
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.4rem 0.6rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(14,165,233,0.3);">
+            <div style="display:flex; align-items:center; gap:0.45rem;">
+              <input type="checkbox" class="grade-checkbox" value="Original" style="accent-color:#0ea5e9;">
+              <span style="font-weight:700; color:#38bdf8;">👑 100% Original</span>
+            </div>
+            <span style="font-size:0.68rem; background:rgba(14,165,233,0.2); color:#38bdf8; padding:0.1rem 0.35rem; border-radius:4px; font-weight:700;">AUTHENTIC</span>
+          </label>
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.4rem 0.6rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(139,92,246,0.3);">
+            <div style="display:flex; align-items:center; gap:0.45rem;">
+              <input type="checkbox" class="grade-checkbox" value="High Grade" style="accent-color:#8b5cf6;">
+              <span style="font-weight:700; color:#a78bfa;">⭐ High Grade</span>
+            </div>
+            <span style="font-size:0.68rem; background:rgba(139,92,246,0.2); color:#a78bfa; padding:0.1rem 0.35rem; border-radius:4px; font-weight:700;">PREMIUM</span>
+          </label>
+          <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer; padding:0.4rem 0.6rem; background:rgba(255,255,255,0.04); border-radius:6px; border:1px solid rgba(16,185,129,0.3);">
+            <div style="display:flex; align-items:center; gap:0.45rem;">
+              <input type="checkbox" class="grade-checkbox" value="Budget" style="accent-color:#10b981;">
+              <span style="font-weight:700; color:#34d399;">🏷️ Budget / Low-Cost</span>
+            </div>
+            <span style="font-size:0.68rem; background:rgba(16,185,129,0.2); color:#34d399; padding:0.1rem 0.35rem; border-radius:4px; font-weight:700;">ECONOMICAL</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. Dynamic Brand Checkboxes with Logos -->
       <div style="margin-bottom:1.5rem;" id="brandFilterSection">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
           <span style="font-weight:700; font-size:0.9rem; color:#ffffff;"><i class="fas fa-tag" style="color:var(--accent-amber);"></i> Brands (<span id="activeCatLabel">All</span>)</span>
@@ -203,8 +235,6 @@
       <div style="margin-bottom:1.5rem;">
         <div style="font-weight:700; font-size:0.9rem; color:#ffffff; margin-bottom:0.75rem;"><i class="fas fa-boxes" style="color:var(--accent-green);"></i> Availability</div>
         <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.88rem; color:var(--text-muted);">
-          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockInOnly" value="instock" checked style="accent-color:var(--accent-cyan);"> In Stock Only</label>
-          <label style="cursor:pointer;"><input type="radio" name="stockFilter" id="stockAll" value="all" style="accent-color:var(--accent-cyan);"> All Items (Including Out of Stock)</label>
         </div>
       </div>
 
