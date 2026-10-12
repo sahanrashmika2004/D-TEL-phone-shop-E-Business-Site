@@ -1,0 +1,6 @@
+payment/config.local.php
+*.log
+.DS_Store
+Thumbs.db
+
+api/config.local.php

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <g transform="rotate(-6 200 200)">
+    <rect x="80" y="50" width="240" height="280" rx="16" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"/>
+    <text x="200" y="90" fill="#0284c7" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" text-anchor="middle">⭐ HD+ CLEAR</text>
+    <text x="200" y="115" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" letter-spacing="2" text-anchor="middle">ULTRA-DEFINITION SHIELD</text>
+    <rect x="110" y="140" width="180" height="110" rx="10" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1.5"/>
+    <text x="200" y="180" fill="#0369a1" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" text-anchor="middle">Easy Installation Tray</text>
+    <text x="200" y="205" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">Bubble-Free Auto Alignment</text>
+    <text x="200" y="230" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">Oleophobic Coating Bottle</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">HD+ RETAIL BOX &amp; ALIGN TRAY</text>
+</svg>

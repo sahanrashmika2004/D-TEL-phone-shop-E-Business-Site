@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Apple MFi Lightning Tip View -->
+  <g transform="rotate(35 200 200)">
+    <!-- White Cord -->
+    <rect x="190" y="30" width="20" height="140" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="185" y="160" width="30" height="35" rx="6" fill="#e2e8f0"/>
+    <!-- Connector Shell -->
+    <rect x="182" y="195" width="36" height="65" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+    <!-- 8-Pin Gold Plated Lightning Connector -->
+    <rect x="188" y="260" width="24" height="40" rx="3" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1"/>
+    <!-- 8 Pins -->
+    <rect x="190" y="270" width="20" height="16" fill="#facc15"/>
+  </g>
+  <!-- Apple MFi Badge -->
+  <rect x="130" y="270" width="140" height="30" rx="15" fill="rgba(255,255,255,0.1)" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="200" y="290" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="800" font-size="12" text-anchor="middle">Made for iPhone / iPad</text>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#06b6d4" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#06b6d4" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">MFi C94 LIGHTNING CONNECTOR</text>
+</svg>

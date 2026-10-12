@@ -1,0 +1,10 @@
+<?php
+// Copy this file to api/config.local.php if your MySQL credentials differ from XAMPP defaults.
+return [
+    'host' => '127.0.0.1',
+    'port' => '4307',
+    'name' => 'dtel_mobile_shop',
+    'user' => 'root',
+    'pass' => '',
+];
+

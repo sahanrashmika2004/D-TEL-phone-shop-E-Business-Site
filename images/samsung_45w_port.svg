@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Samsung 45W Adapter Face -->
+  <rect x="110" y="60" width="180" height="240" rx="24" fill="#18181b" stroke="#38bdf8" stroke-width="2.5"/>
+  <text x="200" y="110" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="900" font-size="16" letter-spacing="2" text-anchor="middle">Super Fast Charging</text>
+  <text x="200" y="130" fill="#f8fafc" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" text-anchor="middle">45W PPS</text>
+  <!-- Single USB-C 45W Port -->
+  <rect x="150" y="160" width="100" height="38" rx="10" fill="#090d16" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="180" y="175" width="40" height="8" rx="4" fill="#38bdf8"/>
+  <!-- Samsung Logo -->
+  <text x="200" y="260" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" letter-spacing="3" text-anchor="middle">SAMSUNG</text>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">45W SUPER FAST CHARGING PORT</text>
+</svg>

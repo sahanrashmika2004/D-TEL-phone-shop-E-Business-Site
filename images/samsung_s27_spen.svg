@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="spenGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Angled S27 Chassis -->
+  <g transform="rotate(-20 200 200) translate(10, -20)">
+    <rect x="90" y="40" width="200" height="320" rx="18" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+    <rect x="98" y="48" width="184" height="304" rx="12" fill="#020617"/>
+    <!-- AMOLED Glow Grid -->
+    <circle cx="190" cy="190" r="60" fill="url(#spenGlow)" opacity="0.15"/>
+    <text x="190" y="195" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="800" font-size="20" text-anchor="middle">GALAXY AI</text>
+  </g>
+  <!-- Ejected AI S-Pen 3D Object -->
+  <g transform="rotate(35 250 250) translate(40, -40)">
+    <!-- Pen Body -->
+    <rect x="220" y="80" width="14" height="240" rx="4" fill="#1e293b" stroke="#06b6d4" stroke-width="2"/>
+    <!-- Pen Tip -->
+    <path d="M 220 320 L 227 345 L 234 320 Z" fill="#38bdf8"/>
+    <!-- Pen Clicker & Button -->
+    <rect x="220" y="75" width="14" height="10" rx="2" fill="#94a3b8"/>
+    <rect x="223" y="180" width="8" height="25" rx="3" fill="#38bdf8"/>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">BUILT-IN AI S-PEN &amp; AMOLED</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Phone Screen with Matte Anti-Fingerprint Texture -->
+  <g transform="rotate(-15 200 200) translate(20, -10)">
+    <rect x="90" y="40" width="200" height="320" rx="30" fill="#18181b" stroke="#10b981" stroke-width="2.5"/>
+    <rect x="100" y="50" width="180" height="300" rx="22" fill="#27272a"/>
+    <!-- Matte Gaming Silk Texture -->
+    <text x="190" y="190" fill="#10b981" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" text-anchor="middle">MTB MATTE</text>
+    <text x="190" y="215" fill="#a1a1aa" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle">Anti-Fingerprint Silk Touch</text>
+    <text x="190" y="240" fill="#34d399" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" text-anchor="middle">Zero Glare Gaming</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#10b981" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#10b981" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">MATTE GAMING ANTI-GLARE</text>
+</svg>

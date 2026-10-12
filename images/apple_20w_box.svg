@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Minimalist Apple Retail Box -->
+  <g transform="rotate(-6 200 200)">
+    <rect x="80" y="50" width="240" height="280" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <!-- Apple Logo -->
+    <path d="M 200 90 C 195 90 193 92 190 92 C 187 92 184 90 180 90 C 174 90 169 95 169 105 C 169 115 178 125 182 125 C 185 125 188 122 190 122 C 193 122 196 125 199 125 C 203 125 212 115 212 105 C 212 99 207 95 200 95 Z" fill="#000000" transform="scale(0.8) translate(50, 0)"/>
+    <!-- Product Graphic on Box Front -->
+    <rect x="140" y="140" width="120" height="110" rx="18" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
+    <rect x="180" y="190" width="40" height="14" rx="5" fill="#94a3b8"/>
+    <!-- Box Title -->
+    <text x="200" y="280" fill="#0f172a" font-family="'Outfit', sans-serif" font-weight="700" font-size="14" text-anchor="middle">20W USB-C Power Adapter</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">APPLE SEALED PACKAGING</text>
+</svg>

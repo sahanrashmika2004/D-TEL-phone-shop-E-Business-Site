@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pbBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="pbBody" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f2937"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="500" rx="30" fill="url(#pbBg)"/>
+  <!-- Power Bank Frame -->
+  <rect x="160" y="80" width="180" height="340" rx="24" fill="url(#pbBody)" stroke="#374151" stroke-width="4"/>
+  <!-- LED Display Screen -->
+  <rect x="185" y="110" width="130" height="60" rx="12" fill="#000000" stroke="#06b6d4" stroke-width="2"/>
+  <text x="250" y="150" font-family="monospace" font-size="28" font-weight="bold" fill="#06b6d4" text-anchor="middle">100%</text>
+  <!-- Output Ports at top -->
+  <rect x="195" y="86" width="30" height="8" rx="3" fill="#06b6d4"/>
+  <rect x="235" y="86" width="30" height="8" rx="3" fill="#3b82f6"/>
+  <rect x="275" y="86" width="30" height="8" rx="3" fill="#06b6d4"/>
+  <!-- Brand logo -->
+  <text x="250" y="270" font-family="'Outfit', sans-serif" font-size="20" font-weight="bold" fill="#6b7280" text-anchor="middle">BASEUS 20K</text>
+  <path d="M 235 320 L 265 320 L 245 350 L 260 350 L 230 390 L 240 360 L 225 360 Z" fill="#38bdf8"/>
+</svg>

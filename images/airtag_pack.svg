@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="airtagBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="chrome" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#cbd5e1" />
+      <stop offset="100%" stop-color="#64748b" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" rx="36" fill="url(#airtagBg)" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <!-- Tag 1 (Center) -->
+  <circle cx="150" cy="150" r="55" fill="#f8fafc" stroke="#94a3b8" stroke-width="3"/>
+  <circle cx="150" cy="150" r="35" fill="url(#chrome)"/>
+  <!-- Apple Logo in Tag Center -->
+  <path d="M 150 142 C 146 142 144 144 142 144 C 140 144 138 142 135 142 C 131 142 127 146 127 153 C 127 160 133 167 136 167 C 138 167 140 165 142 165 C 144 165 146 167 148 167 C 151 167 157 160 157 153 C 157 149 154 146 150 146 Z" fill="#334155" transform="scale(0.8) translate(38, 30)"/>
+  <!-- Tag 2 (Top Right Offset) -->
+  <circle cx="215" cy="100" r="38" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="215" cy="100" r="24" fill="url(#chrome)"/>
+  <!-- Tag 3 (Bottom Left Offset) -->
+  <circle cx="85" cy="200" r="38" fill="#f8fafc" stroke="#94a3b8" stroke-width="2.5" opacity="0.9"/>
+  <circle cx="85" cy="200" r="24" fill="url(#chrome)"/>
+  <!-- 4-Pack Badge -->
+  <rect x="85" y="45" width="130" height="26" rx="13" fill="rgba(255,255,255,0.1)" stroke="url(#chrome)" stroke-width="1.5"/>
+  <text x="150" y="62" fill="#f8fafc" font-family="'Outfit', sans-serif" font-weight="700" font-size="11" text-anchor="middle" letter-spacing="1">APPLE AIRTAG 4-PACK</text>
+</svg>

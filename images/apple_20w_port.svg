@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Front Face of Official Apple 20W Adapter -->
+  <rect x="110" y="70" width="180" height="220" rx="28" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2.5"/>
+  <!-- USB-C Port -->
+  <rect x="150" y="150" width="100" height="36" rx="12" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+  <rect x="180" y="164" width="40" height="8" rx="4" fill="#64748b"/>
+  <!-- Subtle Apple Text -->
+  <text x="200" y="240" fill="#94a3b8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle">20W USB-C Power Adapter</text>
+  <text x="200" y="260" fill="#cbd5e1" font-family="'Outfit', sans-serif" font-weight="500" font-size="10" text-anchor="middle">Designed by Apple in California</text>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">APPLE GENUINE USB-C PORT</text>
+</svg>

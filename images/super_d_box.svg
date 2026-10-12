@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Gold Edition Packaging Box -->
+  <g transform="rotate(-6 200 200)">
+    <rect x="80" y="50" width="240" height="280" rx="16" fill="#18181b" stroke="#fb7185" stroke-width="2.5"/>
+    <!-- Gold Crown Header -->
+    <text x="200" y="90" fill="#fb7185" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" text-anchor="middle">👑 SUPER D 9H</text>
+    <text x="200" y="115" fill="#eab308" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" letter-spacing="3" text-anchor="middle">CURVED PRIVACY EDITION</text>
+    <!-- Hard Shell Box Contents -->
+    <rect x="110" y="140" width="180" height="110" rx="10" fill="#090d16" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+    <text x="200" y="180" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="800" font-size="13" text-anchor="middle">Installation Kit Included</text>
+    <text x="200" y="205" fill="#94a3b8" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">Wet/Dry Wipes • Dust Absorber</text>
+    <text x="200" y="230" fill="#94a3b8" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">Alignment Tool Guide</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#fb7185" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#fb7185" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">GOLD EDITION PACKAGING KIT</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Retail Box in Perspective -->
+  <g transform="rotate(-6 200 200)">
+    <rect x="80" y="50" width="240" height="280" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+    <text x="200" y="90" fill="#0f172a" font-family="'Outfit', sans-serif" font-weight="900" font-size="16" letter-spacing="3" text-anchor="middle">SAMSUNG</text>
+    <rect x="130" y="120" width="140" height="110" rx="12" fill="#1e293b"/>
+    <rect x="175" y="170" width="50" height="14" rx="4" fill="#38bdf8"/>
+    <text x="200" y="270" fill="#0f172a" font-family="'Outfit', sans-serif" font-weight="800" font-size="15" text-anchor="middle">Power Adapter Trio 25W</text>
+    <text x="200" y="295" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">Super Fast Charging • USB Type-C</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">AUTHENTIC SAMSUNG PACKAGING</text>
+</svg>

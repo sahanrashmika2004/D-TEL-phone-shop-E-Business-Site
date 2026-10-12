@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mountBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="cyanCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="300" rx="36" fill="url(#mountBg)" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <!-- Car Air Vent Clip Base -->
+  <path d="M 135 220 L 165 220 L 160 270 L 140 270 Z" fill="#334155"/>
+  <rect x="130" y="200" width="40" height="30" rx="6" fill="#1e293b" stroke="#475569" stroke-width="2"/>
+  <!-- Ball Joint Pivot -->
+  <circle cx="150" cy="180" r="14" fill="#64748b"/>
+  <!-- Magnetic MagSafe Ring Charger Pad -->
+  <circle cx="150" cy="120" r="65" fill="#1e293b" stroke="url(#cyanCyan)" stroke-width="4"/>
+  <circle cx="150" cy="120" r="48" fill="#0f172a" stroke="#38bdf8" stroke-width="2" stroke-dasharray="6,4"/>
+  <circle cx="150" cy="120" r="18" fill="#334155"/>
+  <!-- Qi Lightning Icon -->
+  <path d="M 152 108 L 144 120 L 151 120 L 148 132 L 158 118 L 151 118 Z" fill="#06b6d4"/>
+  <!-- Badge -->
+  <rect x="80" y="30" width="140" height="26" rx="13" fill="rgba(6,182,212,0.15)" stroke="url(#cyanCyan)" stroke-width="1.5"/>
+  <text x="150" y="47" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="11" text-anchor="middle" letter-spacing="1">ESR MAGSAFE MOUNT</text>
+</svg>

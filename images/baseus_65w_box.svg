@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Retail Packaging in Perspective -->
+  <g transform="rotate(-8 200 200)">
+    <rect x="80" y="60" width="240" height="260" rx="14" fill="#ffffff" stroke="#eab308" stroke-width="3"/>
+    <!-- Yellow Baseus Header -->
+    <rect x="80" y="60" width="240" height="40" rx="14" fill="#facc15"/>
+    <text x="200" y="87" fill="#000000" font-family="'Outfit', sans-serif" font-weight="900" font-size="18" text-anchor="middle">Baseus</text>
+    <!-- Product Graphic inside Box Window -->
+    <rect x="130" y="120" width="140" height="110" rx="10" fill="#18181b"/>
+    <circle cx="200" cy="140" r="4" fill="#38bdf8"/>
+    <text x="200" y="165" fill="#eab308" font-family="'Outfit', sans-serif" font-weight="900" font-size="14" text-anchor="middle">65W</text>
+    <!-- GaN3 Pro Badge -->
+    <text x="200" y="270" fill="#0f172a" font-family="'Outfit', sans-serif" font-weight="800" font-size="16" text-anchor="middle">GaN3 Pro Fast Charger</text>
+    <text x="200" y="295" fill="#64748b" font-family="'Outfit', sans-serif" font-weight="600" font-size="11" text-anchor="middle">2C + 1U Multi-Port Quick Charge</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#eab308" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#eab308" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">ORIGINAL RETAIL BOX PACK</text>
+</svg>

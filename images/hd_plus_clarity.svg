@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="clarityBeam" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.8" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Phone Screen with Crystal Clarity Reflection -->
+  <g transform="rotate(-15 200 200) translate(20, -10)">
+    <rect x="90" y="40" width="200" height="320" rx="30" fill="#020617" stroke="#38bdf8" stroke-width="2.5"/>
+    <rect x="98" y="48" width="184" height="304" rx="24" fill="#0369a1" opacity="0.3"/>
+    <!-- Crystal Light Flare Reflection -->
+    <path d="M 100 50 L 220 50 L 140 350 L 100 350 Z" fill="url(#clarityBeam)" opacity="0.4"/>
+    <text x="190" y="210" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="900" font-size="20" text-anchor="middle">99.9% CLARITY</text>
+    <text x="190" y="235" fill="#bae6fd" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle">HD+ Retina Optical Shield</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">99.9% OPTICAL CLARITY &amp; 9H</text>
+</svg>

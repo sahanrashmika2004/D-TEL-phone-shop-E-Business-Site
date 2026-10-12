@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Closed MagSafe Charging Case (USB-C) -->
+  <rect x="100" y="90" width="200" height="150" rx="45" fill="#ffffff" stroke="#cbd5e1" stroke-width="2.5"/>
+  <!-- Lid Seam Line -->
+  <line x1="100" y1="140" x2="300" y2="140" stroke="#cbd5e1" stroke-width="1.5"/>
+  <!-- LED Status Light -->
+  <circle cx="200" cy="165" r="4" fill="#22c55e"/>
+  <!-- Lanyard Loop on Right Side -->
+  <rect x="296" y="160" width="8" height="24" rx="4" fill="#94a3b8"/>
+  <!-- Built-In Speaker Holes on Bottom -->
+  <circle cx="170" cy="232" r="2" fill="#64748b"/>
+  <circle cx="180" cy="232" r="2" fill="#64748b"/>
+  <circle cx="220" cy="232" r="2" fill="#64748b"/>
+  <circle cx="230" cy="232" r="2" fill="#64748b"/>
+  <!-- USB-C Port on Bottom -->
+  <rect x="188" y="235" width="24" height="6" rx="3" fill="#64748b"/>
+  <!-- Find My Speaker & MagSafe Badge -->
+  <rect x="110" y="275" width="180" height="30" rx="15" fill="rgba(255,255,255,0.08)" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="200" y="295" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="800" font-size="11" text-anchor="middle">USB-C • LANYARD • FIND MY</text>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#ffffff" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#ffffff" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">USB-C MAGSAFE CHARGING CASE</text>
+</svg>

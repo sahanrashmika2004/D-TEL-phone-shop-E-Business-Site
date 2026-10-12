@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Corner Drop Air Cushion Technology Focus -->
+  <g transform="rotate(-20 200 200) translate(20, -10)">
+    <rect x="90" y="40" width="200" height="320" rx="34" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="3"/>
+    <!-- Shock Absorption Corner Air Pockets -->
+    <circle cx="110" cy="60" r="14" fill="#a855f7" opacity="0.6"/>
+    <circle cx="270" cy="60" r="14" fill="#a855f7" opacity="0.6"/>
+    <circle cx="110" cy="340" r="14" fill="#a855f7" opacity="0.6"/>
+    <circle cx="270" cy="340" r="14" fill="#a855f7" opacity="0.6"/>
+    <!-- Military Drop Standard Badge -->
+    <rect x="130" y="180" width="120" height="40" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+    <text x="190" y="205" fill="#c084fc" font-family="'Outfit', sans-serif" font-weight="900" font-size="12" text-anchor="middle">MIL-STD 810G</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#c084fc" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">AIR CUSHION DROP DEFENSE</text>
+</svg>

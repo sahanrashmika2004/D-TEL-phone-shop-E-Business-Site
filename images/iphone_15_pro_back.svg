@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="titaniumBack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="lensGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1e24" />
+      <stop offset="50%" stop-color="#090d16" />
+      <stop offset="100%" stop-color="#00f2fe" stop-opacity="0.4" />
+    </linearGradient>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+    <radialGradient id="flashGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </radialGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+
+  <!-- Phone Chassis Back -->
+  <rect x="90" y="30" width="220" height="340" rx="38" fill="url(#titaniumBack)" stroke="url(#ringGrad)" stroke-width="3" filter="url(#shadow)"/>
+  
+  <!-- Apple Logo -->
+  <path d="M 200 195 C 193 195 190 198 186 198 C 182 198 178 195 172 195 C 164 195 156 202 156 216 C 156 230 168 244 174 244 C 178 244 182 240 186 240 C 190 240 194 244 198 244 C 204 244 216 230 216 216 C 216 208 210 202 200 202 Z" fill="#94a3b8" opacity="0.6" transform="translate(10,-10)"/>
+
+  <!-- Tri-Camera Island -->
+  <rect x="106" y="46" width="105" height="105" rx="26" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5"/>
+  
+  <!-- Lens 1 (Main 48MP) -->
+  <circle cx="138" cy="78" r="22" fill="url(#ringGrad)"/>
+  <circle cx="138" cy="78" r="18" fill="url(#lensGrad)" stroke="#06b6d4" stroke-width="1"/>
+  <circle cx="135" cy="75" r="7" fill="#ffffff" opacity="0.25"/>
+
+  <!-- Lens 2 (Ultra-Wide) -->
+  <circle cx="138" cy="122" r="22" fill="url(#ringGrad)"/>
+  <circle cx="138" cy="122" r="18" fill="url(#lensGrad)" stroke="#06b6d4" stroke-width="1"/>
+  <circle cx="135" cy="119" r="7" fill="#ffffff" opacity="0.25"/>
+
+  <!-- Lens 3 (5X Telephoto Tetraprism) -->
+  <circle cx="180" cy="100" r="22" fill="url(#ringGrad)"/>
+  <circle cx="180" cy="100" r="18" fill="url(#lensGrad)" stroke="#06b6d4" stroke-width="1"/>
+  <circle cx="177" cy="97" r="7" fill="#ffffff" opacity="0.25"/>
+
+  <!-- True Tone Flash & LiDAR -->
+  <circle cx="180" cy="65" r="9" fill="url(#flashGlow)"/>
+  <circle cx="180" cy="135" r="6" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+
+  <!-- Badge Label -->
+  <rect x="95" y="320" width="210" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="rgba(6,182,212,0.4)" stroke-width="1.5"/>
+  <text x="200" y="341" fill="#38bdf8" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">NATURAL TITANIUM BACK VIEW</text>
+</svg>

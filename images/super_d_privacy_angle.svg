@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="privacyBlind" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.95" />
+      <stop offset="35%" stop-color="#000000" stop-opacity="0.9" />
+      <stop offset="50%" stop-color="#38bdf8" stop-opacity="0.3" />
+      <stop offset="65%" stop-color="#000000" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.95" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="#090d16" rx="28"/>
+  <!-- Phone with 28 Degree Spy Privacy Glass -->
+  <g transform="rotate(-15 200 200) translate(20, -10)">
+    <rect x="90" y="40" width="200" height="320" rx="30" fill="#020617" stroke="#fb7185" stroke-width="2.5"/>
+    <!-- Privacy Filter Demonstration -->
+    <rect x="100" y="50" width="180" height="300" rx="22" fill="url(#privacyBlind)"/>
+    <!-- 28 Degree Angle Cone -->
+    <path d="M 190 200 L 140 100 L 240 100 Z" fill="rgba(56,189,248,0.15)"/>
+    <text x="190" y="230" fill="#fb7185" font-family="'Outfit', sans-serif" font-weight="900" font-size="16" text-anchor="middle">28° PRIVACY</text>
+    <text x="190" y="250" fill="#f8fafc" font-family="'Outfit', sans-serif" font-weight="700" font-size="11" text-anchor="middle">Anti-Peeping Filter</text>
+  </g>
+  <!-- Label -->
+  <rect x="80" y="345" width="240" height="32" rx="16" fill="rgba(0,0,0,0.6)" stroke="#fb7185" stroke-width="1.5"/>
+  <text x="200" y="366" fill="#fb7185" font-family="'Outfit', sans-serif" font-weight="700" font-size="12" text-anchor="middle" letter-spacing="1">28° SIDE SPY PRIVACY ANGLE</text>
+</svg>
