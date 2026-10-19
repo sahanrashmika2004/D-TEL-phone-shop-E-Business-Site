@@ -1,6 +1,6 @@
 <?php
 // Copy this file to payment/config.local.php and enter your NEW Merchant Secret.
 // Keep config.local.php private and never upload it to GitHub.
-$PAYHERE_MERCHANT_ID = '1238431';
-$PAYHERE_MERCHANT_SECRET = 'YOUR_NEW_PAYHERE_MERCHANT_SECRET';
+$PAYHERE_MERCHANT_ID = '';
+$PAYHERE_MERCHANT_SECRET = '';
 ?>

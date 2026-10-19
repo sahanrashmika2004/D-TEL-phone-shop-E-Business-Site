@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-TEL | My Account & Orders</title>
+  <meta name="description" content="Manage your D-TEL personal profile, view your order history and tracking securely.">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
+
+  <script>
+    // Instant redirect to live website if user is not logged in
+    try {
+      var rawUser = localStorage.getItem('tz_user');
+      if (!rawUser || rawUser === 'null' || rawUser === '{}') {
+        window.location.replace('index.html');
+      }
+    } catch(e) {}
+  </script>
+
+  <style>
+    /* ─── Account Dashboard Specific Styles ────────────────────────── */
+    .account-page-wrap {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .account-banner {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      margin-bottom: 2rem;
+    }
+
+    .account-user-info {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .account-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+      border: 3px solid rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+    }
+
+    .account-tab-btn {
+      padding: 0.85rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+    }
+
+    .account-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    .account-tab-btn.active {
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.12);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.25);
+    }
+
+    .account-stat-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .order-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .order-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .order-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .status-Pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .status-Processing {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .status-Shipped {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+
+    .status-Delivered {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .status-Cancelled {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      color: #ffffff;
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.25);
+      outline: none;
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #10b981;
+      color: #ffffff;
+      padding: 0.85rem 1.5rem;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      font-weight: 700;
+      z-index: 999999;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER NAVBAR -->
+  <header class="header-sticky">
+    <div class="nav-container">
+      
+      <!-- Store Logo: D-TEL Cellular -->
+      <a href="index.html" class="brand-logo">
+        <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
+        <div>
+          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
+          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+        </div>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrap" style="position:relative;" id="searchBarWrapper">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products" autocomplete="off">
+      </div>
+
+      <!-- Header Actions -->
+      <div class="nav-actions">
+        <a href="shop.html" class="icon-btn" title="Shop Catalog">
+          <i class="fas fa-store"></i>
+          <span>Shop</span>
+        </a>
+
+        <a href="checkout.html" class="icon-btn cart-trigger" title="Shopping Cart">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        </a>
+
+        <a href="account.html" class="icon-btn active" id="headerAccountBtn" title="My Account">
+          <i class="fas fa-user-circle"></i>
+          <span id="headerAccountName">My Account</span>
+        </a>
+
+        <button onclick="Auth.logout()" class="icon-btn" title="Sign Out" style="background:rgba(239,68,68,0.12); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- SUB-NAV BAR WITH DROPDOWNS -->
+    <nav class="sub-nav-bar">
+      <div class="sub-nav-container">
+        <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
+
+        <!-- Smartphones Dropdown -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Smartphones" class="sub-nav-link">
+            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
+            <a href="shop.html?category=Smartphones&brand=Samsung"><i class="fas fa-mobile-alt" style="color:#38bdf8;"></i> Samsung Galaxy</a>
+            <a href="shop.html?category=Smartphones&brand=Xiaomi"><i class="fas fa-bolt" style="color:#f97316;"></i> Xiaomi</a>
+            <a href="shop.html?category=Smartphones&brand=Google"><i class="fab fa-google" style="color:#34a853;"></i> Google Pixel</a>
+            <a href="shop.html?category=Smartphones" style="border-top:1px solid rgba(255,255,255,0.07); margin-top:4px; padding-top:10px;"><i class="fas fa-th-large" style="color:#38bdf8;"></i> All Smartphones</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Covers" class="sub-nav-link">
+            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+ (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️ MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: CHARGERS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Chargers" class="sub-nav-link">
+            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
+            <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: AUDIO -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Audio" class="sub-nav-link">
+            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: POWER BANKS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Power" class="sub-nav-link">
+            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
+            <a href="shop.html?category=Power&sub=20000mAh"><i class="fas fa-battery-full"></i> 20000 mAh & Above</a>
+            <a href="shop.html?category=Power&sub=Wireless"><i class="fas fa-rss"></i> MagSafe Power Banks</a>
+          </div>
+        </div>
+
+        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
+        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN ACCOUNT WRAPPER -->
+  <main class="account-page-wrap">
+    
+    <!-- Breadcrumb -->
+    <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.5rem;">
+      <a href="index.html" style="color:var(--text-muted);">Home</a>
+      <span>/</span>
+      <span style="color:var(--accent-cyan);">My Account & Orders</span>
+    </div>
+
+    <!-- NON-LOGGED-IN GATEWAY (Shown if user is not logged in) -->
+    <div id="unauthNotice" style="display:none; text-align:center; padding:4rem 2rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); max-width:600px; margin:3rem auto;">
+      <div style="width:80px; height:80px; border-radius:50%; background:rgba(6, 182, 212, 0.15); color:var(--accent-cyan); display:flex; align-items:center; justify-content:center; font-size:2.5rem; margin:0 auto 1.5rem;">
+        <i class="fas fa-user-lock"></i>
+      </div>
+      <h2 style="font-size:1.6rem; color:#ffffff; margin-bottom:0.75rem;">Customer Account Portal</h2>
+      <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:2rem; line-height:1.6;">
+        Please sign in to view your placed orders, track shipment status, and update your delivery details. Your information is 100% private and protected.
+      </p>
+      <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+        <button onclick="Auth.openModal('login')" class="btn-primary" style="padding:0.75rem 2rem; font-size:0.95rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Account
+        </button>
+        <button onclick="Auth.openModal('register')" style="padding:0.75rem 1.75rem; font-size:0.95rem; background:rgba(255,255,255,0.06); border:1px solid var(--border-color); color:#ffffff; border-radius:var(--radius-md);">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+      </div>
+    </div>
+
+    <!-- AUTHENTICATED USER DASHBOARD -->
+    <div id="authDashboard" style="display:none;">
+
+      <!-- Account Top Welcome Banner -->
+      <div class="account-banner">
+        <div class="account-user-info">
+          <div class="account-avatar" id="userAvatarText">U</div>
+          <div>
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <h1 id="userNameDisplay" style="font-size:1.6rem; font-weight:800; color:#ffffff; margin:0;">Customer Name</h1>
+              <span style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); font-size:0.72rem; font-weight:800; padding:0.2rem 0.6rem; border-radius:var(--radius-full);">
+                <i class="fas fa-check-circle"></i> VERIFIED ACCOUNT
+              </span>
+            </div>
+            <div style="color:var(--text-muted); font-size:0.9rem; margin-top:0.35rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <span id="userEmailDisplay"><i class="fas fa-envelope"></i> email@example.com</span>
+              <span>•</span>
+              <span id="userPhoneDisplay"><i class="fas fa-phone"></i> 07XXXXXXXX</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.75rem;">
+          <a href="shop.html" class="account-tab-btn" style="text-decoration:none;">
+            <i class="fas fa-store"></i> Shop Now
+          </a>
+          <button onclick="Auth.logout()" class="account-tab-btn" style="color:#f87171; border-color:rgba(239,68,68,0.3);">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Stats Counters -->
+      <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2rem;">
+        <div class="account-stat-card">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(6, 182, 212, 0.15); color:var(--accent-cyan); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            <i class="fas fa-box"></i>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">TOTAL ORDERS</div>
+            <div id="statTotalOrders" style="font-size:1.5rem; font-weight:800; color:#ffffff;">0</div>
+          </div>
+        </div>
+
+        <div class="account-stat-card">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(245, 158, 11, 0.15); color:var(--accent-amber); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">PENDING / PROCESSING</div>
+            <div id="statPendingOrders" style="font-size:1.5rem; font-weight:800; color:#ffffff;">0</div>
+          </div>
+        </div>
+
+        <div class="account-stat-card">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(16, 185, 129, 0.15); color:var(--accent-green); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            <i class="fas fa-truck-fast"></i>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">DELIVERED</div>
+            <div id="statDeliveredOrders" style="font-size:1.5rem; font-weight:800; color:#ffffff;">0</div>
+          </div>
+        </div>
+
+        <div class="account-stat-card">
+          <div style="width:48px; height:48px; border-radius:12px; background:rgba(59, 130, 246, 0.15); color:var(--accent-blue); display:flex; align-items:center; justify-content:center; font-size:1.4rem;">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div>
+            <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">TOTAL SPENT</div>
+            <div id="statTotalSpent" style="font-size:1.5rem; font-weight:800; color:#ffffff;">Rs. 0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div style="display:flex; gap:0.75rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:2rem; flex-wrap:wrap;">
+        <button class="account-tab-btn active" id="tabBtnOrders" onclick="switchAccountTab('orders')">
+          <i class="fas fa-box-open"></i> My Orders History (<span id="ordersTabCount">0</span>)
+        </button>
+        <button class="account-tab-btn" id="tabBtnProfile" onclick="switchAccountTab('profile')">
+          <i class="fas fa-user-edit"></i> Edit Private Profile
+        </button>
+        <button class="account-tab-btn" id="tabBtnPrivacy" onclick="switchAccountTab('privacy')">
+          <i class="fas fa-shield-alt"></i> Privacy & Security Guarantee
+        </button>
+      </div>
+
+      <!-- TAB 1: MY ORDERS SECTION -->
+      <section id="tabContentOrders">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h2 style="font-size:1.35rem; color:#ffffff; margin:0 0 0.25rem 0;">Your Placed Orders</h2>
+            <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">
+              Only orders placed under your account are displayed. Real-time updates directly from our database.
+            </p>
+          </div>
+          <button onclick="loadUserOrders()" style="background:rgba(255,255,255,0.06); border:1px solid var(--border-color); color:#cbd5e1; padding:0.5rem 1rem; border-radius:var(--radius-sm); font-size:0.85rem; cursor:pointer;">
+            <i class="fas fa-sync-alt"></i> Refresh Orders
+          </button>
+        </div>
+
+        <div id="ordersContainer">
+          <div style="text-align:center; padding:3rem; color:var(--text-muted);">
+            <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:var(--accent-cyan); margin-bottom:1rem;"></i>
+            <div>Loading your private orders...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: EDIT PROFILE SECTION -->
+      <section id="tabContentProfile" style="display:none; max-width:800px;">
+        <div style="margin-bottom:1.5rem;">
+          <h2 style="font-size:1.35rem; color:#ffffff; margin:0 0 0.25rem 0;">Edit Personal Details</h2>
+          <p style="color:var(--text-muted); font-size:0.88rem; margin:0;">
+            Update your contact information, default delivery address, or change your account password.
+          </p>
+        </div>
+
+        <form id="profileForm" onsubmit="handleSaveProfile(event)" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem;">
+          
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+            <div class="form-group">
+              <label for="profName"><i class="fas fa-user"></i> Full Name *</label>
+              <input type="text" id="profName" required placeholder="e.g. Kasun Perera">
+            </div>
+
+            <div class="form-group">
+              <label for="profEmail"><i class="fas fa-envelope"></i> Email Address *</label>
+              <input type="email" id="profEmail" required placeholder="e.g. kasun@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profPhone"><i class="fas fa-phone"></i> Contact Phone (Sri Lanka Mobile) *</label>
+            <input type="tel" id="profPhone" required placeholder="07XXXXXXXX (e.g. 0771234567)" pattern="^07[0-9]{8}$" title="10-digit Sri Lankan phone starting with 07">
+            <small style="color:var(--text-dim); font-size:0.75rem;">Must be a 10-digit Sri Lankan number starting with 07</small>
+          </div>
+
+          <div class="form-group">
+            <label for="profAddress"><i class="fas fa-map-marker-alt"></i> Default Delivery Address *</label>
+            <textarea id="profAddress" rows="3" required placeholder="No, Street, Town, District"></textarea>
+          </div>
+
+          <!-- CHANGE PASSWORD (OPTIONAL) -->
+          <div style="border-top:1px solid var(--border-color); margin:2rem 0 1.5rem 0; padding-top:1.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <span style="font-weight:700; color:#ffffff; font-size:1rem;"><i class="fas fa-lock"></i> Change Password (Optional)</span>
+              <small style="color:var(--text-muted);">Leave blank if not changing</small>
+            </div>
+
+            <div class="form-group">
+              <label for="profCurrentPass">Current Password (Required only if changing password)</label>
+              <div style="position:relative;">
+                <input type="password" id="profCurrentPass" placeholder="Enter current password">
+                <span onclick="togglePassVisibility('profCurrentPass', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted);">
+                  <i class="far fa-eye"></i>
+                </span>
+              </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+              <div class="form-group">
+                <label for="profNewPass">New Password</label>
+                <div style="position:relative;">
+                  <input type="password" id="profNewPass" placeholder="8+ chars, upper, lower, special">
+                  <span onclick="togglePassVisibility('profNewPass', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted);">
+                    <i class="far fa-eye"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="profConfirmPass">Confirm New Password</label>
+                <div style="position:relative;">
+                  <input type="password" id="profConfirmPass" placeholder="Re-enter new password">
+                  <span onclick="togglePassVisibility('profConfirmPass', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:var(--text-muted);">
+                    <i class="far fa-eye"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:2rem;">
+            <button type="submit" id="saveProfileBtn" class="btn-primary" style="padding:0.85rem 2.25rem; font-size:0.95rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); display:flex; align-items:center; gap:0.5rem;">
+              <i class="fas fa-save"></i> Save Profile Details
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- TAB 3: PRIVACY & DATA GUARANTEE -->
+      <section id="tabContentPrivacy" style="display:none; max-width:850px;">
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:2rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:1.5rem;">
+            <div style="width:48px; height:48px; border-radius:12px; background:rgba(16, 185, 129, 0.15); color:var(--accent-green); display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div>
+              <h2 style="font-size:1.35rem; color:#ffffff; margin:0 0 0.25rem 0;">100% User Privacy & Security Guarantee</h2>
+              <p style="color:var(--text-muted); font-size:0.85rem; margin:0;">
+                How D-TEL Cellular protects your account and separates your private information.
+              </p>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:1.25rem; color:#cbd5e1; font-size:0.92rem; line-height:1.7;">
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <i class="fas fa-check-circle" style="color:var(--accent-cyan); font-size:1.2rem; margin-top:0.25rem;"></i>
+              <div>
+                <strong style="color:#ffffff;">Strict Data Isolation Between Users:</strong>
+                <div>Every order, delivery address, phone number, and bank transfer slip is linked exclusively to your unique User ID. No other customer can ever see your orders or personal details.</div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <i class="fas fa-check-circle" style="color:var(--accent-cyan); font-size:1.2rem; margin-top:0.25rem;"></i>
+              <div>
+                <strong style="color:#ffffff;">Encrypted Credentials & Session Security:</strong>
+                <div>Your account passwords and private sessions are protected using industry-standard security practices. Account changes require validation against the primary database.</div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <i class="fas fa-check-circle" style="color:var(--accent-cyan); font-size:1.2rem; margin-top:0.25rem;"></i>
+              <div>
+                <strong style="color:#ffffff;">Protected Bank Transfer Receipts:</strong>
+                <div>Bank transfer deposit slips uploaded during checkout are confidential financial documents visible only to you and the authorized Store Administrator for payment verification.</div>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; align-items:flex-start;">
+              <i class="fas fa-check-circle" style="color:var(--accent-cyan); font-size:1.2rem; margin-top:0.25rem;"></i>
+              <div>
+                <strong style="color:#ffffff;">Direct Profile Control:</strong>
+                <div>You have total control to update your full name, phone number, and delivery destination at any time from this dashboard.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastMsg" class="toast-msg">
+    <i class="fas fa-check-circle"></i> <span id="toastText">Profile updated successfully!</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="width:100%; background:var(--bg-primary); border-top:1px solid var(--border-color); margin-top:4rem;">
+    <div style="width:100%; max-width:100%; margin:0; padding:1.5rem clamp(1.5rem, 4vw, 4.5rem); border-top:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; font-size:0.82rem; color:var(--text-dim); box-sizing:border-box;">
+      <div>&copy; 2026 D-TEL Mobile & Accessories Store. ICT2142 E-Business Project.</div>
+      <div><a href="admin.html" style="color:var(--text-muted);"><i class="fas fa-lock"></i> Store Admin Portal</a></div>
+    </div>
+  </footer>
+
+  <!-- CORE SCRIPTS -->
+  <script src="js/data.js?v=20261018_nav_fix"></script>
+  <script src="js/api-client.js?v=20261018_nav_fix"></script>
+  <script src="js/auth.js?v=20261018_nav_fix"></script>
+  <script src="js/app.js?v=20261018_nav_fix"></script>
+
+  <script>
+    let currentAccountUser = null;
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toastMsg');
+      const text = document.getElementById('toastText');
+      if (!toast || !text) return;
+      text.textContent = msg;
+      toast.style.background = isError ? '#ef4444' : '#10b981';
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    function togglePassVisibility(inputId, el) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        el.innerHTML = '<i class="far fa-eye-slash" style="color:var(--accent-cyan);"></i>';
+      } else {
+        input.type = 'password';
+        el.innerHTML = '<i class="far fa-eye"></i>';
+      }
+    }
+
+    function switchAccountTab(tabName) {
+      const tabs = ['orders', 'profile', 'privacy'];
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        const content = document.getElementById(`tabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (btn) btn.classList.remove('active');
+        if (content) content.style.display = 'none';
+      });
+
+      const activeBtn = document.getElementById(`tabBtn${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+      const activeContent = document.getElementById(`tabContent${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activeContent) activeContent.style.display = 'block';
+
+      if (tabName === 'orders') {
+        loadUserOrders();
+      }
+    }
+
+    async function loadUserOrders() {
+      const container = document.getElementById('ordersContainer');
+      if (!container || !currentAccountUser) return;
+
+      container.innerHTML = `
+        <div style="text-align:center; padding:3rem; color:var(--text-muted);">
+          <i class="fas fa-spinner fa-spin" style="font-size:2rem; color:var(--accent-cyan); margin-bottom:1rem;"></i>
+          <div>Loading your private orders...</div>
+        </div>
+      `;
+
+      try {
+        const userId = currentAccountUser.user_id || currentAccountUser.id;
+        const orders = await ApiClient.getOrders(userId);
+
+        // Client-side strict filter as extra guarantee
+        const myOrders = orders.filter(o => String(o.user_id) === String(userId));
+
+        // Update stats
+        document.getElementById('statTotalOrders').textContent = myOrders.length;
+        document.getElementById('ordersTabCount').textContent = myOrders.length;
+
+        const pendingCount = myOrders.filter(o => ['Pending', 'Processing'].includes(o.status)).length;
+        document.getElementById('statPendingOrders').textContent = pendingCount;
+
+        const deliveredCount = myOrders.filter(o => o.status === 'Delivered').length;
+        document.getElementById('statDeliveredOrders').textContent = deliveredCount;
+
+        const totalSpent = myOrders.reduce((sum, o) => sum + (parseFloat(o.total_amount) || 0), 0);
+        document.getElementById('statTotalSpent').textContent = 'Rs. ' + totalSpent.toLocaleString();
+
+        if (myOrders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:4rem 2rem; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg);">
+              <div style="width:70px; height:70px; border-radius:50%; background:rgba(255,255,255,0.04); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; font-size:2rem; color:var(--text-dim);">
+                <i class="fas fa-box-open"></i>
+              </div>
+              <h3 style="color:#ffffff; margin-bottom:0.5rem; font-size:1.25rem;">No Orders Yet</h3>
+              <p style="color:var(--text-muted); font-size:0.9rem; max-width:400px; margin:0 auto 1.5rem;">
+                You haven't placed any orders with this account yet. Browse our store to order smartphones and accessories!
+              </p>
+              <a href="shop.html" class="btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; padding:0.75rem 1.75rem; text-decoration:none; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));">
+                <i class="fas fa-shopping-bag"></i> Start Shopping
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = myOrders.map(ord => {
+          const formattedDate = ord.order_date ? new Date(ord.order_date).toLocaleString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+          }) : 'Recently Placed';
+
+          const status = ord.status || 'Pending';
+          const payMethod = ord.payment_method || 'Cash on Delivery';
+          const payStatus = ord.payment_status || 'Pending';
+          const slipPath = ord.bank_slip_path;
+
+          const itemsHtml = (ord.items && ord.items.length > 0) ? ord.items.map(it => `
+            <div style="display:flex; align-items:center; gap:1rem; padding:0.75rem 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+              <img src="${it.image || 'images/cat-chargers.svg'}" alt="${it.product_name}" style="width:48px; height:48px; object-fit:contain; border-radius:6px; background:rgba(0,0,0,0.3); padding:4px;" onerror="this.src='images/cat-chargers.svg'">
+              <div style="flex:1; min-width:0;">
+                <div style="font-weight:700; color:#f1f5f9; font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${it.product_name || 'Mobile Accessory'}</div>
+                <div style="font-size:0.78rem; color:var(--text-muted);">${it.brand || ''} ${it.model ? '• ' + it.model : ''}</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:0.85rem; color:#ffffff; font-weight:700;">${it.quantity} x Rs. ${Number(it.unit_price).toLocaleString()}</div>
+                <div style="font-size:0.75rem; color:var(--accent-cyan);">Rs. ${Number(it.subtotal || (it.quantity * it.unit_price)).toLocaleString()}</div>
+              </div>
+            </div>
+          `).join('') : '<div style="color:var(--text-dim); font-size:0.85rem; padding:0.5rem 0;">Ordered products recorded with invoice.</div>';
+
+          return `
+            <div class="order-card">
+              <!-- Order Header -->
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1rem;">
+                <div>
+                  <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+                    <span style="font-size:1.15rem; font-weight:800; color:#ffffff;">Order #ORD-${String(ord.order_id).padStart(4, '0')}</span>
+                    <span class="order-status-pill status-${status}"><i class="fas fa-circle" style="font-size:0.5rem;"></i> ${status}</span>
+                  </div>
+                  <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.35rem;">
+                    Placed on: <strong style="color:#cbd5e1;">${formattedDate}</strong>
+                  </div>
+                </div>
+
+                <div style="text-align:right;">
+                  <div style="font-size:0.78rem; color:var(--text-muted); text-transform:uppercase;">Total Amount</div>
+                  <div style="font-size:1.35rem; font-weight:800; color:var(--accent-rose);">Rs. ${Number(ord.total_amount).toLocaleString()}.00</div>
+                </div>
+              </div>
+
+              <!-- Items Breakdown -->
+              <div style="margin-bottom:1rem;">
+                ${itemsHtml}
+              </div>
+
+              <!-- Order Footer: Payment & Delivery Information -->
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:rgba(0,0,0,0.25); border-radius:var(--radius-sm); padding:0.85rem 1rem; font-size:0.85rem;">
+                <div style="display:flex; align-items:center; gap:1.25rem; flex-wrap:wrap;">
+                  <div>
+                    <span style="color:var(--text-muted);">Payment:</span> 
+                    <strong style="color:#ffffff;">${payMethod}</strong> 
+                    <span style="font-size:0.75rem; color:${payStatus === 'Paid' ? '#34d399' : '#f59e0b'}; font-weight:700;">(${payStatus})</span>
+                  </div>
+
+                  <div>
+                    <span style="color:var(--text-muted);">Delivery to:</span> 
+                    <strong style="color:#ffffff;">${ord.delivery_address || 'Address provided at checkout'}</strong>
+                  </div>
+                </div>
+
+                <!-- Bank Slip Action if Bank Transfer -->
+                <div>
+                  ${slipPath ? `
+                    <a href="${slipPath}" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; padding:0.4rem 0.85rem; background:rgba(6, 182, 212, 0.15); border:1px solid rgba(6, 182, 212, 0.4); border-radius:6px; color:#38bdf8; font-size:0.8rem; font-weight:700; text-decoration:none;">
+                      <i class="fas fa-receipt"></i> View Bank Slip
+                    </a>
+                  ` : (payMethod.toLowerCase().includes('bank') ? `
+                    <span style="color:var(--accent-amber); font-size:0.78rem; font-weight:700;">
+                      <i class="fas fa-clock"></i> Bank Slip Verification
+                    </span>
+                  ` : '')}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Failed to load orders:', err);
+        container.innerHTML = `
+          <div style="text-align:center; padding:3rem; color:#f87171;">
+            <i class="fas fa-exclamation-triangle" style="font-size:2rem; margin-bottom:1rem;"></i>
+            <div>Unable to retrieve orders from database.</div>
+            <button onclick="loadUserOrders()" style="margin-top:1rem; background:var(--accent-blue); color:#fff; padding:0.5rem 1rem; border-radius:6px;">Try Again</button>
+          </div>
+        `;
+      }
+    }
+
+    async function handleSaveProfile(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveProfileBtn');
+      const originalText = saveBtn.innerHTML;
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+      const name = document.getElementById('profName').value.trim();
+      const email = document.getElementById('profEmail').value.trim();
+      const phone = document.getElementById('profPhone').value.trim();
+      const address = document.getElementById('profAddress').value.trim();
+      const currentPassword = document.getElementById('profCurrentPass').value;
+      const newPassword = document.getElementById('profNewPass').value;
+      const confirmPassword = document.getElementById('profConfirmPass').value;
+
+      if (newPassword && newPassword !== confirmPassword) {
+        alert('❌ The new passwords do not match. Please verify.');
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
+        return;
+      }
+
+      try {
+        const payload = {
+          user_id: currentAccountUser.user_id || currentAccountUser.id,
+          name,
+          email,
+          phone,
+          address
+        };
+
+        if (newPassword) {
+          payload.current_password = currentPassword;
+          payload.new_password = newPassword;
+        }
+
+        const res = await ApiClient.updateProfile(payload);
+        if (res && res.status === 'success') {
+          showToast('✅ Profile updated successfully!');
+          // Clear password fields
+          document.getElementById('profCurrentPass').value = '';
+          document.getElementById('profNewPass').value = '';
+          document.getElementById('profConfirmPass').value = '';
+
+          // Update local session
+          if (res.user) {
+            currentAccountUser = { ...currentAccountUser, ...res.user };
+            Auth.setUser(currentAccountUser);
+            renderUserHeader(currentAccountUser);
+          }
+        }
+      } catch (err) {
+        alert(`❌ Error updating profile: ${err.message}`);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalText;
+      }
+    }
+
+    function renderUserHeader(user) {
+      document.getElementById('userNameDisplay').textContent = user.name || 'Valued Customer';
+      document.getElementById('userEmailDisplay').innerHTML = `<i class="fas fa-envelope"></i> ${user.email || 'No email'}`;
+      document.getElementById('userPhoneDisplay').innerHTML = `<i class="fas fa-phone"></i> ${user.phone || 'No phone'}`;
+      
+      const initials = (user.name || 'U').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+      document.getElementById('userAvatarText').textContent = initials;
+
+      // Populate form
+      document.getElementById('profName').value = user.name || '';
+      document.getElementById('profEmail').value = user.email || '';
+      document.getElementById('profPhone').value = user.phone || '';
+      document.getElementById('profAddress').value = user.address || '';
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = Auth.getUser();
+
+      if (!user) {
+        // User is not logged in / logged out -> redirect directly to the live website (index.html)
+        window.location.replace('index.html');
+        return;
+      }
+
+      currentAccountUser = user;
+      document.getElementById('unauthNotice').style.display = 'none';
+      document.getElementById('authDashboard').style.display = 'block';
+
+      renderUserHeader(user);
+
+      // Check URL parameters for tab
+      const urlParams = new URLSearchParams(window.location.search);
+      const tab = urlParams.get('tab') || 'orders';
+      switchAccountTab(tab);
+
+      // Fetch fresh profile from MySQL in background
+      try {
+        const userId = user.user_id || user.id;
+        if (userId) {
+          const freshProfile = await ApiClient.getProfile(userId);
+          if (freshProfile && freshProfile.status === 'success' && freshProfile.user) {
+            currentAccountUser = { ...currentAccountUser, ...freshProfile.user };
+            Auth.setUser(currentAccountUser);
+            renderUserHeader(currentAccountUser);
+          }
+        }
+      } catch(e) {
+        console.warn('Live profile sync fallback:', e);
+      }
+    });
+  </script>
+</body>
+</html>

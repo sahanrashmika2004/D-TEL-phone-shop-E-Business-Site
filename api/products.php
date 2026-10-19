@@ -28,6 +28,32 @@ try {
     if (!$checkSpecs) {
         $conn->exec("ALTER TABLE `product` ADD COLUMN `specs` TEXT DEFAULT NULL AFTER `description`");
     }
+    $checkIsOffer = $conn->query("SHOW COLUMNS FROM `product` LIKE 'is_offer'")->fetch();
+    if (!$checkIsOffer) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `is_offer` TINYINT(1) NOT NULL DEFAULT 0 AFTER `status`");
+    }
+    $checkOfferPrice = $conn->query("SHOW COLUMNS FROM `product` LIKE 'offer_price'")->fetch();
+    if (!$checkOfferPrice) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `offer_price` DECIMAL(12,2) DEFAULT NULL AFTER `is_offer`");
+    }
+    $checkOrigPrice = $conn->query("SHOW COLUMNS FROM `product` LIKE 'original_price'")->fetch();
+    if (!$checkOrigPrice) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `original_price` DECIMAL(12,2) DEFAULT NULL AFTER `offer_price`");
+    }
+    // Auto-create product_offer dedicated table
+    $conn->exec("
+        CREATE TABLE IF NOT EXISTS `product_offer` (
+            `offer_id` INT AUTO_INCREMENT PRIMARY KEY,
+            `product_id` INT NOT NULL,
+            `offer_title` VARCHAR(255) DEFAULT 'Special Deal',
+            `original_price` DECIMAL(12,2) NOT NULL,
+            `offer_price` DECIMAL(12,2) NOT NULL,
+            `discount_percent` INT DEFAULT 0,
+            `status` ENUM('active', 'inactive') DEFAULT 'active',
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX (`product_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 } catch (Exception $e) {
     // Suppress column check errors if permissions restricted
 }
@@ -75,7 +101,13 @@ switch ($method) {
                 $params[] = $search;
             }
 
-            $sql .= " ORDER BY p.product_id DESC";
+            $is_offer = isset($_GET['is_offer']) ? intval($_GET['is_offer']) : (isset($_GET['sale']) && $_GET['sale'] === 'true' ? 1 : null);
+            if ($is_offer !== null) {
+                $sql .= " AND p.is_offer = ?";
+                $params[] = $is_offer;
+            }
+
+            $sql .= " ORDER BY p.category_id ASC, p.product_id ASC";
 
             $stmt = $conn->prepare($sql);
             $stmt->execute($params);
@@ -136,9 +168,36 @@ switch ($method) {
         $model = !empty($input['model']) ? $input['model'] : '';
         $specs = !empty($input['specs']) ? $input['specs'] : '';
 
+        $stockVal = intval($input['stock'] ?? 0);
+        // Auto-determine status based on stock
+        if (isset($input['status']) && $input['status'] === 'inactive') {
+            $status = 'inactive';
+        } elseif ($stockVal <= 0) {
+            $status = 'out_of_stock';
+        } else {
+            $status = 'active';
+        }
+
+        $isOffer = !empty($input['is_offer']) ? 1 : 0;
+        $offerPrice = (isset($input['offer_price']) && is_numeric($input['offer_price']) && floatval($input['offer_price']) > 0)
+            ? floatval($input['offer_price'])
+            : null;
+        $originalPrice = (isset($input['original_price']) && is_numeric($input['original_price']) && floatval($input['original_price']) > 0)
+            ? floatval($input['original_price'])
+            : (isset($input['oldPrice']) && is_numeric($input['oldPrice']) ? floatval($input['oldPrice']) : null);
+
+        $basePrice = floatval($input['price']);
+        $finalPrice = $basePrice;
+        if ($isOffer && $offerPrice !== null) {
+            $finalPrice = $offerPrice;
+            if (!$originalPrice || $originalPrice <= $offerPrice) {
+                $originalPrice = $basePrice;
+            }
+        }
+
         $stmt = $conn->prepare("
-            INSERT INTO product (category_id, admin_id, product_name, brand, model, price, stock, description, specs, image, image_2, image_3, status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO product (category_id, admin_id, product_name, brand, model, price, is_offer, offer_price, original_price, stock, description, specs, image, image_2, image_3, status) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             intval($input['category_id']),
@@ -146,8 +205,11 @@ switch ($method) {
             $input['product_name'],
             $brand,
             $model,
-            floatval($input['price']),
-            intval($input['stock'] ?? 0),
+            $finalPrice,
+            $isOffer,
+            $offerPrice,
+            $originalPrice,
+            $stockVal,
             $input['description'] ?? '',
             $specs,
             $image,
@@ -157,6 +219,29 @@ switch ($method) {
         ]);
 
         $newId = $conn->lastInsertId();
+
+        // If it is an offer, also insert record into product_offer table
+        if ($isOffer && $newId) {
+            try {
+                $discountPercent = ($originalPrice && $originalPrice > $offerPrice)
+                    ? round((($originalPrice - $offerPrice) / $originalPrice) * 100)
+                    : 0;
+                $offerStmt = $conn->prepare("
+                    INSERT INTO product_offer (product_id, offer_title, original_price, offer_price, discount_percent, status)
+                    VALUES (?, ?, ?, ?, ?, 'active')
+                ");
+                $offerStmt->execute([
+                    $newId,
+                    'Special Offer: ' . $input['product_name'],
+                    $originalPrice ?: $finalPrice,
+                    $offerPrice,
+                    $discountPercent
+                ]);
+            } catch (Exception $oe) {
+                error_log('[D-TEL Offer Insert] ' . $oe->getMessage());
+            }
+        }
+
         echo json_encode([
             "status" => "success", 
             "message" => "Product created successfully", 
@@ -165,6 +250,10 @@ switch ($method) {
                 "product_id" => $newId,
                 "category_id" => intval($input['category_id']),
                 "product_name" => $input['product_name'],
+                "price" => $finalPrice,
+                "is_offer" => $isOffer,
+                "offer_price" => $offerPrice,
+                "original_price" => $originalPrice,
                 "image" => $image,
                 "image_2" => $image_2,
                 "image_3" => $image_3
@@ -191,9 +280,37 @@ switch ($method) {
         $model = !empty($input['model']) ? $input['model'] : '';
         $specs = !empty($input['specs']) ? $input['specs'] : '';
 
+        $stockVal = intval($input['stock'] ?? 0);
+        // Auto-determine status: if stock=0 => out_of_stock, else active (unless manually inactive)
+        $incomingStatus = $input['status'] ?? 'active';
+        if ($incomingStatus === 'inactive') {
+            $autoStatus = 'inactive';
+        } elseif ($stockVal <= 0) {
+            $autoStatus = 'out_of_stock';
+        } else {
+            $autoStatus = 'active';
+        }
+
+        $isOffer = !empty($input['is_offer']) ? 1 : 0;
+        $offerPrice = (isset($input['offer_price']) && is_numeric($input['offer_price']) && floatval($input['offer_price']) > 0)
+            ? floatval($input['offer_price'])
+            : null;
+        $originalPrice = (isset($input['original_price']) && is_numeric($input['original_price']) && floatval($input['original_price']) > 0)
+            ? floatval($input['original_price'])
+            : (isset($input['oldPrice']) && is_numeric($input['oldPrice']) ? floatval($input['oldPrice']) : null);
+
+        $basePrice = floatval($input['price']);
+        $finalPrice = $basePrice;
+        if ($isOffer && $offerPrice !== null) {
+            $finalPrice = $offerPrice;
+            if (!$originalPrice || $originalPrice <= $offerPrice) {
+                $originalPrice = $basePrice;
+            }
+        }
+
         $stmt = $conn->prepare("
             UPDATE product 
-            SET category_id = ?, product_name = ?, brand = ?, model = ?, price = ?, stock = ?, description = ?, specs = ?, image = ?, image_2 = ?, image_3 = ?, status = ?
+            SET category_id = ?, product_name = ?, brand = ?, model = ?, price = ?, is_offer = ?, offer_price = ?, original_price = ?, stock = ?, description = ?, specs = ?, image = ?, image_2 = ?, image_3 = ?, status = ?
             WHERE product_id = ?
         ");
         $stmt->execute([
@@ -201,18 +318,44 @@ switch ($method) {
             $input['product_name'] ?? $input['name'],
             $brand,
             $model,
-            floatval($input['price']),
-            intval($input['stock'] ?? 0),
+            $finalPrice,
+            $isOffer,
+            $offerPrice,
+            $originalPrice,
+            $stockVal,
             $input['description'] ?? '',
             $specs,
             $image,
             $image_2,
             $image_3,
-            $input['status'] ?? 'active',
+            $autoStatus,
             $prodId
         ]);
 
-        echo json_encode(["status" => "success", "message" => "Product updated successfully"]);
+        // Sync product_offer table
+        try {
+            $conn->prepare("DELETE FROM product_offer WHERE product_id = ?")->execute([$prodId]);
+            if ($isOffer) {
+                $discountPercent = ($originalPrice && $originalPrice > $offerPrice)
+                    ? round((($originalPrice - $offerPrice) / $originalPrice) * 100)
+                    : 0;
+                $offerStmt = $conn->prepare("
+                    INSERT INTO product_offer (product_id, offer_title, original_price, offer_price, discount_percent, status)
+                    VALUES (?, ?, ?, ?, ?, 'active')
+                ");
+                $offerStmt->execute([
+                    $prodId,
+                    'Special Offer: ' . ($input['product_name'] ?? $input['name']),
+                    $originalPrice ?: $finalPrice,
+                    $offerPrice,
+                    $discountPercent
+                ]);
+            }
+        } catch (Exception $oe) {
+            error_log('[D-TEL Offer Sync] ' . $oe->getMessage());
+        }
+
+        echo json_encode(["status" => "success", "message" => "Product updated successfully", "product_status" => $autoStatus]);
         break;
 
     case 'DELETE':
@@ -231,6 +374,10 @@ switch ($method) {
 
         $stmt = $conn->prepare("DELETE FROM product WHERE product_id = ?");
         $stmt->execute([$id]);
+
+        try {
+            $conn->prepare("DELETE FROM product_offer WHERE product_id = ?")->execute([$id]);
+        } catch (Exception $de) {}
 
         echo json_encode(["status" => "success", "message" => "Product deleted successfully"]);
         break;

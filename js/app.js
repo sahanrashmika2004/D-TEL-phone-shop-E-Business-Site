@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     const allProds = StorageDB.getProducts();
-    const catProds = category === "All" ? allProds : allProds.filter(p => p.category.toLowerCase() === category.toLowerCase());
+    const catProds = category === "All" ? allProds : allProds.filter(p => (p.category || p.category_name || "").toLowerCase() === category.toLowerCase());
     const minPrice = catProds.length > 0 ? Math.min(...catProds.map(p => p.price)) : 0;
     
     let availableBrands = [];
@@ -329,20 +329,26 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCategoryBanner(category);
   }
 
+  // Persistent active category state
+  window._activeCategory = "All";
+
   // Category Pill Selection Handler
   window.selectCategoryPill = function(catName) {
+    window._activeCategory = catName || "All";
     if (categoryFilter) {
-      categoryFilter.value = catName;
+      categoryFilter.value = window._activeCategory;
     }
+    window._activeSaleFilter = false;
+    const saleBtn = document.getElementById("saleFilterPill");
+    if (saleBtn) saleBtn.classList.remove("active");
+
     document.querySelectorAll(".category-pill-btn").forEach(btn => {
-      if (btn.textContent.includes(catName) || (catName === "All" && btn.textContent.includes("All Products"))) {
-        btn.classList.add("active");
-      } else {
-        btn.classList.remove("active");
-      }
+      const isAll = (window._activeCategory === "All" && btn.textContent.includes("All Products"));
+      const isMatch = (window._activeCategory !== "All" && btn.textContent.toLowerCase().includes(window._activeCategory.toLowerCase()));
+      btn.classList.toggle("active", isAll || isMatch);
     });
 
-    populateBrandFilters(catName);
+    populateBrandFilters(window._activeCategory);
     renderProducts();
   };
 
@@ -355,16 +361,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const subParam = urlParams.get('sub');
   const wattageParam = urlParams.get('wattage');
   const searchParam = urlParams.get('search');
+  const saleParam = urlParams.get('sale') || urlParams.get('offer');
+  window._activeSaleFilter = (saleParam === 'true');
 
-  const initialCat = catParam || (categoryFilter ? categoryFilter.value : "All");
-  populateBrandFilters(initialCat);
+  window._activeCategory = catParam || (categoryFilter ? categoryFilter.value : "All");
+  populateBrandFilters(window._activeCategory);
 
-  if (catParam && categoryFilter) {
+  if (categoryFilter && catParam) {
     categoryFilter.value = catParam;
-    document.querySelectorAll(".category-pill-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.textContent.includes(catParam));
-    });
   }
+  document.querySelectorAll(".category-pill-btn").forEach(btn => {
+    const isAll = (window._activeCategory === "All" && btn.textContent.includes("All Products"));
+    const isMatch = (window._activeCategory !== "All" && btn.textContent.toLowerCase().includes(window._activeCategory.toLowerCase()));
+    btn.classList.toggle("active", isAll || isMatch);
+  });
 
   if (gradeParam) {
     setTimeout(() => {
@@ -443,229 +453,255 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
   // RENDER & FILTER ENGINE
   // ==========================================
+  function createProductCardHtml(p) {
+    const isOutOfStock = (p.stock !== undefined && p.stock !== null && parseInt(p.stock) <= 0) || p.status === 'out_of_stock' || (typeof p.status === 'string' && p.status.toLowerCase().includes('out'));
+    const wishlist = (typeof StorageDB !== 'undefined' && StorageDB.getWishlist) ? StorageDB.getWishlist() : [];
+    const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
+    const isWishlisted = wishlist.includes(p.id);
+    
+    const discountPercent = (p.oldPrice && p.oldPrice > p.price) 
+      ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) 
+      : 0;
+
+    const isOffer = p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || discountPercent > 0;
+
+    // Dynamic Quality Grade Badges (Top Highlight)
+    let qualityBadgeHtml = "";
+    if (isOffer) {
+      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #f43f5e, #dc2626); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(244,63,94,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-fire"></i> ${discountPercent > 0 ? `-${discountPercent}% OFF` : 'SPECIAL OFFER'}</span>`;
+    } else if (p.qualityGrade === "Original") {
+      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #0284c7, #2563eb); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(2,132,199,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-crown"></i> 100% Original</span>`;
+    } else if (p.qualityGrade === "High Grade") {
+      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #7c3aed, #4f46e5); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(124,58,237,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-star"></i> High Grade</span>`;
+    } else if (p.qualityGrade === "Budget") {
+      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #059669, #10b981); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(5,150,105,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-tag"></i> Budget / Low-Cost</span>`;
+    }
+
+    return `
+      <div class="product-card" data-id="${p.id}" style="background:var(--bg-secondary); border:1px solid ${isOutOfStock ? 'rgba(239,68,68,0.45)' : 'var(--border-color)'}; border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; transition:all 0.3s ease; ${isOutOfStock ? 'opacity:0.88;' : ''}">
+        
+        <!-- Badges & Wishlist Overlay (Prominent Quality Badge On Top) -->
+        <div style="position:absolute; top:12px; left:12px; z-index:3; display:flex; gap:0.35rem; flex-wrap:wrap; max-width:75%;">
+          ${isOutOfStock ? `<span style="background:linear-gradient(135deg,#dc2626,#991b1b); color:#ffffff; font-size:0.68rem; font-weight:900; padding:0.28rem 0.6rem; border-radius:5px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(220,38,38,0.5); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-ban"></i> Out of Stock</span>` : qualityBadgeHtml}
+          ${!isOutOfStock && discountPercent > 0 ? `<span style="background:var(--accent-rose); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.2rem 0.45rem; border-radius:4px;">-${discountPercent}%</span>` : ""}
+        </div>
+
+        <button onclick="window.handleWishlistToggle('${p.id}')" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="position:absolute; top:12px; right:12px; z-index:3; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; color:${isWishlisted ? '#f43f5e' : 'var(--text-muted)'}; font-size:0.9rem; cursor:pointer; transition:all 0.2s ease;">
+          <i class="${isWishlisted ? 'fas fa-heart' : 'far fa-heart'}"></i>
+        </button>
+        
+        <!-- Thumbnail Image (dimmed if out of stock) -->
+        <a href="product-detail.html?id=${p.id}" class="card-thumb" style="display:block; text-align:center; margin-bottom:0.75rem; cursor:pointer; text-decoration:none; height:160px; background:transparent; padding:0.5rem 0; position:relative;">
+          <img src="${p.image}" alt="${p.name}" loading="lazy" style="max-width:100%; height:150px; object-fit:contain; transition:transform 0.3s ease; ${isOutOfStock ? 'filter:grayscale(65%) brightness(0.65);' : ''}" onerror="this.src='images/cat-chargers.svg'">
+          ${isOutOfStock ? `
+          <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+            <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(239,68,68,0.7); border-radius:8px; padding:0.4rem 0.9rem; font-size:0.78rem; font-weight:900; color:#fca5a5; letter-spacing:1px; text-transform:uppercase; backdrop-filter:blur(3px); box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+              <i class="fas fa-times-circle" style="color:#ef4444; margin-right:5px;"></i>SOLD OUT
+            </div>
+          </div>` : ''}
+        </a>
+
+        <!-- Card Body -->
+        <div class="card-body" style="display:flex; flex-direction:column; gap:0.45rem;">
+          
+          <!-- Brand & Category Row -->
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
+            <div style="display:flex; align-items:center; gap:0.35rem; font-weight:700; color:var(--accent-cyan);">
+              <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color}; border-radius:4px;">
+                <i class="${brandMeta.icon}"></i>
+              </span>
+              <span>${p.brand}</span>
+            </div>
+            <span style="color:var(--text-dim); background:rgba(255,255,255,0.04); padding:0.1rem 0.45rem; border-radius:4px; font-size:0.72rem;">${p.category}</span>
+          </div>
+          
+          <!-- Title -->
+          <h3 style="font-size:0.95rem; font-weight:700; color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; height:42px; overflow:hidden; line-height:1.35; margin:0.15rem 0;">
+            <a href="product-detail.html?id=${p.id}" style="color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; text-decoration:none; transition:color 0.2s ease;">${p.name}</a>
+          </h3>
+
+          <!-- Specs Snippet Chip -->
+          <div style="font-size:0.73rem; color:var(--text-muted); background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.05); padding:0.3rem 0.5rem; border-radius:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${p.specs || ''}">
+            <i class="fas fa-microchip" style="color:var(--accent-cyan); font-size:0.7rem; margin-right:3px;"></i>
+            ${p.specs || (p.qualityGrade === 'Budget' ? 'Budget Friendly Replacement' : 'Genuine Original Warranty')}
+          </div>
+          
+          <!-- Rating -->
+          <div style="display:flex; justify-content:flex-start; align-items:center; margin-top:0.15rem;">
+            <span style="color:var(--accent-amber); font-size:0.82rem; font-weight:700;">
+              <i class="fas fa-star"></i> ${p.rating || 4.8} <span style="font-size:0.72rem; color:var(--text-dim); font-weight:400;">(${p.reviewsCount || 10})</span>
+            </span>
+          </div>
+
+          <!-- Price Row -->
+          <div style="display:flex; align-items:baseline; gap:0.5rem; margin:0.35rem 0 0.5rem;">
+            <span style="font-size:1.15rem; font-weight:800; color:${isOutOfStock ? '#94a3b8' : 'var(--accent-cyan)'};">Rs. ${(p.price || 0).toLocaleString()}</span>
+            ${p.oldPrice ? `<span style="font-size:0.8rem; color:var(--text-dim); text-decoration:line-through;">Rs. ${p.oldPrice.toLocaleString()}</span>` : ""}
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display:grid; grid-template-columns:1fr auto; gap:0.4rem;">
+            ${isOutOfStock 
+              ? `<button disabled style="padding:0.6rem 0.8rem; font-size:0.82rem; background:rgba(107,114,128,0.25); border:1.5px solid rgba(239,68,68,0.4); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:800; cursor:not-allowed; color:#f87171;">
+                  <i class="fas fa-ban"></i> OUT OF STOCK
+                </button>`
+              : `<button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="padding:0.6rem 0.8rem; font-size:0.82rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border:none; display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:700; cursor:pointer;">
+                  <i class="fas fa-cart-plus"></i> ADD TO CART
+                </button>`}
+            <a href="product-detail.html?id=${p.id}" class="icon-btn" title="View Specifications" style="width:38px; height:38px; border-radius:var(--radius-md); background:rgba(255,255,255,0.06); border:1px solid var(--border-color); display:inline-flex; align-items:center; justify-content:center; color:#ffffff;">
+              <i class="fas fa-arrow-right" style="font-size:0.85rem;"></i>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    `;
+  }
+  window.createProductCardHtml = createProductCardHtml;
+
   function renderProducts() {
     const displayContainer = document.getElementById("catalogProductsGrid") || productsGrid;
-    if (!displayContainer) return;
-
-    let filtered = StorageDB.getProducts();
-
-    // 1. Search Query
-    const query = searchInput ? (searchInput.value || "").toLowerCase().trim() : "";
-    if (query) {
-      filtered = filtered.filter(p =>
-        (p.name || "").toLowerCase().includes(query) ||
-        (p.brand || "").toLowerCase().includes(query) ||
-        (p.category || "").toLowerCase().includes(query) ||
-        (p.specs && (p.specs || "").toLowerCase().includes(query)) ||
-        (p.description && (p.description || "").toLowerCase().includes(query))
-      );
-    }
-
-    // 2. Category Filter
-    const activeCategory = categoryFilter ? categoryFilter.value : "All";
-    if (activeCategory && activeCategory !== "All") {
-      filtered = filtered.filter(p => (p.category || "").toLowerCase() === activeCategory.toLowerCase());
-    }
-
-    // 3. Brand Filter
-    const checkedBrandBoxes = document.querySelectorAll(".brand-checkbox:checked");
-    const selectedBrands = Array.from(checkedBrandBoxes).map(cb => cb.value.toLowerCase());
-    if (selectedBrands.length > 0) {
-      filtered = filtered.filter(p => selectedBrands.some(b => (p.brand || "").toLowerCase().includes(b)));
-    }
-
-    // 3.5 Quality Tier / Grade Filter (Original, High Grade, Budget)
-    const checkedGradeBoxes = document.querySelectorAll(".grade-checkbox:checked");
-    const selectedGrades = Array.from(checkedGradeBoxes).map(cb => cb.value.toLowerCase());
-    if (selectedGrades.length > 0) {
-      filtered = filtered.filter(p => p.qualityGrade && selectedGrades.includes(p.qualityGrade.toLowerCase()));
-    }
-
-    // 4. Charger Wattage Filter (20W, 25W, 30W, 45W, 65W)
-    const checkedWattageBoxes = document.querySelectorAll(".wattage-checkbox:checked");
-    const selectedWattages = Array.from(checkedWattageBoxes).map(cb => cb.value.toLowerCase());
-    if (selectedWattages.length > 0) {
-      filtered = filtered.filter(p => p.wattage && selectedWattages.includes(p.wattage.toLowerCase()));
-    }
-
-    // 5. Cable & Connector Filter (USB-C, Lightning, Micro USB)
-    const checkedConnectorBoxes = document.querySelectorAll(".connector-checkbox:checked");
-    const selectedConnectors = Array.from(checkedConnectorBoxes).map(cb => cb.value.toLowerCase());
-    if (selectedConnectors.length > 0) {
-      filtered = filtered.filter(p => p.connector && selectedConnectors.some(c => p.connector.toLowerCase().includes(c)));
-    }
-
-    // 6. Glass Quality Tier Filter (Super D, HD+, MTB - ONLY for Screen Protectors)
-    const checkedTierBoxes = document.querySelectorAll(".tier-checkbox:checked");
-    const selectedTiers = Array.from(checkedTierBoxes).map(cb => cb.value.toLowerCase());
-    if (selectedTiers.length > 0) {
-      filtered = filtered.filter(p => p.qualityTier && selectedTiers.includes(p.qualityTier.toLowerCase()));
-    }
-
-    // 7. Price Range
-    if (priceRange) {
-      const maxPrice = parseFloat(priceRange.value) || 500000;
-      filtered = filtered.filter(p => p.price <= maxPrice);
-    }
-
-    // 8. Availability Stock Filter
-    const stockInOnlyRadio = document.getElementById("stockInOnly");
-    if (stockInOnlyRadio && stockInOnlyRadio.checked) {
-      filtered = filtered.filter(p => p.stock > 0);
-    }
-
-    // 9. Rating Filter
-    const rating4PlusCb = document.getElementById("rating4Plus");
-    if (rating4PlusCb && rating4PlusCb.checked) {
-      filtered = filtered.filter(p => p.rating >= 4.0);
-    }
-
-    // 10. Sorting (including Tier Rank: Best to Standard)
-    if (sortSelect) {
-      const sortVal = sortSelect.value;
-      if (sortVal === "tier-best") {
-        filtered.sort((a, b) => {
-          const rankA = a.tierRank || 99;
-          const rankB = b.tierRank || 99;
-          return rankA - rankB;
-        });
-      } else if (sortVal === "price-low") {
-        filtered.sort((a, b) => a.price - b.price);
-      } else if (sortVal === "price-high") {
-        filtered.sort((a, b) => b.price - a.price);
-      } else if (sortVal === "rating") {
-        filtered.sort((a, b) => b.rating - a.rating);
-      }
-    }
-
-    // Update Counter
-    const showingCountNum = document.getElementById("showingCountNum");
-    if (showingCountNum) {
-      showingCountNum.textContent = filtered.length;
-    }
-    if (productCountEl) {
-      productCountEl.textContent = `Showing ${filtered.length} Products`;
-    }
-
-    // Render Grid HTML
-    if (filtered.length === 0) {
-      displayContainer.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg);">
-          <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-glow);"></i>
-          <h3 style="font-size:1.3rem; color:#ffffff; margin-bottom:0.5rem;">No Matching Mobile Products Found</h3>
-          <p style="margin-bottom:1.5rem;">Try adjusting your brand, wattage, or price criteria or resetting filters.</p>
-          <button onclick="window.resetFilters()" class="btn-primary" style="padding:0.6rem 1.5rem;"><i class="fas fa-undo-alt"></i> Reset All Filters</button>
-        </div>
-      `;
-      return;
-    }
-
-    const wishlist = StorageDB.getWishlist();
-
-    function createProductCardHtml(p) {
-      const isOutOfStock = p.stock <= 0;
-      const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
-      const isWishlisted = wishlist.includes(p.id);
-      
-      const discountPercent = (p.oldPrice && p.oldPrice > p.price) 
-        ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) 
-        : 0;
-
-      // Dynamic Quality Grade Badges (Top Highlight)
-      let qualityBadgeHtml = "";
-      if (p.qualityGrade === "Original") {
-        qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #0284c7, #2563eb); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(2,132,199,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-crown"></i> 100% Original</span>`;
-      } else if (p.qualityGrade === "High Grade") {
-        qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #7c3aed, #4f46e5); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(124,58,237,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-star"></i> High Grade</span>`;
-      } else if (p.qualityGrade === "Budget") {
-        qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #059669, #10b981); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(5,150,105,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-tag"></i> Budget / Low-Cost</span>`;
-      }
-
-      return `
-        <div class="product-card" data-id="${p.id}" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; transition:all 0.3s ease;">
-          
-          <!-- Badges & Wishlist Overlay (Prominent Quality Badge On Top) -->
-          <div style="position:absolute; top:12px; left:12px; z-index:3; display:flex; gap:0.35rem; flex-wrap:wrap; max-width:75%;">
-            ${qualityBadgeHtml}
-            ${discountPercent > 0 ? `<span style="background:var(--accent-rose); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.2rem 0.45rem; border-radius:4px;">-${discountPercent}%</span>` : ""}
-          </div>
-
-          <button onclick="window.handleWishlistToggle('${p.id}')" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="position:absolute; top:12px; right:12px; z-index:3; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; color:${isWishlisted ? '#f43f5e' : 'var(--text-muted)'}; font-size:0.9rem; cursor:pointer; transition:all 0.2s ease;">
-            <i class="${isWishlisted ? 'fas fa-heart' : 'far fa-heart'}"></i>
-          </button>
-          
-          <!-- Thumbnail Image -->
-          <a href="product-detail.html?id=${p.id}" class="card-thumb" style="display:block; text-align:center; margin-bottom:0.75rem; cursor:pointer; text-decoration:none; height:160px; background:transparent; padding:0.5rem 0;">
-            <img src="${p.image}" alt="${p.name}" loading="lazy" style="max-width:100%; height:150px; object-fit:contain; transition:transform 0.3s ease;" onerror="this.src='images/cat-chargers.svg'">
-          </a>
-
-          <!-- Card Body -->
-          <div class="card-body" style="display:flex; flex-direction:column; gap:0.45rem;">
-            
-            <!-- Brand & Category Row -->
-            <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem;">
-              <div style="display:flex; align-items:center; gap:0.35rem; font-weight:700; color:var(--accent-cyan);">
-                <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color}; border-radius:4px;">
-                  <i class="${brandMeta.icon}"></i>
-                </span>
-                <span>${p.brand}</span>
-              </div>
-              <span style="color:var(--text-dim); background:rgba(255,255,255,0.04); padding:0.1rem 0.45rem; border-radius:4px; font-size:0.72rem;">${p.category}</span>
-            </div>
-            
-            <!-- Title -->
-            <h3 style="font-size:0.95rem; font-weight:700; color:#ffffff; height:42px; overflow:hidden; line-height:1.35; margin:0.15rem 0;">
-              <a href="product-detail.html?id=${p.id}" style="color:#ffffff; text-decoration:none; transition:color 0.2s ease;">${p.name}</a>
-            </h3>
-
-            <!-- Specs Snippet Chip -->
-            <div style="font-size:0.73rem; color:var(--text-muted); background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.05); padding:0.3rem 0.5rem; border-radius:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${p.specs || ''}">
-              <i class="fas fa-microchip" style="color:var(--accent-cyan); font-size:0.7rem; margin-right:3px;"></i>
-              ${p.specs || (p.qualityGrade === 'Budget' ? 'Budget Friendly Replacement' : 'Genuine Original Warranty')}
-            </div>
-            
-            <!-- Rating (Inventory quantities are admin-only) -->
-            <div style="display:flex; justify-content:flex-start; align-items:center; margin-top:0.15rem;">
-              <span style="color:var(--accent-amber); font-size:0.82rem; font-weight:700;">
-                <i class="fas fa-star"></i> ${p.rating} <span style="font-size:0.72rem; color:var(--text-dim); font-weight:400;">(${p.reviewsCount || 10})</span>
-              </span>
-            </div>
-
-            <!-- Price Row -->
-            <div style="display:flex; align-items:baseline; gap:0.5rem; margin:0.35rem 0 0.5rem;">
-              <span style="font-size:1.15rem; font-weight:800; color:var(--accent-cyan);">Rs. ${p.price.toLocaleString()}</span>
-              ${p.oldPrice ? `<span style="font-size:0.8rem; color:var(--text-dim); text-decoration:line-through;">Rs. ${p.oldPrice.toLocaleString()}</span>` : ""}
-            </div>
-
-            <!-- Action Buttons Grid (Add to Cart + View Detail) -->
-            <div style="display:grid; grid-template-columns:1fr auto; gap:0.4rem;">
-              <button class="btn-primary" ${isOutOfStock ? 'disabled style="opacity:0.5; cursor:not-allowed;"' : ''} onclick="window.handleAddToCart('${p.id}')" style="padding:0.6rem 0.8rem; font-size:0.82rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border:none; display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:700; cursor:pointer;">
-                <i class="fas fa-cart-plus"></i> ADD TO CART
-              </button>
-              <a href="product-detail.html?id=${p.id}" class="icon-btn" title="View Specifications" style="width:38px; height:38px; border-radius:var(--radius-md); background:rgba(255,255,255,0.06); border:1px solid var(--border-color); display:inline-flex; align-items:center; justify-content:center; color:#ffffff;">
-                <i class="fas fa-arrow-right" style="font-size:0.85rem;"></i>
-              </a>
-            </div>
-
-          </div>
-        </div>
-      `;
-    }
-
-    displayContainer.innerHTML = filtered.map(p => createProductCardHtml(p)).join("");
-
-    // Also populate homepage grids if present
     const newArrivalsGrid = document.getElementById("newArrivalsGrid");
-    if (newArrivalsGrid) {
-      const allProducts = StorageDB.getProducts();
-      newArrivalsGrid.innerHTML = allProducts.slice(0, 8).map(p => createProductCardHtml(p)).join("");
+    const specialOffersGrid = document.getElementById("specialOffersGrid");
+
+    const allProducts = StorageDB.getProducts();
+
+    if (displayContainer) {
+      let filtered = [...allProducts];
+
+      // 0. Special Offer / Sale Filter (e.g. ?sale=true or SALE % pill)
+      if (window._activeSaleFilter) {
+        filtered = filtered.filter(p => (p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || (p.oldPrice && p.oldPrice > p.price)));
+      }
+
+      // 1. Search Query
+      const query = searchInput ? (searchInput.value || "").toLowerCase().trim() : "";
+      if (query) {
+        filtered = filtered.filter(p =>
+          (p.name || "").toLowerCase().includes(query) ||
+          (p.brand || "").toLowerCase().includes(query) ||
+          (p.category || "").toLowerCase().includes(query) ||
+          (p.specs && (p.specs || "").toLowerCase().includes(query)) ||
+          (p.description && (p.description || "").toLowerCase().includes(query))
+        );
+      }
+
+      // 2. Category Filter
+      const activeCategory = window._activeCategory || (categoryFilter ? categoryFilter.value : "All");
+      if (activeCategory && activeCategory !== "All") {
+        filtered = filtered.filter(p => {
+          const cat = (p.category || p.category_name || "").toLowerCase();
+          return cat === activeCategory.toLowerCase();
+        });
+      }
+
+      // 3. Brand Filter
+      const checkedBrandBoxes = document.querySelectorAll(".brand-checkbox:checked");
+      const selectedBrands = Array.from(checkedBrandBoxes).map(cb => cb.value.toLowerCase());
+      if (selectedBrands.length > 0) {
+        filtered = filtered.filter(p => selectedBrands.some(b => (p.brand || "").toLowerCase().includes(b)));
+      }
+
+      // 3.5 Quality Tier / Grade Filter (Original, High Grade, Budget)
+      const checkedGradeBoxes = document.querySelectorAll(".grade-checkbox:checked");
+      const selectedGrades = Array.from(checkedGradeBoxes).map(cb => cb.value.toLowerCase());
+      if (selectedGrades.length > 0) {
+        filtered = filtered.filter(p => p.qualityGrade && selectedGrades.includes(p.qualityGrade.toLowerCase()));
+      }
+
+      // 4. Charger Wattage Filter (20W, 25W, 30W, 45W, 65W)
+      const checkedWattageBoxes = document.querySelectorAll(".wattage-checkbox:checked");
+      const selectedWattages = Array.from(checkedWattageBoxes).map(cb => cb.value.toLowerCase());
+      if (selectedWattages.length > 0) {
+        filtered = filtered.filter(p => p.wattage && selectedWattages.includes(p.wattage.toLowerCase()));
+      }
+
+      // 5. Cable & Connector Filter (USB-C, Lightning, Micro USB)
+      const checkedConnectorBoxes = document.querySelectorAll(".connector-checkbox:checked");
+      const selectedConnectors = Array.from(checkedConnectorBoxes).map(cb => cb.value.toLowerCase());
+      if (selectedConnectors.length > 0) {
+        filtered = filtered.filter(p => p.connector && selectedConnectors.some(c => p.connector.toLowerCase().includes(c)));
+      }
+
+      // 6. Glass Quality Tier Filter (Super D, HD+, MTB - ONLY for Screen Protectors)
+      const checkedTierBoxes = document.querySelectorAll(".tier-checkbox:checked");
+      const selectedTiers = Array.from(checkedTierBoxes).map(cb => cb.value.toLowerCase());
+      if (selectedTiers.length > 0) {
+        filtered = filtered.filter(p => p.qualityTier && selectedTiers.includes(p.qualityTier.toLowerCase()));
+      }
+
+      // 7. Price Range
+      if (priceRange) {
+        const maxPrice = parseFloat(priceRange.value) || 500000;
+        filtered = filtered.filter(p => p.price <= maxPrice);
+      }
+
+      // 8. Availability Stock Filter
+      const stockInOnlyRadio = document.getElementById("stockInOnly");
+      if (stockInOnlyRadio && stockInOnlyRadio.checked) {
+        filtered = filtered.filter(p => (p.stock > 0 && p.status !== 'out_of_stock'));
+      }
+
+      // 9. Rating Filter
+      const rating4PlusCb = document.getElementById("rating4Plus");
+      if (rating4PlusCb && rating4PlusCb.checked) {
+        filtered = filtered.filter(p => p.rating >= 4.0);
+      }
+
+      // 10. Sorting (including Tier Rank: Best to Standard)
+      if (sortSelect) {
+        const sortVal = sortSelect.value;
+        if (sortVal === "tier-best") {
+          filtered.sort((a, b) => {
+            const rankA = a.tierRank || 99;
+            const rankB = b.tierRank || 99;
+            return rankA - rankB;
+          });
+        } else if (sortVal === "price-low") {
+          filtered.sort((a, b) => a.price - b.price);
+        } else if (sortVal === "price-high") {
+          filtered.sort((a, b) => b.price - a.price);
+        } else if (sortVal === "rating") {
+          filtered.sort((a, b) => b.rating - a.rating);
+        }
+      }
+
+      // Update Counter
+      const showingCountNum = document.getElementById("showingCountNum");
+      if (showingCountNum) {
+        showingCountNum.textContent = filtered.length;
+      }
+      if (productCountEl) {
+        productCountEl.textContent = `Showing ${filtered.length} Products`;
+      }
+
+      // Render Grid HTML
+      if (filtered.length === 0) {
+        displayContainer.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg);">
+            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; color: var(--border-glow);"></i>
+            <h3 style="font-size:1.3rem; color:#ffffff; margin-bottom:0.5rem;">No Matching Mobile Products Found</h3>
+            <p style="margin-bottom:1.5rem;">Try adjusting your brand, wattage, or price criteria or resetting filters.</p>
+            <button onclick="window.resetFilters()" class="btn-primary" style="padding:0.6rem 1.5rem;"><i class="fas fa-undo-alt"></i> Reset All Filters</button>
+          </div>
+        `;
+      } else {
+        displayContainer.innerHTML = filtered.map(p => createProductCardHtml(p)).join("");
+      }
     }
 
-    const specialOffersGrid = document.getElementById("specialOffersGrid");
+    // Always populate homepage grids if present
+    if (newArrivalsGrid) {
+      const smartphones = allProducts.filter(p => (p.category || p.category_name || "").toLowerCase() === "smartphones");
+      const others = allProducts.filter(p => (p.category || p.category_name || "").toLowerCase() !== "smartphones");
+      const arrivalsList = [...smartphones, ...others].slice(0, 8);
+      newArrivalsGrid.innerHTML = arrivalsList.map(p => createProductCardHtml(p)).join("");
+    }
+
     if (specialOffersGrid) {
-      const allProducts = StorageDB.getProducts();
-      const offers = allProducts.filter(p => p.oldPrice && p.oldPrice > p.price).slice(0, 4);
-      specialOffersGrid.innerHTML = offers.map(p => createProductCardHtml(p)).join("");
+      const offers = allProducts.filter(p => (p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || (p.oldPrice && p.oldPrice > p.price)));
+      const displayOffers = offers.length > 0 ? offers : allProducts.slice(0, 4);
+      specialOffersGrid.innerHTML = displayOffers.map(p => createProductCardHtml(p)).join("");
     }
   }
 
@@ -722,8 +758,77 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProducts();
   };
 
-  // Initial render on load
-  renderProducts();
+  // ─── Live Product Sync: fetch fresh items directly from MySQL API ─────
+  async function syncStockFromDB() {
+    try {
+      if (typeof ApiClient === 'undefined' || !ApiClient.getProducts) {
+        renderProducts();
+        return;
+      }
+
+      const liveProducts = await ApiClient.getProducts();
+      if (!liveProducts || liveProducts.length === 0) {
+        renderProducts();
+        return;
+      }
+
+      const CATEGORY_NAMES = {
+        1: "Smartphones",
+        2: "Chargers",
+        3: "Covers",
+        4: "Audio",
+        5: "Power",
+        6: "Accessories"
+      };
+
+      const formatted = liveProducts.map(dbp => {
+        const catName = dbp.category_name || CATEGORY_NAMES[dbp.category_id] || "Smartphones";
+        const origPrice = (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : null);
+        const curPrice = parseFloat(dbp.price) || 0;
+        const offerPrice = (dbp.offer_price && parseFloat(dbp.offer_price) > 0) ? parseFloat(dbp.offer_price) : null;
+        const isOffer = (dbp.is_offer == 1 || dbp.is_offer === true || dbp.is_offer === '1' || (origPrice && origPrice > curPrice)) ? 1 : 0;
+        const stockVal = parseInt(dbp.stock ?? 0);
+
+        return {
+          id: `prod_${dbp.product_id}`,
+          numericId: parseInt(dbp.product_id),
+          category_id: parseInt(dbp.category_id) || 1,
+          name: dbp.product_name,
+          category: catName,
+          category_name: catName,
+          brand: (typeof normalizeBrand === 'function') ? normalizeBrand(dbp.brand) : (dbp.brand || "Generic"),
+          model: dbp.model || "",
+          price: curPrice,
+          oldPrice: origPrice,
+          original_price: origPrice,
+          offer_price: offerPrice,
+          is_offer: isOffer,
+          stock: stockVal,
+          status: (stockVal <= 0 || dbp.status === 'out_of_stock') ? 'out_of_stock' : 'active',
+          description: dbp.description || "",
+          specs: dbp.specs || "",
+          image: dbp.image || "images/cat-chargers.svg",
+          image_2: dbp.image_2 || null,
+          image_3: dbp.image_3 || null,
+          connector: dbp.connector || "USB-C",
+          rating: dbp.rating || 4.8,
+          reviewsCount: dbp.reviewsCount || 25,
+          qualityGrade: dbp.qualityGrade || (parseInt(dbp.category_id) === 1 ? "Original" : "High Grade")
+        };
+      });
+
+      StorageDB.saveProducts(formatted);
+      console.log(`[D-TEL] ✅ Live stock synced: ${formatted.length} products from DB`);
+      renderProducts();
+      window.dispatchEvent(new CustomEvent("productsUpdated", { detail: formatted }));
+
+    } catch (err) {
+      console.warn('[D-TEL] ⚠️ Live stock sync failed, using cached data:', err.message);
+      renderProducts();
+    }
+  }
+
+  syncStockFromDB();
 
   // ==========================================
   // CART SYSTEM & DRAWER MANAGEMENT
@@ -780,6 +885,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.handleAddToCart = function(productId) {
+    const product = (typeof StorageDB !== 'undefined' && StorageDB.getProductById) ? StorageDB.getProductById(productId) : null;
+    if (product && ((product.stock !== undefined && parseInt(product.stock) <= 0) || product.status === 'out_of_stock' || (typeof product.status === 'string' && product.status.toLowerCase().includes('out')))) {
+      alert(`⚠️ Sorry, "${product.name || 'This product'}" is currently OUT OF STOCK and cannot be added to cart.`);
+      return;
+    }
+
     if (typeof Auth !== 'undefined') {
       const user = Auth.getUser();
       if (!user) {
@@ -1199,4 +1310,56 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartUI();
   updateWishlistUI();
   window.applyStoreSettingsToDOM();
+
+  // Asynchronously fetch fresh products from MySQL API and refresh store
+  async function syncStoreProductsFromApi() {
+    if (typeof ApiClient !== "undefined" && typeof ApiClient.getProducts === "function") {
+      try {
+        const dbProducts = await ApiClient.getProducts();
+        if (Array.isArray(dbProducts) && dbProducts.length > 0) {
+          const CATEGORY_NAMES = {
+            1: "Smartphones",
+            2: "Chargers",
+            3: "Covers",
+            4: "Audio",
+            5: "Power",
+            6: "Accessories"
+          };
+          const formatted = dbProducts.map(dbp => {
+            const catName = dbp.category_name || CATEGORY_NAMES[dbp.category_id] || "Smartphones";
+            return {
+              id: `prod_${dbp.product_id}`,
+              numericId: dbp.product_id,
+              category_id: dbp.category_id || 1,
+              name: dbp.product_name,
+              category: catName,
+              category_name: catName,
+              brand: (typeof normalizeBrand === 'function') ? normalizeBrand(dbp.brand) : (dbp.brand || "Generic"),
+              model: dbp.model || "",
+              price: parseFloat(dbp.price),
+              oldPrice: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : null),
+              original_price: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : null,
+              offer_price: (dbp.offer_price && parseFloat(dbp.offer_price) > 0) ? parseFloat(dbp.offer_price) : null,
+              is_offer: (dbp.is_offer == 1 || dbp.is_offer === true || dbp.is_offer === '1') ? 1 : 0,
+              stock: parseInt(dbp.stock),
+              description: dbp.description || "",
+              specs: dbp.specs || "",
+              image: dbp.image || "images/cat-chargers.svg",
+              image_2: dbp.image_2 || null,
+              image_3: dbp.image_3 || null,
+              connector: dbp.connector || "USB-C",
+              status: dbp.status || "active"
+            };
+          });
+          StorageDB.saveProducts(formatted);
+          renderProducts();
+          window.dispatchEvent(new CustomEvent('productsUpdated', { detail: formatted }));
+        }
+      } catch (err) {
+        console.warn("Live storefront products sync skipped:", err);
+      }
+    }
+  }
+
+  syncStoreProductsFromApi();
 });

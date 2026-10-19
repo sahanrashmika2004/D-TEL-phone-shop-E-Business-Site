@@ -151,6 +151,10 @@ document.addEventListener("DOMContentLoaded", async () => {
               brand: (typeof normalizeBrand === 'function') ? normalizeBrand(dbp.brand) : (dbp.brand || "Generic"),
               model: dbp.model || "",
               price: parseFloat(dbp.price),
+              oldPrice: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : null),
+              original_price: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : null,
+              offer_price: (dbp.offer_price && parseFloat(dbp.offer_price) > 0) ? parseFloat(dbp.offer_price) : null,
+              is_offer: (dbp.is_offer == 1 || dbp.is_offer === true || dbp.is_offer === '1') ? 1 : 0,
               stock: parseInt(dbp.stock),
               description: dbp.description || "",
               specs: dbp.specs || "",
@@ -244,6 +248,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               payment_method: dbo.payment_method || dbo.paymentMethod || 'Cash on Delivery',
               paymentStatus: dbo.payment_status || dbo.paymentStatus || 'Pending',
               payment_status: dbo.payment_status || dbo.paymentStatus || 'Pending',
+              bank_slip_path: dbo.bank_slip_path || dbo.bankSlipPath || null,
+              bankSlipPath: dbo.bank_slip_path || dbo.bankSlipPath || null,
               status: dbo.status || 'Pending',
               items: items.length > 0 ? items : (existingIdx >= 0 && merged[existingIdx].items ? merged[existingIdx].items : [])
             };
@@ -409,6 +415,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <td>
             <strong style="color:var(--accent-cyan); font-size:0.95rem;">LKR ${Number(p.price || 0).toLocaleString()}</strong>
             ${p.oldPrice ? `<div style="font-size:0.75rem; color:var(--text-dim); text-decoration:line-through;">LKR ${Number(p.oldPrice).toLocaleString()}</div>` : ''}
+            ${(p.is_offer == 1 || p.is_offer === true || (p.oldPrice && p.oldPrice > p.price)) ? `<div style="margin-top:3px;"><span style="font-size:0.65rem; background:rgba(244,63,94,0.18); color:#fb7185; border:1px solid rgba(244,63,94,0.3); border-radius:4px; padding:1px 6px; font-weight:800; display:inline-flex; align-items:center; gap:2px;"><i class="fas fa-fire"></i> SPECIAL OFFER</span></div>` : ''}
           </td>
           <td>
             <span class="status-pill ${isOut ? 'out-of-stock' : 'in-stock'}">
@@ -616,6 +623,15 @@ document.addEventListener("DOMContentLoaded", async () => {
               <span class="status-pill ${isPaid ? 'in-stock' : 'out-of-stock'}" style="font-size:0.7rem; padding:2px 6px; cursor:pointer;" onclick="window.toggleOrderPaymentStatus('${o.id || o.order_id}')" title="Click to toggle Paid/Pending">
                 <i class="fas fa-circle" style="font-size:0.4rem; margin-right:3px;"></i> ${isPaid ? 'Paid' : 'Payment Pending'}
               </span>
+              ${(o.bank_slip_path || o.bankSlipPath || o.bankSlipDataUri) ? `
+                <span style="font-size:0.68rem; background:rgba(245,158,11,0.15); color:#fde68a; border:1px solid rgba(245,158,11,0.3); padding:2px 6px; border-radius:4px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                  <i class="fas fa-paperclip" style="font-size:0.6rem;"></i> Slip Attached
+                </span>
+              ` : (((o.paymentMethod || o.payment_method || '').toLowerCase().includes('bank')) ? `
+                <span style="font-size:0.68rem; background:rgba(245,158,11,0.06); color:#f59e0b; border:1px dashed rgba(245,158,11,0.3); padding:2px 6px; border-radius:4px; font-weight:700; display:inline-flex; align-items:center; gap:3px;">
+                  <i class="fas fa-clock" style="font-size:0.6rem;"></i> Slip Pending
+                </span>
+              ` : '')}
             </div>
           </td>
           <td>
@@ -642,16 +658,103 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join("");
   }
 
+  // Direct Bank Slip Viewer helper
+  window.viewBankSlip = async function(orderId) {
+    const numId = parseInt(String(orderId).replace(/\D/g, '')) || 0;
+    let targetPath = null;
+
+    const allOrders = (typeof StorageDB.getAllOrders === 'function') ? StorageDB.getAllOrders() : [];
+    const o = allOrders.find(x => x.id === orderId || x.order_id == orderId || String(x.id).replace(/\D/g, '') == String(numId));
+    if (o && (o.bank_slip_path || o.bankSlipPath)) {
+      targetPath = o.bank_slip_path || o.bankSlipPath;
+    }
+
+    if (!targetPath && numId > 0) {
+      try {
+        const res = await fetch(`api/orders.php?order_id=${numId}`);
+        if (res.ok) {
+          const j = await res.json();
+          if (j && j.data && j.data.bank_slip_path) {
+            targetPath = j.data.bank_slip_path;
+            if (o) { o.bank_slip_path = targetPath; o.bankSlipPath = targetPath; StorageDB.saveOrders(allOrders); }
+          }
+        }
+      } catch(e) {}
+    }
+
+    if (targetPath) {
+      let finalUrl = targetPath;
+      if (!targetPath.startsWith('http://') && !targetPath.startsWith('https://') && !targetPath.startsWith('data:')) {
+        const basePath = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+        finalUrl = targetPath.startsWith('/') ? (window.location.origin + targetPath) : (basePath + targetPath);
+      }
+      window.open(finalUrl, '_blank');
+    } else {
+      alert("Bank slip receipt has not been uploaded yet or could not be found on server.");
+    }
+  };
+
   // Customer & Order Details Modal Viewer
-  window.openOrderDetailsModal = function(orderId) {
+  window.openOrderDetailsModal = async function(orderId) {
     const modalOverlay = document.getElementById("orderDetailsModalOverlay");
     if (!modalOverlay) return;
 
-    const allOrders = (typeof StorageDB.getAllOrders === 'function')
+    let allOrders = (typeof StorageDB.getAllOrders === 'function')
       ? StorageDB.getAllOrders()
       : (JSON.parse(localStorage.getItem("tz_orders")) || []);
 
-    const order = allOrders.find(o => o.id === orderId || o.order_id == orderId || String(o.id) === String(orderId));
+    let order = allOrders.find(o => o.id === orderId || o.order_id == orderId || String(o.id) === String(orderId));
+
+    // Always fetch latest order details from database to ensure fresh bank_slip_path
+    const numId = parseInt(String(orderId).replace(/\D/g, '')) || (order && order.order_id ? parseInt(order.order_id) : 0);
+    if (numId > 0) {
+      try {
+        const freshRes = await fetch(`api/orders.php?order_id=${numId}`);
+        if (freshRes.ok) {
+          const freshJson = await freshRes.json();
+          if (freshJson && freshJson.status === 'success' && freshJson.data) {
+            const dbo = freshJson.data;
+            if (!order) {
+              order = {
+                id: `ORD-${dbo.order_id}`,
+                order_id: dbo.order_id,
+                customerName: dbo.customer_name || 'Customer',
+                phone: dbo.customer_phone || dbo.phone,
+                email: dbo.customer_email || dbo.email,
+                delivery_address: dbo.customer_address || dbo.delivery_address,
+                paymentMethod: dbo.payment_method || 'Bank Transfer',
+                paymentStatus: dbo.payment_status || 'Pending',
+                bank_slip_path: dbo.bank_slip_path,
+                bankSlipPath: dbo.bank_slip_path,
+                status: dbo.status || 'Pending',
+                total: parseFloat(dbo.total_amount || 0),
+                items: dbo.items || []
+              };
+            } else {
+              if (dbo.bank_slip_path) {
+                order.bank_slip_path = dbo.bank_slip_path;
+                order.bankSlipPath = dbo.bank_slip_path;
+              }
+              if (dbo.payment_status) {
+                order.payment_status = dbo.payment_status;
+                order.paymentStatus = dbo.payment_status;
+              }
+              if (dbo.status) {
+                order.status = dbo.status;
+              }
+              const idx = allOrders.findIndex(x => x.id === order.id || x.order_id == order.order_id);
+              if (idx >= 0) {
+                allOrders[idx] = { ...allOrders[idx], ...order };
+                StorageDB.saveOrders(allOrders);
+              }
+            }
+          }
+        }
+      } catch (fetchErr) {
+        console.warn("Could not fetch fresh order from server:", fetchErr);
+      }
+    }
+
     if (!order) {
       alert("Order details could not be found.");
       return;
@@ -669,6 +772,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const paymentStatus = order.paymentStatus || order.payment_status || 'Pending';
     const isPaid = paymentStatus.toLowerCase() === 'paid';
+
+    // Resolve bank slip path
+    const slipPath = order.bank_slip_path || order.bankSlipPath || order.bankSlipDataUri || (order.bankSlip && typeof order.bankSlip === 'string' && (order.bankSlip.startsWith('data:') || order.bankSlip.startsWith('images/')) ? order.bankSlip : null);
+    const payMethod = (order.paymentMethod || order.payment_method || '').toLowerCase();
+    const isBank = payMethod.includes('bank') || !!slipPath || !!order.bankSlip;
+
+    let fullSlipUrl = null;
+    let isPdfSlip = false;
+    if (slipPath) {
+      isPdfSlip = slipPath.toLowerCase().includes('.pdf') || slipPath.startsWith('data:application/pdf');
+      fullSlipUrl = slipPath;
+      if (!slipPath.startsWith('http://') && !slipPath.startsWith('https://') && !slipPath.startsWith('data:')) {
+        const basePath = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+        fullSlipUrl = slipPath.startsWith('/') ? (window.location.origin + slipPath) : (basePath + slipPath);
+      }
+    }
 
     const itemsHtml = Array.isArray(order.items) && order.items.length > 0
       ? order.items.map(item => {
@@ -772,8 +891,79 @@ document.addEventListener("DOMContentLoaded", async () => {
               <span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700; display:block;">Payment Method</span>
               <strong style="color:#fff; font-size:1rem;"><i class="fas fa-money-bill-wave" style="color:var(--accent-amber);"></i> ${order.paymentMethod || order.payment_method || 'Cash on Delivery'}</strong>
               ${order.cardBrand ? `<div style="font-size:0.78rem; color:var(--text-muted); margin-top:2px;">Card: ${order.cardBrand} ${order.cardLast4 ? '(•••• ' + order.cardLast4 + ')' : ''}</div>` : ''}
-              ${order.bankSlip ? `<div style="font-size:0.78rem; color:var(--accent-cyan); margin-top:2px;"><i class="fas fa-paperclip"></i> Slip: ${order.bankSlip}</div>` : ''}
+              
+              ${isBank ? `
+                <div style="margin-top:0.45rem;">
+                  <button type="button" onclick="window.viewBankSlip('${order.id || order.order_id}')" style="background:linear-gradient(135deg, #06b6d4, #2563eb); color:#fff; border:none; padding:0.45rem 0.9rem; border-radius:6px; font-size:0.82rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:0.45rem; box-shadow:0 2px 8px rgba(6,182,212,0.35);">
+                    <i class="fas fa-file-invoice"></i> Open Bank Slip Receipt <i class="fas fa-external-link-alt" style="font-size:0.72rem; margin-left:3px;"></i>
+                  </button>
+                  ${order.bankSlip ? `<div style="font-size:0.75rem; color:var(--accent-cyan); margin-top:4px;"><i class="fas fa-paperclip"></i> ${order.bankSlip}</div>` : ''}
+                </div>
+              ` : ''}
             </div>
+
+            ${(() => {
+              if (isBank) {
+                if (fullSlipUrl) {
+                  return `
+                    <div style="background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.35); border-radius:10px; padding:0.85rem;">
+                      <div style="font-weight:700; color:#fde68a; font-size:0.85rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem; flex-wrap:wrap;">
+                        <i class="fas fa-file-invoice"></i> Bank Transfer Receipt / Deposit Slip
+                        <span style="background:rgba(16,185,129,0.2); color:#6ee7b7; border:1px solid rgba(16,185,129,0.3); padding:2px 8px; border-radius:999px; font-size:0.72rem; font-weight:700; margin-left:auto;">UPLOADED</span>
+                      </div>
+                      ${isPdfSlip ? `
+                        <div style="display:flex; flex-direction:column; gap:0.75rem;">
+                          <div style="display:flex; align-items:center; justify-content:space-between; gap:0.75rem; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:0.75rem 1rem; flex-wrap:wrap;">
+                            <div style="display:flex; align-items:center; gap:0.75rem; min-width:0; overflow:hidden;">
+                              <i class="fas fa-file-pdf" style="color:#ef4444; font-size:2rem; flex-shrink:0;"></i>
+                              <div style="overflow:hidden;">
+                                <div style="font-weight:700; color:#fff; font-size:0.9rem; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${order.bankSlip || slipPath.split('/').pop()}</div>
+                                <div style="font-size:0.75rem; color:#fca5a5;">PDF Bank Deposit Receipt</div>
+                              </div>
+                            </div>
+                            <div style="display:flex; gap:0.5rem; flex-shrink:0;">
+                              <a href="${fullSlipUrl}" target="_blank" style="background:#ef4444; color:#fff; padding:0.5rem 1rem; border-radius:6px; font-size:0.85rem; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:0.4rem; box-shadow:0 2px 8px rgba(239,68,68,0.4);">
+                                <i class="fas fa-external-link-alt"></i> Open PDF in New Window
+                              </a>
+                            </div>
+                          </div>
+                          <!-- Embedded PDF preview for instant in-modal reading -->
+                          <div style="border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,0.15);">
+                            <iframe src="${fullSlipUrl}" style="width:100%; height:380px; border:none; display:block; background:#fff;"></iframe>
+                          </div>
+                        </div>
+                      ` : `
+                        <div>
+                          <div style="border-radius:8px; overflow:hidden; border:1px solid rgba(245,158,11,0.3); background:#000; position:relative; max-height:280px; text-align:center;">
+                            <img src="${fullSlipUrl}" alt="Bank Deposit Slip" style="width:100%; max-height:280px; object-fit:contain; display:block;" onerror="this.parentElement.innerHTML='<div style=\\'padding:1.5rem;color:#fca5a5;text-align:center;\\'><i class=\\'fas fa-exclamation-triangle\\'></i> Slip image could not be loaded</div>'">
+                          </div>
+                          <div style="display:flex; gap:0.5rem; margin-top:0.6rem;">
+                            <a href="${fullSlipUrl}" target="_blank" style="flex:1; text-align:center; background:linear-gradient(135deg, #06b6d4, #3b82f6); color:#fff; padding:0.55rem 0.75rem; border-radius:6px; font-size:0.85rem; font-weight:700; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+                              <i class="fas fa-expand-alt"></i> View Full Size
+                            </a>
+                            <a href="${fullSlipUrl}" download style="flex:1; text-align:center; background:rgba(16,185,129,0.15); color:#6ee7b7; border:1px solid rgba(16,185,129,0.3); padding:0.55rem 0.75rem; border-radius:6px; font-size:0.85rem; font-weight:700; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+                              <i class="fas fa-download"></i> Download Slip
+                            </a>
+                          </div>
+                        </div>
+                      `}
+                    </div>
+                  `;
+                } else {
+                  return `
+                    <div style="background:rgba(245,158,11,0.06); border:1px dashed rgba(245,158,11,0.3); border-radius:10px; padding:0.85rem; text-align:center;">
+                      <i class="fas fa-clock" style="color:#f59e0b; font-size:1.3rem; margin-bottom:0.35rem; display:block;"></i>
+                      <div style="font-size:0.85rem; color:#fde68a; font-weight:700;">Bank Slip Not Yet Uploaded</div>
+                      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">Customer may send via WhatsApp or upload later</div>
+                      <button type="button" onclick="window.viewBankSlip('${order.id || order.order_id}')" style="margin-top:0.5rem; background:rgba(245,158,11,0.2); color:#fde68a; border:1px solid rgba(245,158,11,0.4); padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:700; cursor:pointer;">
+                        <i class="fas fa-sync-alt"></i> Check Server for Slip
+                      </button>
+                    </div>
+                  `;
+                }
+              }
+              return '';
+            })()}
 
             <div>
               <span style="color:var(--text-muted); font-size:0.75rem; text-transform:uppercase; font-weight:700; display:block; margin-bottom:0.25rem;">Payment Status</span>
@@ -798,6 +988,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
 
       </div>
+
 
       <!-- ORDERED ITEMS BREAKDOWN -->
       <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1.5rem;">
@@ -1225,6 +1416,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const img2 = product ? (product.image_2 || product.image2 || "") : "";
     const img3 = product ? (product.image_3 || product.image3 || "") : "";
 
+    const hasOffer = product ? (product.is_offer == 1 || product.is_offer === true || (product.oldPrice && product.oldPrice > product.price)) : false;
+    const origPriceVal = product ? (product.original_price || product.oldPrice || (hasOffer ? product.price : '')) : '';
+    const offerPriceVal = product ? (product.offer_price || (hasOffer ? product.price : '')) : '';
+
     productModalOverlay.querySelector(".modal-card").innerHTML = `
       <button class="modal-close-btn" onclick="window.closeProductModal()" title="Close">&times;</button>
       
@@ -1274,13 +1469,49 @@ document.addEventListener("DOMContentLoaded", async () => {
             <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:0.35rem; color:#fff;">
               Price (LKR) <span style="color:var(--accent-rose);">*</span>
             </label>
-            <input type="number" id="pPrice" step="any" required value="${isEdit ? product.price : ''}" placeholder="420000">
+            <input type="number" id="pPrice" step="any" required value="${isEdit ? (product.original_price || product.oldPrice || product.price) : ''}" placeholder="420000">
           </div>
           <div>
             <label style="font-size:0.85rem; font-weight:700; display:block; margin-bottom:0.35rem; color:#fff;">
               Initial Stock Count <span style="color:var(--accent-rose);">*</span>
             </label>
             <input type="number" id="pStock" required min="0" value="${isEdit ? (product.stock !== undefined ? product.stock : 10) : 15}" placeholder="15">
+          </div>
+        </div>
+
+        <!-- SPECIAL OFFER & DISCOUNT PROMOTION SECTION -->
+        <div style="background:linear-gradient(135deg, rgba(244,63,94,0.09), rgba(239,68,68,0.03)); border:1.5px solid rgba(244,63,94,0.32); border-radius:var(--radius-md); padding:1rem 1.25rem; margin-bottom:1.25rem;">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+            <label style="display:flex; align-items:center; gap:0.65rem; cursor:pointer; font-size:0.92rem; font-weight:800; color:#ffffff; margin:0;">
+              <input type="checkbox" id="pIsOffer" style="width:19px; height:19px; accent-color:#f43f5e; cursor:pointer;" ${hasOffer ? 'checked' : ''} onchange="window.toggleOfferInputs(this.checked)">
+              <span><i class="fas fa-tags" style="color:var(--accent-rose);"></i> Set as Special Offer / Flash Deal Item</span>
+            </label>
+            <span style="font-size:0.75rem; background:rgba(244,63,94,0.2); color:#fb7185; border:1px solid rgba(244,63,94,0.4); padding:0.2rem 0.65rem; border-radius:var(--radius-full); font-weight:700;">
+              SALE % PROMOTION
+            </span>
+          </div>
+
+          <div id="offerInputsRow" style="display:${hasOffer ? 'grid' : 'none'}; grid-template-columns:1fr 1fr 1.2fr; gap:1rem; margin-top:1rem; padding-top:1rem; border-top:1px dashed rgba(244,63,94,0.25);">
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; display:block; margin-bottom:0.35rem; color:#fca5a5;">
+                Regular / Original Price (LKR) <span style="color:var(--accent-rose);">*</span>
+              </label>
+              <input type="number" id="pOriginalPrice" step="any" value="${origPriceVal}" placeholder="e.g. 420000" oninput="window.calcOfferPreview()">
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; display:block; margin-bottom:0.35rem; color:#67e8f9;">
+                Special Offer Price (LKR) <span style="color:var(--accent-cyan);">*</span>
+              </label>
+              <input type="number" id="pOfferPrice" step="any" value="${offerPriceVal}" placeholder="e.g. 385000" oninput="window.calcOfferPreview()">
+            </div>
+            <div>
+              <label style="font-size:0.82rem; font-weight:700; display:block; margin-bottom:0.35rem; color:#a7f3d0;">
+                Calculated Deal Discount
+              </label>
+              <div id="offerPreviewText" style="background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.08); border-radius:6px; padding:0.45rem 0.75rem; font-size:0.85rem; font-weight:800; color:#34d399; height:42px; display:flex; align-items:center;">
+                ${hasOffer && origPriceVal && offerPriceVal ? `🔥 ${Math.round(((origPriceVal - offerPriceVal)/origPriceVal)*100)}% OFF (Save LKR ${(origPriceVal - offerPriceVal).toLocaleString()})` : 'Enter prices to preview discount'}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1403,6 +1634,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     productModalOverlay.classList.add("active");
 
+    window.toggleOfferInputs = function(checked) {
+      const row = document.getElementById("offerInputsRow");
+      if (row) row.style.display = checked ? "grid" : "none";
+      if (checked) {
+        const pPriceEl = document.getElementById("pPrice");
+        const pOrigEl = document.getElementById("pOriginalPrice");
+        if (pPriceEl && pOrigEl && !pOrigEl.value && pPriceEl.value) {
+          pOrigEl.value = pPriceEl.value;
+        }
+        window.calcOfferPreview();
+      }
+    };
+
+    window.calcOfferPreview = function() {
+      const orig = parseFloat(document.getElementById("pOriginalPrice")?.value || 0);
+      const offer = parseFloat(document.getElementById("pOfferPrice")?.value || 0);
+      const preview = document.getElementById("offerPreviewText");
+      if (!preview) return;
+      if (orig > 0 && offer > 0 && orig > offer) {
+        const pct = Math.round(((orig - offer) / orig) * 100);
+        const diff = orig - offer;
+        preview.style.color = "#34d399";
+        preview.innerHTML = `<i class="fas fa-fire" style="color:#f43f5e; margin-right:4px;"></i> <strong>-${pct}% OFF</strong> <span style="font-size:0.75rem; color:#94a3b8; margin-left:6px;">(Save Rs. ${diff.toLocaleString()})</span>`;
+      } else if (orig > 0 && offer >= orig) {
+        preview.style.color = "#f87171";
+        preview.innerHTML = `<i class="fas fa-exclamation-circle"></i> Offer price must be less than regular price`;
+      } else {
+        preview.style.color = "#94a3b8";
+        preview.textContent = "Enter original & offer prices";
+      }
+    };
+
     function resolveImagePath(val) {
       if (!val) return '';
       val = val.trim();
@@ -1499,6 +1762,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       const view2Image = rawSlot2 ? resolveImagePath(rawSlot2) : null;
       const view3Image = rawSlot3 ? resolveImagePath(rawSlot3) : null;
 
+      const isOffer = document.getElementById("pIsOffer") ? document.getElementById("pIsOffer").checked : false;
+      const rawOrig = document.getElementById("pOriginalPrice") ? parseFloat(document.getElementById("pOriginalPrice").value) : null;
+      const rawOffer = document.getElementById("pOfferPrice") ? parseFloat(document.getElementById("pOfferPrice").value) : null;
+
+      let finalPrice = parseFloat(document.getElementById("pPrice").value);
+      let originalPrice = null;
+      let offerPrice = null;
+
+      if (isOffer) {
+        if (!rawOffer || rawOffer <= 0) {
+          alert("Please enter a valid Special Offer Price.");
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = isEdit ? 'Save & Sync Changes to Database' : 'Publish Product to Store & Database';
+          return;
+        }
+        originalPrice = (rawOrig && rawOrig > 0) ? rawOrig : finalPrice;
+        if (rawOffer >= originalPrice) {
+          alert("Special Offer Price must be lower than the Regular / Original Price.");
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = isEdit ? 'Save & Sync Changes to Database' : 'Publish Product to Store & Database';
+          return;
+        }
+        offerPrice = rawOffer;
+        finalPrice = rawOffer; // selling price
+      }
+
       const productPayload = {
         id: isEdit ? product.id : `prod_${Date.now()}`,
         numericId: isEdit ? (product.numericId || (String(product.id).replace('prod_', ''))) : null,
@@ -1509,10 +1798,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         product_name: document.getElementById("pName").value.trim(),
         brand: (typeof normalizeBrand === 'function') ? normalizeBrand(document.getElementById("pBrand").value.trim()) : (document.getElementById("pBrand").value.trim() || 'Generic'),
         model: document.getElementById("pModel").value.trim() || '',
-        price: parseFloat(document.getElementById("pPrice").value),
+        price: finalPrice,
+        oldPrice: isOffer ? originalPrice : null,
+        original_price: isOffer ? originalPrice : null,
+        offer_price: isOffer ? offerPrice : null,
+        is_offer: isOffer ? 1 : 0,
         stock: parseInt(document.getElementById("pStock").value),
         connector: document.getElementById("pConnector").value.trim() || 'USB-C',
-        badge: document.getElementById("pBadge").value.trim() || 'New Arrival',
+        badge: isOffer ? (document.getElementById("pBadge").value.trim() || '🔥 SPECIAL OFFER') : (document.getElementById("pBadge").value.trim() || 'New Arrival'),
         qualityTier: (chosenCategory === 'Covers' && document.getElementById("pBadge").value.trim()) ? document.getElementById("pBadge").value.trim() : (isEdit ? product.qualityTier : null),
         specs: document.getElementById("pSpecs").value.trim(),
         description: document.getElementById("pDesc").value.trim() || "High quality guaranteed mobile hardware from D-TEL.",

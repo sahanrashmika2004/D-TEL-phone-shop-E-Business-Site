@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
+  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
 </head>
 <body>
 
@@ -59,14 +59,73 @@
 
     </div>
 
-    <!-- NAVIGATION LINKS BAR -->
+    <!-- NAVIGATION LINKS BAR WITH HOVER DROPDOWN -->
     <nav class="sub-nav-bar">
       <div class="sub-nav-container">
         <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
-        <a href="shop.html?category=Covers" class="sub-nav-link">PHONE CASES</a>
-        <a href="shop.html?category=Chargers" class="sub-nav-link active">CHARGERS</a>
-        <a href="shop.html?category=Audio" class="sub-nav-link">AUDIO</a>
-        <a href="shop.html?category=Power" class="sub-nav-link">POWER BANKS</a>
+
+        <!-- Smartphones Dropdown -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Smartphones" class="sub-nav-link">
+            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
+            <a href="shop.html?category=Smartphones&brand=Samsung"><i class="fas fa-mobile-alt" style="color:#38bdf8;"></i> Samsung Galaxy</a>
+            <a href="shop.html?category=Smartphones&brand=Xiaomi"><i class="fas fa-bolt" style="color:#f97316;"></i> Xiaomi</a>
+            <a href="shop.html?category=Smartphones&brand=Google"><i class="fab fa-google" style="color:#34a853;"></i> Google Pixel</a>
+            <a href="shop.html?category=Smartphones" style="border-top:1px solid rgba(255,255,255,0.07); margin-top:4px; padding-top:10px;"><i class="fas fa-th-large" style="color:#38bdf8;"></i> All Smartphones</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Covers" class="sub-nav-link">
+            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+ (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️ MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: CHARGERS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Chargers" class="sub-nav-link active">
+            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
+            <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: AUDIO -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Audio" class="sub-nav-link">
+            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: POWER BANKS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Power" class="sub-nav-link">
+            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
+            <a href="shop.html?category=Power&sub=20000mAh"><i class="fas fa-battery-full"></i> 20000 mAh & Above</a>
+            <a href="shop.html?category=Power&sub=Wireless"><i class="fas fa-rss"></i> MagSafe Power Banks</a>
+          </div>
+        </div>
+
         <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
         <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
       </div>
@@ -92,9 +151,14 @@
       
       <!-- Left Column: Main High-Res Image + 3 Thumbnails -->
       <div>
-        <div class="pdp-gallery-main">
+        <div class="pdp-gallery-main" style="position:relative;">
           <img id="pdpMainImage" src="images/anker_charger.png" alt="Universal Fast Charger 20W" onerror="this.src='images/cat-chargers.svg'">
-          <div style="position:absolute; bottom:10px; right:15px; background:rgba(0,0,0,0.6); color:var(--text-muted); font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:4px;">
+          <div id="pdpSoldOutOverlay" style="display:none; position:absolute; inset:0; background:rgba(15, 23, 42, 0.75); backdrop-filter:blur(2px); border-radius:inherit; align-items:center; justify-content:center; z-index:10;">
+            <div style="background:#ef4444; color:#ffffff; font-weight:900; letter-spacing:2px; font-size:1.15rem; padding:0.6rem 1.6rem; border-radius:8px; box-shadow:0 8px 25px rgba(239,68,68,0.5); text-transform:uppercase; border:2px solid #ffffff;">
+              <i class="fas fa-ban"></i> OUT OF STOCK
+            </div>
+          </div>
+          <div style="position:absolute; bottom:10px; right:15px; background:rgba(0,0,0,0.6); color:var(--text-muted); font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:4px; z-index:11;">
             MAIN HIGH-RES IMAGE
           </div>
         </div>
@@ -123,7 +187,7 @@
           Universal Fast Charger 20W
         </h1>
 
-        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">
+        <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;">
           <span id="pdpBrandWrap">Brand: <strong id="pdpBrand" style="color:#ffffff;">Anker</strong></span>
           <span>|</span>
           <span>Model: <strong id="pdpModel" style="color:#ffffff;">FC-20W</strong></span>
@@ -131,14 +195,30 @@
           <span style="color:var(--accent-amber);"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i> <strong style="color:#ffffff;">(24 Reviews)</strong></span>
         </div>
 
+        <!-- Live Stock Status Pill -->
+        <div id="pdpStockBadgeWrap" style="margin-bottom:1.25rem;">
+          <!-- Dynamically populated by renderPdpUI: In Stock or Out of Stock -->
+        </div>
+
         <!-- Pricing Display -->
-        <div style="display:flex; align-items:baseline; gap:1.25rem; margin-bottom:1.5rem;">
+        <div style="display:flex; align-items:baseline; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap;">
           <div id="pdpPrice" style="font-size:2rem; font-weight:800; color:var(--accent-rose);">
             Rs. 4,800.00
           </div>
           <div id="pdpOldPrice" style="font-size:1.1rem; color:var(--text-dim); text-decoration:line-through;">
             Rs. 5,500.00
           </div>
+          <span id="pdpDiscountBadge" style="display:none; font-size:0.85rem; background:linear-gradient(135deg, #f43f5e, #dc2626); color:#ffffff; border-radius:4px; padding:0.25rem 0.65rem; font-weight:800; box-shadow:0 2px 6px rgba(244,63,94,0.4);">
+            <i class="fas fa-fire"></i> SPECIAL OFFER
+          </span>
+        </div>
+
+        <!-- Out of Stock Warning Notice (Shown when stock <= 0) -->
+        <div id="pdpOutOfStockNotice" style="display:none; padding:1rem 1.25rem; border-radius:10px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; font-size:0.9rem; line-height:1.5; margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem; font-weight:800; color:#ef4444; margin-bottom:0.25rem; font-size:0.95rem;">
+            <i class="fas fa-exclamation-triangle"></i> CURRENTLY OUT OF STOCK
+          </div>
+          <div>This item is temporarily sold out in our live inventory. You cannot add this item to cart right now. Please check back soon or message our store on WhatsApp for stock availability updates.</div>
         </div>
 
         <!-- Green Highlighted Stock & Warranty Box -->
@@ -151,17 +231,17 @@
         <div style="display:flex; items-center; gap:1.25rem; flex-wrap:wrap; margin-top:2rem;">
           
           <!-- Qty Selector -->
-          <div style="display:flex; flex-direction:column; gap:0.35rem;">
+          <div style="display:flex; flex-direction:column; gap:0.35rem;" id="pdpQtyContainer">
             <label style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Qty:</label>
             <div class="qty-counter">
-              <button onclick="adjustPdpQty(-1)">-</button>
+              <button id="pdpQtyMinusBtn" onclick="adjustPdpQty(-1)">-</button>
               <input type="number" id="pdpQtyInput" value="1" min="1" max="50">
-              <button onclick="adjustPdpQty(1)">+</button>
+              <button id="pdpQtyPlusBtn" onclick="adjustPdpQty(1)">+</button>
             </div>
           </div>
 
           <!-- Action Buttons -->
-          <div style="flex:1; display:flex; gap:1rem; align-items:flex-end;">
+          <div style="flex:1; display:flex; gap:1rem; align-items:flex-end;" id="pdpActionsContainer">
             <button class="btn-primary" id="pdpAddToCartBtn" style="flex:1; padding:0.85rem; background:var(--accent-blue); border:none; font-size:0.95rem;">
               <i class="fas fa-cart-plus"></i> ADD TO CART
             </button>
@@ -293,12 +373,265 @@
     }
 
     function adjustPdpQty(delta) {
+      if (currentPdpProduct) {
+        const isOos = (currentPdpProduct.stock !== undefined && currentPdpProduct.stock !== null && parseInt(currentPdpProduct.stock) <= 0) ||
+                      currentPdpProduct.status === 'out_of_stock' ||
+                      (typeof currentPdpProduct.status === 'string' && currentPdpProduct.status.toLowerCase().includes('out'));
+        if (isOos) return;
+      }
       const input = document.getElementById('pdpQtyInput');
       if (input) {
         let val = parseInt(input.value) || 1;
         val += delta;
         if (val < 1) val = 1;
         input.value = val;
+      }
+    }
+
+    function renderPdpUI(product) {
+      if (!product) return;
+      currentPdpProduct = product;
+
+      document.title = "D-TEL | " + product.name;
+      document.getElementById('pdpTitleBreadcrumb').textContent = product.name;
+      document.getElementById('pdpCategoryBreadcrumb').textContent = product.category;
+      document.getElementById('pdpSubCatBreadcrumb').textContent = product.category + " Accessories";
+
+      const view1 = product.image || "images/cat-chargers.svg";
+      const view2 = product.image_2 || product.image2 || view1;
+      const view3 = product.image_3 || product.image3 || view1;
+
+      const mainImg = document.getElementById('pdpMainImage');
+      if (mainImg) mainImg.src = view1;
+      document.getElementById('pdpTitle').textContent = product.name;
+      
+      // Update 3 thumbnails gallery
+      const thumbsWrap = document.querySelector('.pdp-thumbs');
+      if (thumbsWrap) {
+        thumbsWrap.innerHTML = `
+          <div class="thumb-card active" onclick="switchMainImage(this, '${view1}')">
+            <img src="${view1}" alt="View 1" style="height:50px; object-fit:contain;" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+            <div>View 1 (Main)</div>
+          </div>
+          <div class="thumb-card" onclick="switchMainImage(this, '${view2}')">
+            <img src="${view2}" alt="View 2" style="height:50px; object-fit:contain; ${view2 === view1 ? 'filter:brightness(1.1);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+            <div>View 2 (Detail)</div>
+          </div>
+          <div class="thumb-card" onclick="switchMainImage(this, '${view3}')">
+            <img src="${view3}" alt="View 3" style="height:50px; object-fit:contain; ${view3 === view1 ? 'transform:scale(0.9);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
+            <div>View 3 (Angle)</div>
+          </div>
+        `;
+      }
+      
+      const bMeta = typeof getBrandMeta === 'function' ? getBrandMeta(product.brand) : ((typeof BRAND_META !== 'undefined') ? BRAND_META[product.brand] : null);
+      if (bMeta) {
+        document.getElementById('pdpBrandWrap').innerHTML = `Brand: <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.75rem; background:${bMeta.bg}; color:${bMeta.color};"><i class="${bMeta.icon}"></i></span> <strong style="color:#ffffff;">${bMeta.name || product.brand}</strong>`;
+      } else {
+        document.getElementById('pdpBrand').textContent = product.brand || "D-TEL";
+      }
+
+      const tierWrap = document.getElementById('pdpTierBadgeWrap');
+      if (tierWrap) {
+        let badgeHtml = "";
+        if (product.qualityGrade === "Original") {
+          badgeHtml = `
+            <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(2,132,199,0.2), rgba(37,99,235,0.25)); color:#38bdf8; border:1px solid #0284c7; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(2,132,199,0.3);">
+              <i class="fas fa-crown"></i> 👑 100% Original Brand Authentic Product
+            </span>
+          `;
+        } else if (product.qualityGrade === "High Grade") {
+          badgeHtml = `
+            <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.25)); color:#a78bfa; border:1px solid #7c3aed; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(124,58,237,0.3);">
+              <i class="fas fa-star"></i> ⭐ High Grade Premium Quality
+            </span>
+          `;
+        } else if (product.qualityGrade === "Budget") {
+          badgeHtml = `
+            <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(5,150,105,0.2), rgba(16,185,129,0.25)); color:#34d399; border:1px solid #059669; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(5,150,105,0.3);">
+              <i class="fas fa-tag"></i> 🏷️ Budget / Low-Cost Standard Grade
+            </span>
+          `;
+        } else if (product.qualityTier) {
+          const tierColor = product.qualityTier === 'Super D' ? '#fb7185' : product.qualityTier === 'HD+' ? '#60a5fa' : '#34d399';
+          const tierBg = product.qualityTier === 'Super D' ? 'rgba(244,63,94,0.15)' : product.qualityTier === 'HD+' ? 'rgba(59,130,246,0.15)' : 'rgba(16,185,129,0.15)';
+          badgeHtml = `
+            <span style="display:inline-flex; align-items:center; gap:0.4rem; background:${tierBg}; color:${tierColor}; border:1px solid ${tierColor}; padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.82rem; font-weight:800;">
+              <i class="fas fa-crown"></i> ${product.badge || product.qualityTier + ' Quality'}
+            </span>
+          `;
+        }
+        tierWrap.innerHTML = badgeHtml;
+      }
+
+      // Update Warranty highlight in highlights box
+      const highlightsBox = document.querySelector('.pdp-highlights-box');
+      if (highlightsBox) {
+        const warrantyText = product.qualityGrade === 'Original'
+          ? '1 Year Official Brand Warranty (TRCSL / Genxt Supported)'
+          : product.qualityGrade === 'High Grade'
+          ? '6 Months Comprehensive Warranty Included'
+          : '1 Month Direct Replacement Warranty (Low-Cost Grade)';
+        
+        highlightsBox.innerHTML = `
+          <div><i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i> ${warrantyText}</div>
+          <div><i class="fas fa-truck-fast" style="color:var(--accent-blue);"></i> Islandwide Express Doorstep Delivery Available</div>
+        `;
+      }
+
+      document.getElementById('pdpModel').textContent = product.model || "FC-20W";
+      document.getElementById('pdpPrice').textContent = "Rs. " + Number(product.price).toLocaleString() + ".00";
+      
+      const origPriceVal = product.original_price || product.oldPrice;
+      const hasOffer = (product.is_offer == 1 || product.is_offer === true || product.is_offer === '1') || (origPriceVal && Number(origPriceVal) > Number(product.price));
+      const oldPriceEl = document.getElementById('pdpOldPrice');
+      const discountBadgeEl = document.getElementById('pdpDiscountBadge');
+      
+      if (oldPriceEl) {
+        if (hasOffer && origPriceVal) {
+          oldPriceEl.style.display = 'block';
+          oldPriceEl.textContent = "Rs. " + Number(origPriceVal).toLocaleString() + ".00";
+          if (discountBadgeEl) {
+            const pct = Math.round(((Number(origPriceVal) - Number(product.price)) / Number(origPriceVal)) * 100);
+            discountBadgeEl.style.display = 'inline-flex';
+            discountBadgeEl.innerHTML = `<i class="fas fa-fire" style="margin-right:4px;"></i> ${pct > 0 ? `-${pct}% OFF` : 'SPECIAL OFFER'}`;
+          }
+        } else {
+          oldPriceEl.style.display = 'none';
+          if (discountBadgeEl) discountBadgeEl.style.display = 'none';
+        }
+      }
+      document.getElementById('pdpSpecsText').textContent = product.specs || (product.qualityGrade === 'Budget' ? "Economical Replacement Quality" : "100% Genuine Brand Product Guaranteed");
+
+      // ─── OUT OF STOCK LIVE CHECK ───
+      const isOutOfStock = (product.stock !== undefined && product.stock !== null && parseInt(product.stock) <= 0) ||
+                           product.status === 'out_of_stock' ||
+                           (typeof product.status === 'string' && product.status.toLowerCase().includes('out'));
+
+      const soldOutOverlay = document.getElementById('pdpSoldOutOverlay');
+      const stockBadgeWrap = document.getElementById('pdpStockBadgeWrap');
+      const outOfStockNotice = document.getElementById('pdpOutOfStockNotice');
+      const addToCartBtn = document.getElementById('pdpAddToCartBtn');
+      const buyNowBtn = document.getElementById('pdpBuyNowBtn');
+      const qtyInput = document.getElementById('pdpQtyInput');
+      const qtyMinusBtn = document.getElementById('pdpQtyMinusBtn');
+      const qtyPlusBtn = document.getElementById('pdpQtyPlusBtn');
+
+      if (isOutOfStock) {
+        // Overlay and dimmed image
+        if (soldOutOverlay) soldOutOverlay.style.display = 'flex';
+        if (mainImg) mainImg.style.filter = 'grayscale(55%) opacity(0.85)';
+
+        // Stock Badge: Red OUT OF STOCK
+        if (stockBadgeWrap) {
+          stockBadgeWrap.innerHTML = `
+            <span style="display:inline-flex; align-items:center; gap:0.45rem; background:rgba(239,68,68,0.18); color:#ef4444; border:1px solid #ef4444; padding:0.4rem 1rem; border-radius:var(--radius-full); font-size:0.88rem; font-weight:800; letter-spacing:0.5px;">
+              <i class="fas fa-times-circle"></i> OUT OF STOCK / SOLD OUT
+            </span>
+          `;
+        }
+
+        // Out of Stock warning notice
+        if (outOfStockNotice) outOfStockNotice.style.display = 'block';
+
+        // Add to Cart button disabled
+        if (addToCartBtn) {
+          addToCartBtn.disabled = true;
+          addToCartBtn.style.background = '#374151';
+          addToCartBtn.style.color = '#9ca3af';
+          addToCartBtn.style.border = '1px solid #4b5563';
+          addToCartBtn.style.cursor = 'not-allowed';
+          addToCartBtn.style.opacity = '0.75';
+          addToCartBtn.innerHTML = '<i class="fas fa-ban"></i> OUT OF STOCK';
+          addToCartBtn.onclick = (e) => {
+            e.preventDefault();
+            alert(`❌ Sorry, "${product.name}" is currently OUT OF STOCK and cannot be purchased.`);
+          };
+        }
+
+        // Buy Now button hidden
+        if (buyNowBtn) {
+          buyNowBtn.disabled = true;
+          buyNowBtn.style.display = 'none';
+        }
+
+        // Qty controls disabled
+        if (qtyInput) {
+          qtyInput.disabled = true;
+          qtyInput.value = '0';
+        }
+        if (qtyMinusBtn) { qtyMinusBtn.disabled = true; qtyMinusBtn.style.opacity = '0.4'; qtyMinusBtn.style.cursor = 'not-allowed'; }
+        if (qtyPlusBtn) { qtyPlusBtn.disabled = true; qtyPlusBtn.style.opacity = '0.4'; qtyPlusBtn.style.cursor = 'not-allowed'; }
+
+      } else {
+        // In Stock
+        if (soldOutOverlay) soldOutOverlay.style.display = 'none';
+        if (mainImg) mainImg.style.filter = 'none';
+
+        const stockUnits = (product.stock !== undefined && product.stock !== null) ? parseInt(product.stock) : null;
+        const stockLabel = stockUnits !== null ? `${stockUnits} units in stock` : 'In Stock';
+
+        if (stockBadgeWrap) {
+          stockBadgeWrap.innerHTML = `
+            <span style="display:inline-flex; align-items:center; gap:0.45rem; background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.4); padding:0.35rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:700;">
+              <i class="fas fa-check-circle"></i> ${stockLabel}
+            </span>
+          `;
+        }
+
+        if (outOfStockNotice) outOfStockNotice.style.display = 'none';
+
+        if (addToCartBtn) {
+          addToCartBtn.disabled = false;
+          addToCartBtn.style.background = 'var(--accent-blue)';
+          addToCartBtn.style.color = '#ffffff';
+          addToCartBtn.style.border = 'none';
+          addToCartBtn.style.cursor = 'pointer';
+          addToCartBtn.style.opacity = '1';
+          addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> ADD TO CART';
+          addToCartBtn.onclick = () => {
+            const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
+            const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
+            if (!user && typeof Auth !== 'undefined') {
+              Auth.openModal('customer', () => {
+                StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+                if (window.updateHeaderCounters) window.updateHeaderCounters();
+                alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
+              }, '⚠️ Please Sign In or Register to add this product to your cart.');
+              return;
+            }
+            StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+            if (window.updateHeaderCounters) window.updateHeaderCounters();
+            alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
+          };
+        }
+
+        if (buyNowBtn) {
+          buyNowBtn.disabled = false;
+          buyNowBtn.style.display = 'block';
+          buyNowBtn.onclick = () => {
+            const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
+            const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
+            if (!user && typeof Auth !== 'undefined') {
+              Auth.openModal('customer', () => {
+                StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+                if (window.updateHeaderCounters) window.updateHeaderCounters();
+                window.location.href = 'checkout.html';
+              }, '⚠️ Please Sign In or Register to proceed with Buy Now.');
+              return;
+            }
+            StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
+            if (window.updateHeaderCounters) window.updateHeaderCounters();
+            window.location.href = 'checkout.html';
+          };
+        }
+
+        if (qtyInput) {
+          qtyInput.disabled = false;
+          if (parseInt(qtyInput.value) < 1) qtyInput.value = '1';
+        }
+        if (qtyMinusBtn) { qtyMinusBtn.disabled = false; qtyMinusBtn.style.opacity = '1'; qtyMinusBtn.style.cursor = 'pointer'; }
+        if (qtyPlusBtn) { qtyPlusBtn.disabled = false; qtyPlusBtn.style.opacity = '1'; qtyPlusBtn.style.cursor = 'pointer'; }
       }
     }
 
@@ -310,35 +643,43 @@
       // Try local product first
       currentPdpProduct = products.find(p => p.id === prodId || p.numericId == prodId || p.id === `prod_${prodId}`);
 
-      // Try fetching from MySQL backend if numeric ID
-      if (!currentPdpProduct && typeof ApiClient !== "undefined" && !isNaN(parseInt(prodId.replace('prod_', '')))) {
-        try {
-          const numericId = parseInt(prodId.replace('prod_', ''));
-          const dbProd = await ApiClient.getProductById(numericId);
-          if (dbProd) {
-            currentPdpProduct = {
-              id: `prod_${dbProd.product_id}`,
-              numericId: dbProd.product_id,
-              name: dbProd.product_name,
-              category: dbProd.category_name || "Smartphones",
-              brand: dbProd.brand || "D-TEL",
-              model: dbProd.model || "",
-              price: parseFloat(dbProd.price),
-              stock: parseInt(dbProd.stock),
-              description: dbProd.description,
-              specs: dbProd.specs,
-              image: dbProd.image || "images/cat-chargers.svg",
-              image_2: dbProd.image_2 || null,
-              image_3: dbProd.image_3 || null,
-              image2: dbProd.image_2 || null,
-              image3: dbProd.image_3 || null,
-              connector: dbProd.connector || "USB-C",
-              rating: 4.9,
-              reviewsCount: 15
-            };
+      // Try fetching from MySQL backend if numeric ID or not found
+      if ((!currentPdpProduct || isNaN(currentPdpProduct.stock)) && typeof ApiClient !== "undefined") {
+        const rawNum = prodId.replace('prod_', '');
+        if (!isNaN(parseInt(rawNum))) {
+          try {
+            const numericId = parseInt(rawNum);
+            const dbProd = await ApiClient.getProductById(numericId);
+            if (dbProd) {
+              currentPdpProduct = {
+                id: `prod_${dbProd.product_id}`,
+                numericId: dbProd.product_id,
+                name: dbProd.product_name,
+                category: dbProd.category_name || "Smartphones",
+                brand: dbProd.brand || "D-TEL",
+                model: dbProd.model || "",
+                price: parseFloat(dbProd.price),
+                original_price: (dbProd.original_price && parseFloat(dbProd.original_price) > 0) ? parseFloat(dbProd.original_price) : null,
+                offer_price: (dbProd.offer_price && parseFloat(dbProd.offer_price) > 0) ? parseFloat(dbProd.offer_price) : null,
+                is_offer: (dbProd.is_offer == 1 || dbProd.is_offer === true || (dbProd.original_price && parseFloat(dbProd.original_price) > parseFloat(dbProd.price))) ? 1 : 0,
+                oldPrice: (dbProd.original_price && parseFloat(dbProd.original_price) > 0) ? parseFloat(dbProd.original_price) : (dbProd.old_price ? parseFloat(dbProd.old_price) : null),
+                stock: parseInt(dbProd.stock ?? 0),
+                status: dbProd.status || (parseInt(dbProd.stock ?? 0) <= 0 ? 'out_of_stock' : 'active'),
+                description: dbProd.description,
+                specs: dbProd.specs,
+                image: dbProd.image || "images/cat-chargers.svg",
+                image_2: dbProd.image_2 || null,
+                image_3: dbProd.image_3 || null,
+                image2: dbProd.image_2 || null,
+                image3: dbProd.image_3 || null,
+                connector: dbProd.connector || "USB-C",
+                rating: 4.9,
+                reviewsCount: 15
+              };
+            }
+          } catch (e) {
+            console.warn("Could not fetch product from MySQL API:", e);
           }
-        } catch (e) {
-          console.warn("Could not fetch product from MySQL API:", e);
         }
       }
 
@@ -346,131 +687,22 @@
         currentPdpProduct = products[2] || products[0];
       }
 
-      if (currentPdpProduct) {
-        document.title = "D-TEL | " + currentPdpProduct.name;
-        document.getElementById('pdpTitleBreadcrumb').textContent = currentPdpProduct.name;
-        document.getElementById('pdpCategoryBreadcrumb').textContent = currentPdpProduct.category;
-        document.getElementById('pdpSubCatBreadcrumb').textContent = currentPdpProduct.category + " Accessories";
+      renderPdpUI(currentPdpProduct);
 
-        const view1 = currentPdpProduct.image || "images/cat-chargers.svg";
-        const view2 = currentPdpProduct.image_2 || currentPdpProduct.image2 || view1;
-        const view3 = currentPdpProduct.image_3 || currentPdpProduct.image3 || view1;
-
-        document.getElementById('pdpMainImage').src = view1;
-        document.getElementById('pdpTitle').textContent = currentPdpProduct.name;
-        
-        // Update 3 thumbnails gallery
-        const thumbsWrap = document.querySelector('.pdp-thumbs');
-        if (thumbsWrap) {
-          thumbsWrap.innerHTML = `
-            <div class="thumb-card active" onclick="switchMainImage(this, '${view1}')">
-              <img src="${view1}" alt="View 1" style="height:50px; object-fit:contain;" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
-              <div>View 1 (Main)</div>
-            </div>
-            <div class="thumb-card" onclick="switchMainImage(this, '${view2}')">
-              <img src="${view2}" alt="View 2" style="height:50px; object-fit:contain; ${view2 === view1 ? 'filter:brightness(1.1);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
-              <div>View 2 (Detail)</div>
-            </div>
-            <div class="thumb-card" onclick="switchMainImage(this, '${view3}')">
-              <img src="${view3}" alt="View 3" style="height:50px; object-fit:contain; ${view3 === view1 ? 'transform:scale(0.9);' : ''}" onerror="this.onerror=null; this.src='images/cat-chargers.svg';">
-              <div>View 3 (Angle)</div>
-            </div>
-          `;
-        }
-        
-        const bMeta = typeof getBrandMeta === 'function' ? getBrandMeta(currentPdpProduct.brand) : ((typeof BRAND_META !== 'undefined') ? BRAND_META[currentPdpProduct.brand] : null);
-        if (bMeta) {
-          document.getElementById('pdpBrandWrap').innerHTML = `Brand: <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.75rem; background:${bMeta.bg}; color:${bMeta.color};"><i class="${bMeta.icon}"></i></span> <strong style="color:#ffffff;">${bMeta.name || currentPdpProduct.brand}</strong>`;
-        } else {
-          document.getElementById('pdpBrand').textContent = currentPdpProduct.brand || "D-TEL";
-        }
-
-        const tierWrap = document.getElementById('pdpTierBadgeWrap');
-        if (tierWrap) {
-          let badgeHtml = "";
-          if (currentPdpProduct.qualityGrade === "Original") {
-            badgeHtml = `
-              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(2,132,199,0.2), rgba(37,99,235,0.25)); color:#38bdf8; border:1px solid #0284c7; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(2,132,199,0.3);">
-                <i class="fas fa-crown"></i> 👑 100% Original Brand Authentic Product
-              </span>
-            `;
-          } else if (currentPdpProduct.qualityGrade === "High Grade") {
-            badgeHtml = `
-              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.25)); color:#a78bfa; border:1px solid #7c3aed; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(124,58,237,0.3);">
-                <i class="fas fa-star"></i> ⭐ High Grade Premium Quality
-              </span>
-            `;
-          } else if (currentPdpProduct.qualityGrade === "Budget") {
-            badgeHtml = `
-              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:linear-gradient(135deg, rgba(5,150,105,0.2), rgba(16,185,129,0.25)); color:#34d399; border:1px solid #059669; padding:0.4rem 0.95rem; border-radius:var(--radius-full); font-size:0.85rem; font-weight:800; box-shadow:0 0 12px rgba(5,150,105,0.3);">
-                <i class="fas fa-tag"></i> 🏷️ Budget / Low-Cost Standard Grade
-              </span>
-            `;
-          } else if (currentPdpProduct.qualityTier) {
-            const tierColor = currentPdpProduct.qualityTier === 'Super D' ? '#fb7185' : currentPdpProduct.qualityTier === 'HD+' ? '#60a5fa' : '#34d399';
-            const tierBg = currentPdpProduct.qualityTier === 'Super D' ? 'rgba(244,63,94,0.15)' : currentPdpProduct.qualityTier === 'HD+' ? 'rgba(59,130,246,0.15)' : 'rgba(16,185,129,0.15)';
-            badgeHtml = `
-              <span style="display:inline-flex; align-items:center; gap:0.4rem; background:${tierBg}; color:${tierColor}; border:1px solid ${tierColor}; padding:0.35rem 0.85rem; border-radius:var(--radius-full); font-size:0.82rem; font-weight:800;">
-                <i class="fas fa-crown"></i> ${currentPdpProduct.badge || currentPdpProduct.qualityTier + ' Quality'}
-              </span>
-            `;
+      // Listen for MySQL live sync update from app.js
+      window.addEventListener('productsUpdated', (e) => {
+        const freshList = e.detail && e.detail.products ? e.detail.products : StorageDB.getProducts();
+        if (freshList && currentPdpProduct) {
+          const freshProd = freshList.find(p => 
+            p.id === currentPdpProduct.id ||
+            p.numericId === currentPdpProduct.numericId ||
+            (p.name && currentPdpProduct.name && p.name.trim().toLowerCase() === currentPdpProduct.name.trim().toLowerCase())
+          );
+          if (freshProd) {
+            renderPdpUI(freshProd);
           }
-          tierWrap.innerHTML = badgeHtml;
         }
-
-        // Update Warranty highlight in highlights box
-        const highlightsBox = document.querySelector('.pdp-highlights-box');
-        if (highlightsBox) {
-          const warrantyText = currentPdpProduct.qualityGrade === 'Original'
-            ? '1 Year Official Brand Warranty (TRCSL / Genxt Supported)'
-            : currentPdpProduct.qualityGrade === 'High Grade'
-            ? '6 Months Comprehensive Warranty Included'
-            : '1 Month Direct Replacement Warranty (Low-Cost Grade)';
-          
-          highlightsBox.innerHTML = `
-            <div><i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i> ${warrantyText}</div>
-            <div><i class="fas fa-truck-fast" style="color:var(--accent-blue);"></i> Islandwide Express Doorstep Delivery Available</div>
-          `;
-        }
-
-        document.getElementById('pdpModel').textContent = currentPdpProduct.model || "FC-20W";
-        document.getElementById('pdpPrice').textContent = "Rs. " + currentPdpProduct.price.toLocaleString() + ".00";
-        document.getElementById('pdpOldPrice').textContent = "Rs. " + ((currentPdpProduct.oldPrice || Math.round(currentPdpProduct.price * 1.15))).toLocaleString() + ".00";
-        document.getElementById('pdpSpecsText').textContent = currentPdpProduct.specs || (currentPdpProduct.qualityGrade === 'Budget' ? "Economical Replacement Quality" : "100% Genuine Brand Product Guaranteed");
-
-        document.getElementById('pdpAddToCartBtn').onclick = () => {
-          const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
-          const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
-          if (!user && typeof Auth !== 'undefined') {
-            Auth.openModal('customer', () => {
-              StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
-              if (window.updateHeaderCounters) window.updateHeaderCounters();
-              alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
-            }, '⚠️ Please Sign In or Register to add this product to your cart.');
-            return;
-          }
-          StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
-          if (window.updateHeaderCounters) window.updateHeaderCounters();
-          alert(`✅ ${qty} x ${currentPdpProduct.name} added to your D-TEL cart!`);
-        };
-
-        // Buy Now Button directly proceeds to Checkout
-        document.getElementById('pdpBuyNowBtn').onclick = () => {
-          const qty = parseInt(document.getElementById('pdpQtyInput').value) || 1;
-          const user = typeof Auth !== 'undefined' ? Auth.getUser() : null;
-          if (!user && typeof Auth !== 'undefined') {
-            Auth.openModal('customer', () => {
-              StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
-              if (window.updateHeaderCounters) window.updateHeaderCounters();
-              window.location.href = 'checkout.html';
-            }, '⚠️ Please Sign In or Register to proceed with Buy Now.');
-            return;
-          }
-          StorageDB.addToCart(currentPdpProduct.id || currentPdpProduct, qty);
-          if (window.updateHeaderCounters) window.updateHeaderCounters();
-          window.location.href = 'checkout.html';
-        };
-      }
+      });
     });
   </script>
 </body>

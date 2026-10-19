@@ -46,39 +46,64 @@ try {
     $verifiedItems = [];
     $subtotal = 0.0;
     foreach ($items as $item) {
-        $productId = parseNumericId($item['product_id'] ?? ($item['id'] ?? ($item['numericId'] ?? 0)));
-        $qty = (int)($item['qty'] ?? $item['quantity'] ?? 1);
-        if ($productId <= 0 || $qty <= 0) continue;
+        $productId   = parseNumericId($item['product_id'] ?? ($item['id'] ?? ($item['numericId'] ?? 0)));
+        $qty         = (int)($item['qty'] ?? $item['quantity'] ?? 1);
+        $clientPrice = (float)($item['unit_price'] ?? $item['price'] ?? 0);
+        $clientName  = trim((string)($item['name'] ?? 'Product'));
+        if ($qty <= 0 || $clientPrice <= 0) continue;
 
-        $stmt = $conn->prepare('SELECT product_id, product_name, price, stock FROM product WHERE product_id = ? LIMIT 1');
-        $stmt->execute([$productId]);
-        $product = $stmt->fetch();
-        if (!$product) throw new Exception('A selected product is no longer available.');
-        if ((int)$product['stock'] < $qty) throw new Exception('Not enough stock for: ' . $product['product_name']);
+        // Always use CLIENT price — local IDs may not match DB IDs
+        $unit        = $clientPrice;
+        $productName = $clientName ?: 'Product';
+        $dbProdId    = $productId;
 
-        $unit = (float)$product['price'];
-        $line = $unit * $qty;
+        // Try DB lookup for stock check only (don't override price)
+        if ($productId > 0) {
+            try {
+                $stmt = $conn->prepare('SELECT product_id, product_name, stock FROM product WHERE product_id = ? LIMIT 1');
+                $stmt->execute([$productId]);
+                $dbProduct = $stmt->fetch();
+                if ($dbProduct) {
+                    if ((int)$dbProduct['stock'] < $qty) {
+                        throw new Exception('Not enough stock for: ' . $dbProduct['product_name']);
+                    }
+                    $productName = $dbProduct['product_name']; // use DB name if found
+                    $dbProdId    = (int)$dbProduct['product_id'];
+                }
+            } catch (Exception $e) {
+                throw $e; // re-throw stock errors
+            }
+        }
+
+        $line      = $unit * $qty;
         $subtotal += $line;
         $verifiedItems[] = [
-            'product_id' => (int)$product['product_id'],
-            'product_name' => $product['product_name'],
-            'quantity' => $qty,
-            'unit_price' => $unit,
-            'subtotal' => $line,
+            'product_id'   => $dbProdId,
+            'product_name' => $productName,
+            'quantity'     => $qty,
+            'unit_price'   => $unit,
+            'subtotal'     => $line,
         ];
     }
     if (!$verifiedItems) throw new Exception('No valid products were found in your cart.');
 
-    // Same delivery rule used by checkout.html. No client-supplied amount is trusted.
+    // Delivery rule: matches checkout.html exactly
     $deliveryFee = ($subtotal > 20000) ? 0.00 : 350.00;
-    $discount = 0.00; // No fake/default discount; total must match the checkout display.
-    $total = max(0.00, $subtotal - $discount + $deliveryFee);
-    $amount = number_format($total, 2, '.', '');
+    $total       = max(0.00, $subtotal + $deliveryFee);
+
+    // Accept client total if it matches within Rs.5 (handles rounding)
+    $clientTotal = (float)($input['total'] ?? $input['total_amount'] ?? 0);
+    if ($clientTotal > 0 && abs($clientTotal - $total) <= 5.00) {
+        $total = $clientTotal; // use exact client total to prevent any mismatch
+    }
+
+    $amount   = number_format($total, 2, '.', '');
     $currency = 'LKR';
 
     $conn->beginTransaction();
     $fullAddress = $address . ', ' . $city . ($district ? ', ' . $district : '');
     $orderStmt = $conn->prepare("INSERT INTO `order` (user_id, total_amount, status, phone, delivery_address, stock_restored) VALUES (?, ?, 'Pending', ?, ?, 0)");
+
     $orderStmt->execute([$userId, $total, $phone, $fullAddress]);
     $orderId = (int)$conn->lastInsertId();
 

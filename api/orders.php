@@ -5,6 +5,16 @@
  */
 require_once __DIR__ . '/db.php';
 
+// Ensure bank_slip_path column exists in payment table
+try {
+    $colCheck = $conn->query("SHOW COLUMNS FROM `payment` LIKE 'bank_slip_path'");
+    if ($colCheck && $colCheck->rowCount() === 0) {
+        $conn->exec("ALTER TABLE `payment` ADD COLUMN `bank_slip_path` VARCHAR(255) DEFAULT NULL AFTER `payhere_payment_id`");
+    }
+} catch (Throwable $ignored) {
+    // Graceful fallback if table is different or permission restricted
+}
+
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 switch ($method) {
@@ -21,7 +31,8 @@ switch ($method) {
                        u.email as customer_email, 
                        COALESCE(o.phone, u.phone) as customer_phone,
                        COALESCE(o.delivery_address, u.address) as customer_address,
-                       p.payment_id, p.payment_method, p.payment_status, p.payment_date
+                       p.payment_id, p.payment_method, p.payment_status, p.payment_date,
+                       p.bank_slip_path
                 FROM `order` o
                 LEFT JOIN user u ON o.user_id = u.user_id
                 LEFT JOIN payment p ON o.order_id = p.order_id
@@ -31,6 +42,13 @@ switch ($method) {
             $order = $stmt->fetch();
 
             if ($order) {
+                // Privacy Check: if user_id is provided, verify that the order belongs to this user
+                if ($userId && intval($order['user_id']) !== $userId) {
+                    http_response_code(403);
+                    echo json_encode(["status" => "error", "message" => "Access denied: You can only view orders placed by your own account."]);
+                    exit();
+                }
+
                 // Get order items
                 $itemsStmt = $conn->prepare("
                     SELECT oi.*, pr.product_name, pr.image, pr.brand, pr.model, pr.price as catalog_price
@@ -54,7 +72,8 @@ switch ($method) {
                        u.email as customer_email, 
                        COALESCE(o.phone, u.phone) as customer_phone,
                        COALESCE(o.delivery_address, u.address) as customer_address,
-                       p.payment_id, p.payment_method, p.payment_status, p.payment_date
+                       p.payment_id, p.payment_method, p.payment_status, p.payment_date,
+                       p.bank_slip_path
                 FROM `order` o
                 LEFT JOIN user u ON o.user_id = u.user_id
                 LEFT JOIN payment p ON o.order_id = p.order_id

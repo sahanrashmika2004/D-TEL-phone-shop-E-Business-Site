@@ -1,6 +1,23 @@
-payment/config.local.php
+# Local-only credentials and configuration
+.env
+.env.*
+!.env.example
+**/config.local.php
+
+# Private customer uploads
+**/uploads/
+
+# Local database files and backups
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+
+# Private keys
+*.pem
+*.key
+
 *.log
 .DS_Store
 Thumbs.db
-
-api/config.local.php

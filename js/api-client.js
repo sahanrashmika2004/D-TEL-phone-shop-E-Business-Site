@@ -7,7 +7,7 @@ const API_BASE_URL = (() => {
     return new URL('./api', window.location.href).href.replace(/\/$/, '');
   }
   // PHP does not execute from file://. This is the standard XAMPP project-folder fallback.
-  return 'http://localhost/D-TEL-Mobile-Shop-PayHere/api';
+  return 'http://localhost/D-TEL-Mobile-Shop-PayHere-FIXED-v2/DTEL%20MOBILE%20SHOP%20NEW/api';
 })();
 
 async function apiFetch(url, options = {}) {
@@ -90,6 +90,18 @@ const ApiClient = {
   async adminLogin(email, password) {
     return apiFetch(`${API_BASE_URL}/auth.php?action=admin_login`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password })
+    });
+  },
+
+  async getProfile(userId) {
+    return apiFetch(`${API_BASE_URL}/auth.php?action=get_profile&user_id=${encodeURIComponent(userId)}`);
+  },
+
+  async updateProfile(profileData) {
+    return apiFetch(`${API_BASE_URL}/auth.php?action=update_profile`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profileData)
     });
   },
 

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
+  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
 </head>
 <body>
 
@@ -27,10 +27,16 @@
         </div>
       </a>
 
-      <!-- Search Bar -->
-      <div class="search-bar-wrap">
+      <!-- Search Bar with Live Dropdown -->
+      <div class="search-bar-wrap" style="position:relative;" id="searchBarWrapper">
         <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products">
+        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products" autocomplete="off">
+        <div id="searchDropdown" style="
+          display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
+          background:#131927; border:1px solid rgba(56,189,248,0.25); border-radius:12px;
+          box-shadow:0 16px 40px rgba(0,0,0,0.6); z-index:9999; max-height:380px;
+          overflow-y:auto; padding:0.4rem 0;
+        "></div>
       </div>
 
       <!-- Header Actions -->
@@ -59,14 +65,73 @@
 
     </div>
 
-    <!-- NAVIGATION LINKS BAR -->
+    <!-- NAVIGATION LINKS BAR WITH HOVER DROPDOWN -->
     <nav class="sub-nav-bar">
       <div class="sub-nav-container">
         <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
-        <a href="shop.html?category=Covers" class="sub-nav-link">PHONE CASES</a>
-        <a href="shop.html?category=Chargers" class="sub-nav-link">CHARGERS</a>
-        <a href="shop.html?category=Audio" class="sub-nav-link">AUDIO</a>
-        <a href="shop.html?category=Power" class="sub-nav-link">POWER BANKS</a>
+
+        <!-- Smartphones Dropdown -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Smartphones" class="sub-nav-link">
+            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
+            <a href="shop.html?category=Smartphones&brand=Samsung"><i class="fas fa-mobile-alt" style="color:#38bdf8;"></i> Samsung Galaxy</a>
+            <a href="shop.html?category=Smartphones&brand=Xiaomi"><i class="fas fa-bolt" style="color:#f97316;"></i> Xiaomi</a>
+            <a href="shop.html?category=Smartphones&brand=Google"><i class="fab fa-google" style="color:#34a853;"></i> Google Pixel</a>
+            <a href="shop.html?category=Smartphones" style="border-top:1px solid rgba(255,255,255,0.07); margin-top:4px; padding-top:10px;"><i class="fas fa-th-large" style="color:#38bdf8;"></i> All Smartphones</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Covers" class="sub-nav-link">
+            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+ (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️ MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: CHARGERS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Chargers" class="sub-nav-link">
+            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
+            <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: AUDIO -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Audio" class="sub-nav-link">
+            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: POWER BANKS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Power" class="sub-nav-link">
+            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
+            <a href="shop.html?category=Power&sub=20000mAh"><i class="fas fa-battery-full"></i> 20000 mAh & Above</a>
+            <a href="shop.html?category=Power&sub=Wireless"><i class="fas fa-rss"></i> MagSafe Power Banks</a>
+          </div>
+        </div>
+
         <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
         <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
       </div>
@@ -260,6 +325,7 @@
         <button class="category-pill-btn" onclick="window.selectCategoryPill('Audio')"><i class="fas fa-headphones"></i> Audio</button>
         <button class="category-pill-btn" onclick="window.selectCategoryPill('Power')"><i class="fas fa-battery-full"></i> Power Banks</button>
         <button class="category-pill-btn" onclick="window.selectCategoryPill('Accessories')"><i class="fas fa-plug"></i> Accessories</button>
+        <button class="category-pill-btn" id="saleFilterPill" onclick="window.selectSalePill()" style="color:#fb7185; border-color:rgba(244,63,94,0.4);"><i class="fas fa-fire"></i> SALE % Offers</button>
       </div>
 
       <!-- Dynamic Category Details Hero Banner -->
@@ -403,5 +469,143 @@
   <script src="js/api-client.js?v=20260929_private_cart"></script>
   <script src="js/auth.js?v=20260929_private_cart"></script>
   <script src="js/app.js?v=20260929_private_cart"></script>
+
+  <script>
+  // ─── Live Search Dropdown (shop.html) ────────────────────────────────
+  (function() {
+    const searchInput = document.getElementById('searchInput');
+    const dropdown    = document.getElementById('searchDropdown');
+    if (!searchInput || !dropdown) return;
+
+    // Move to body - avoids any clipping/overflow issues
+    document.body.appendChild(dropdown);
+    dropdown.style.position = 'fixed';
+    dropdown.style.zIndex   = '999999';
+
+    function positionDropdown() {
+      const rect = searchInput.getBoundingClientRect();
+      dropdown.style.top   = (rect.bottom + 6) + 'px';
+      dropdown.style.left  = rect.left + 'px';
+      dropdown.style.width = rect.width + 'px';
+    }
+
+    let debounceTimer = null;
+
+    searchInput.addEventListener('input', function() {
+      const q = this.value.trim();
+      clearTimeout(debounceTimer);
+      if (q.length < 2) { dropdown.style.display = 'none'; return; }
+      debounceTimer = setTimeout(() => doSearch(q), 250);
+    });
+
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') dropdown.style.display = 'none';
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+    window.addEventListener('scroll', positionDropdown, { passive: true });
+    window.addEventListener('resize', positionDropdown, { passive: true });
+
+    function getLocalResults(query) {
+      if (typeof StorageDB === 'undefined') return [];
+      const q = query.toLowerCase();
+      return StorageDB.getProducts()
+        .filter(p =>
+          (p.name||'').toLowerCase().includes(q) ||
+          (p.brand||'').toLowerCase().includes(q) ||
+          (p.category||'').toLowerCase().includes(q) ||
+          (p.specs||'').toLowerCase().includes(q)
+        )
+        .map(p => ({
+          id: p.id, name: p.name, brand: p.brand,
+          category: p.category, price: p.price,
+          stock: p.stock ?? 10, status: p.status || 'active',
+          image: p.image || 'images/cat-chargers.svg'
+        }));
+    }
+
+    async function doSearch(query) {
+      positionDropdown();
+      // Show local instantly
+      renderDropdown(getLocalResults(query), query, true);
+      // Try API with 2s timeout
+      try {
+        if (typeof ApiClient !== 'undefined' && ApiClient.getProducts) {
+          const timeout = new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 2000));
+          const liveProds = await Promise.race([ApiClient.getProducts({ search: query }), timeout]);
+          if (liveProds && liveProds.length > 0) {
+            renderDropdown(liveProds.map(p => ({
+              id: p.product_id || p.id,
+              name: p.product_name || p.name || '',
+              brand: p.brand || '',
+              category: p.category_name || p.category || '',
+              price: parseFloat(p.price) || 0,
+              stock: parseInt(p.stock ?? 0),
+              status: p.status || '',
+              image: p.image || 'images/cat-chargers.svg',
+            })), query, false);
+          }
+        }
+      } catch(e) {}
+    }
+
+    function renderDropdown(results, query, fromLocal) {
+      positionDropdown();
+      dropdown.style.display = 'block';
+      if (results.length === 0) {
+        dropdown.innerHTML = `<div style="padding:1.2rem; text-align:center; color:#94a3b8; font-size:0.85rem;"><i class="fas fa-search" style="font-size:1.5rem; display:block; margin-bottom:0.5rem; color:#334155;"></i>No products found for "<strong style="color:#fff;">${query}</strong>"</div>`;
+        return;
+      }
+      const top = results.slice(0, 8);
+      dropdown.innerHTML = `
+        <div style="padding:0.45rem 1rem 0.35rem; font-size:0.7rem; color:#475569; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between;">
+          <span>${results.length} result${results.length!==1?'s':''} for "<span style="color:#38bdf8;">${query}</span>"</span>
+          ${fromLocal ? '<span style="color:#334155;">local</span>' : '<span style="color:#10b981;">✓ live</span>'}
+        </div>
+        ${top.map(p => {
+          const oos = p.stock <= 0 || p.status === 'out_of_stock';
+          return `<a href="product-detail.html?id=${p.id}" style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem 1rem;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.04);" onmouseover="this.style.background='rgba(56,189,248,0.08)'" onmouseout="this.style.background=''">
+            <img src="${p.image}" style="width:42px;height:42px;object-fit:contain;border-radius:6px;background:rgba(0,0,0,0.3);flex-shrink:0;${oos?'filter:grayscale(70%) brightness(0.6);':''}">
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:0.82rem;font-weight:700;color:${oos?'#6b7280':'#f1f5f9'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.name}</div>
+              <div style="font-size:0.7rem;color:#64748b;margin-top:1px;">${p.brand} &bull; ${p.category}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0;">
+              ${oos ? '<span style="font-size:0.68rem;font-weight:800;color:#ef4444;background:rgba(239,68,68,0.13);padding:0.18rem 0.5rem;border-radius:4px;">OUT OF STOCK</span>' : '<span style="font-size:0.85rem;font-weight:800;color:#06b6d4;">Rs.'+p.price.toLocaleString()+'</span>'}
+            </div>
+          </a>`;
+        }).join('')}
+        <a href="shop.html?search=${encodeURIComponent(query)}" style="display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.65rem;font-size:0.8rem;color:#38bdf8;font-weight:700;border-top:1px solid rgba(255,255,255,0.07);text-decoration:none;" onmouseover="this.style.background='rgba(56,189,248,0.07)'" onmouseout="this.style.background=''">
+          <i class="fas fa-search"></i> See all results
+        </a>
+      `;
+    }
+  })();
+
+  window.selectSalePill = function() {
+    window._activeSaleFilter = !window._activeSaleFilter;
+    const btn = document.getElementById("saleFilterPill");
+    if (btn) btn.classList.toggle("active", window._activeSaleFilter);
+    const allBtn = document.querySelector(".category-pill-btn:first-child");
+    if (window._activeSaleFilter && allBtn) allBtn.classList.remove("active");
+    if (typeof window.renderProducts === 'function') window.renderProducts();
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const isSale = new URLSearchParams(window.location.search).get('sale') === 'true';
+    if (isSale) {
+      window._activeSaleFilter = true;
+      const btn = document.getElementById("saleFilterPill");
+      if (btn) btn.classList.add("active");
+      const allBtn = document.querySelector(".category-pill-btn:first-child");
+      if (allBtn) allBtn.classList.remove("active");
+    }
+  });
+  </script>
+
 </body>
 </html>

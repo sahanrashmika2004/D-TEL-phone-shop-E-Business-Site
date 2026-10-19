@@ -1388,8 +1388,10 @@ footer {
   background: rgba(15, 23, 42, 0.95);
   border-bottom: 1px solid var(--border-color);
   padding: 0.6rem 1.5rem;
-  overflow-x: auto;
+  overflow: visible !important;
   white-space: nowrap;
+  position: relative;
+  z-index: 95;
 }
 .sub-nav-container {
   max-width: 1680px;
@@ -1398,6 +1400,7 @@ footer {
   gap: 1.5rem;
   align-items: center;
   justify-content: flex-start;
+  overflow: visible !important;
 }
 .sub-nav-link {
   color: var(--text-muted);
@@ -1408,10 +1411,81 @@ footer {
   transition: all 0.2s ease;
   padding: 0.3rem 0.6rem;
   border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 .sub-nav-link:hover, .sub-nav-link.active {
   color: var(--accent-cyan);
   background: rgba(6, 182, 212, 0.1);
+}
+
+/* Category Dropdown Menus */
+.nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 220px;
+  background: #0f172a;
+  background: rgba(15, 23, 42, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(6, 182, 212, 0.18);
+  padding: 0.5rem 0;
+  z-index: 99999;
+}
+
+/* Hover bridge preventing cursor gap issue */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: block;
+  animation: navFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.dropdown-menu a {
+  color: #94a3b8;
+  padding: 0.65rem 1.25rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  padding-left: 1.5rem;
+}
+
+@keyframes navFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Trust Bar / Feature Highlights Banner (Wireframe 2) */
@@ -1879,6 +1953,16 @@ footer {
   .nav-dropdown {
     display: inline-block;
     flex-shrink: 0;
+  }
+  .nav-dropdown .dropdown-menu {
+    position: fixed;
+    top: 115px;
+    left: 1rem;
+    right: 1rem;
+    width: calc(100% - 2rem);
+    min-width: unset;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
+    z-index: 999999;
   }
 
   /* Hero Banner on Mobile Phone */

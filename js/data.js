@@ -1154,6 +1154,11 @@ function initStorage() {
 const StorageDB = {
   getProducts: function() {
     initStorage();
+    // Auto-invalidate old or corrupted browser cache to ensure all smartphones render
+    if (localStorage.getItem("tz_data_ver") !== "v4_smartphones_fixed") {
+      localStorage.setItem("tz_products", JSON.stringify(INITIAL_PRODUCTS));
+      localStorage.setItem("tz_data_ver", "v4_smartphones_fixed");
+    }
     let prods = [];
     try {
       prods = JSON.parse(localStorage.getItem("tz_products")) || [];
@@ -1165,7 +1170,23 @@ const StorageDB = {
       localStorage.setItem("tz_products", JSON.stringify(INITIAL_PRODUCTS));
     }
     let modified = false;
+    const catMap = { 1: "Smartphones", 2: "Chargers", 3: "Covers", 4: "Audio", 5: "Power", 6: "Accessories" };
     prods = prods.map(p => {
+      if (!p.name && p.product_name) { p.name = p.product_name; modified = true; }
+      if (!p.category) {
+        if (p.category_name) {
+          p.category = p.category_name;
+        } else if (p.category_id && catMap[p.category_id]) {
+          p.category = catMap[p.category_id];
+        } else {
+          p.category = "Smartphones";
+        }
+        modified = true;
+      }
+      if (!p.category_name) { p.category_name = p.category; modified = true; }
+      if (!p.id && p.product_id) { p.id = 'prod_' + p.product_id; modified = true; }
+      if (p.price && typeof p.price === 'string') { p.price = parseFloat(p.price); modified = true; }
+      if (p.stock !== undefined && typeof p.stock === 'string') { p.stock = parseInt(p.stock); modified = true; }
       if (p.brand) {
         const norm = typeof normalizeBrand === 'function' ? normalizeBrand(p.brand) : p.brand;
         if (p.brand !== norm) {
@@ -1311,6 +1332,18 @@ const StorageDB = {
     }
     
     const prodId = product.id || String(productId);
+    
+    // Safety check: do not add out of stock products to cart
+    if (product) {
+      const isOos = (product.stock !== undefined && product.stock !== null && parseInt(product.stock) <= 0) ||
+                    product.status === 'out_of_stock' ||
+                    (typeof product.status === 'string' && product.status.toLowerCase().includes('out'));
+      if (isOos) {
+        console.warn('Cannot add out-of-stock product to cart:', product.name);
+        return false;
+      }
+    }
+
     const existing = cart.find(item => item.productId === prodId || item.id === prodId || item.productId === productId || item.id === productId);
     if (existing) {
       existing.qty = (parseInt(existing.qty) || 1) + qty;

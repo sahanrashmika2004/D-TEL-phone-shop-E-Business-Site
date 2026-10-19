@@ -77,9 +77,27 @@ CREATE TABLE `product` (
     `image_2` VARCHAR(255) DEFAULT NULL,
     `image_3` VARCHAR(255) DEFAULT NULL,
     `status` ENUM('active', 'inactive', 'out_of_stock') DEFAULT 'active',
+    `is_offer` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '1 if on special offer/deal, 0 otherwise',
+    `offer_price` DECIMAL(12,2) DEFAULT NULL COMMENT 'Special discount/deal price',
+    `original_price` DECIMAL(12,2) DEFAULT NULL COMMENT 'Original price before offer discount',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk_product_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------------------
+-- 4.1 Table: product_offer (Special Offers & Deals)
+-- --------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `product_offer` (
+    `offer_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `product_id` INT NOT NULL,
+    `offer_title` VARCHAR(255) DEFAULT 'Special Deal',
+    `original_price` DECIMAL(12,2) NOT NULL,
+    `offer_price` DECIMAL(12,2) NOT NULL,
+    `discount_percent` INT DEFAULT 0,
+    `status` ENUM('active', 'inactive') DEFAULT 'active',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT `fk_product_offer_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------------------
@@ -151,9 +169,13 @@ CREATE TABLE `payment` (
     `payment_status` ENUM('Pending', 'Paid', 'Failed', 'Refunded') DEFAULT 'Pending',
     `payment_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `payhere_payment_id` VARCHAR(100) DEFAULT NULL,
+    `bank_slip_path` VARCHAR(255) DEFAULT NULL,
     CONSTRAINT `uq_payment_payhere_id` UNIQUE (`payhere_payment_id`),
     CONSTRAINT `fk_payment_order` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Migration for existing installations:
+-- ALTER TABLE `payment` ADD COLUMN IF NOT EXISTS `bank_slip_path` VARCHAR(255) DEFAULT NULL AFTER `payhere_payment_id`;
 
 
 -- ====================================================================

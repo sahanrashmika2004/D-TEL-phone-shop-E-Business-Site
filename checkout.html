@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20260929_private_cart">
+  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
 </head>
 <body>
 
@@ -59,14 +59,73 @@
 
     </div>
 
-    <!-- NAVIGATION LINKS BAR -->
+    <!-- NAVIGATION LINKS BAR WITH HOVER DROPDOWN -->
     <nav class="sub-nav-bar">
       <div class="sub-nav-container">
         <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
-        <a href="shop.html?category=Covers" class="sub-nav-link">PHONE CASES</a>
-        <a href="shop.html?category=Chargers" class="sub-nav-link">CHARGERS</a>
-        <a href="shop.html?category=Audio" class="sub-nav-link">AUDIO</a>
-        <a href="shop.html?category=Power" class="sub-nav-link">POWER BANKS</a>
+
+        <!-- Smartphones Dropdown -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Smartphones" class="sub-nav-link">
+            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
+            <a href="shop.html?category=Smartphones&brand=Samsung"><i class="fas fa-mobile-alt" style="color:#38bdf8;"></i> Samsung Galaxy</a>
+            <a href="shop.html?category=Smartphones&brand=Xiaomi"><i class="fas fa-bolt" style="color:#f97316;"></i> Xiaomi</a>
+            <a href="shop.html?category=Smartphones&brand=Google"><i class="fab fa-google" style="color:#34a853;"></i> Google Pixel</a>
+            <a href="shop.html?category=Smartphones" style="border-top:1px solid rgba(255,255,255,0.07); margin-top:4px; padding-top:10px;"><i class="fas fa-th-large" style="color:#38bdf8;"></i> All Smartphones</a>
+          </div>
+        </div>
+
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Covers" class="sub-nav-link">
+            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+ (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️ MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 2: CHARGERS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Chargers" class="sub-nav-link">
+            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
+            <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 3: AUDIO -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Audio" class="sub-nav-link">
+            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
+            <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
+          </div>
+        </div>
+
+        <!-- Dropdown 4: POWER BANKS -->
+        <div class="nav-dropdown">
+          <a href="shop.html?category=Power" class="sub-nav-link">
+            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+          </a>
+          <div class="dropdown-menu">
+            <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
+            <a href="shop.html?category=Power&sub=20000mAh"><i class="fas fa-battery-full"></i> 20000 mAh & Above</a>
+            <a href="shop.html?category=Power&sub=Wireless"><i class="fas fa-rss"></i> MagSafe Power Banks</a>
+          </div>
+        </div>
+
         <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
         <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
       </div>
@@ -332,10 +391,13 @@
         Your order reference has been registered with D-TEL Store.
       </p>
       <div style="display:flex; flex-direction:column; gap:0.75rem;">
+        <button onclick="window.location.href='account.html?tab=orders'" style="width:100%; padding:0.85rem; font-size:1rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); color:#ffffff; font-weight:700; border-radius:var(--radius-md); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.5rem;">
+          <i class="fas fa-box-open"></i> View Order in My Account
+        </button>
         <button class="btn-whatsapp" id="sendOrderWhatsAppBtn" style="width:100%; padding:0.85rem; font-size:1rem; background:#25D366; color:#ffffff;">
           <i class="fab fa-whatsapp"></i> Send Order Receipt via WhatsApp
         </button>
-        <button class="btn-primary" onclick="window.location.href='index.html'" style="width:100%; padding:0.85rem; font-size:1rem;">
+        <button class="btn-primary" onclick="window.location.href='index.html'" style="width:100%; padding:0.85rem; font-size:1rem; background:rgba(255,255,255,0.06); border:1px solid var(--border-color); color:#cbd5e1;">
           Return to D-TEL Home
         </button>
       </div>
@@ -440,6 +502,7 @@
     let deliveryFee = 350;
     let selectedPaymentMethod = "Cash on Delivery";
     let selectedCardBrand = "Visa";
+    let cardLast4 = '0000';  // default — not used for COD/Bank
     window.uploadedBankSlip = null;
 
     function handleBankSlipUpload(input) {
@@ -447,6 +510,9 @@
       const file = input.files[0];
       const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
       const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+
+      // Store the actual File object for server upload
+      window._bankSlipFile = file;
 
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -482,6 +548,7 @@
 
     function removeBankSlip() {
       window.uploadedBankSlip = null;
+      window._bankSlipFile = null;
       const fileInput = document.getElementById('bankSlipFileInput');
       if (fileInput) fileInput.value = "";
       const previewArea = document.getElementById('bankSlipPreviewArea');
@@ -811,38 +878,63 @@
         paymentMethod: selectedPaymentMethod,
         payment_method: selectedPaymentMethod,
         cardBrand: selectedPaymentMethod === "Online Card Payment" ? selectedCardBrand : null,
-        cardLast4: null,
+        cardLast4: cardLast4,
         bankSlip: window.uploadedBankSlip ? window.uploadedBankSlip.name : null,
+        bankSlipDataUri: window.uploadedBankSlip ? window.uploadedBankSlip.dataUri : null,
         status: "Pending",
         items: enrichedItems
       };
 
       const localOrder = StorageDB.addOrder(orderPayload);
 
-      if (typeof ApiClient !== "undefined" && ApiClient.placeOrder) {
+      // ── Save to DB with 4s timeout — never block COD/Bank flow ─────────
+      if (typeof ApiClient !== 'undefined' && ApiClient.placeOrder) {
         try {
-          const apiRes = await ApiClient.placeOrder(orderPayload);
+          const dbTimeout = new Promise((_, rej) => setTimeout(() => rej(new Error('db_timeout')), 4000));
+          const apiRes = await Promise.race([ApiClient.placeOrder(orderPayload), dbTimeout]);
           if (apiRes && apiRes.order_id) {
             localOrder.order_id = apiRes.order_id;
-            localOrder.db_id = apiRes.order_id;
+            localOrder.db_id   = apiRes.order_id;
             const allOrders = (typeof StorageDB.getAllOrders === 'function') ? StorageDB.getAllOrders() : StorageDB.getOrders();
             const idx = allOrders.findIndex(o => o.id === localOrder.id);
             if (idx >= 0) {
               allOrders[idx] = { ...allOrders[idx], order_id: apiRes.order_id, db_id: apiRes.order_id };
               StorageDB.saveOrders(allOrders);
             }
+
+            // ── Upload Bank Slip to server if Bank Transfer selected ──────────
+            if (selectedPaymentMethod === "Bank Transfer" && window.uploadedBankSlip && window._bankSlipFile) {
+              try {
+                const formData = new FormData();
+                formData.append('bank_slip', window._bankSlipFile);
+                formData.append('order_id', apiRes.order_id);
+                const slipRes = await fetch('api/upload_slip.php', { method: 'POST', body: formData });
+                const slipJson = await slipRes.json();
+                if (slipJson.status === 'success') {
+                  console.log('[D-TEL] Bank slip saved:', slipJson.slip_path);
+                  // Store slip path in local order too
+                  if (idx >= 0) {
+                    const allOrd2 = (typeof StorageDB.getAllOrders === 'function') ? StorageDB.getAllOrders() : StorageDB.getOrders();
+                    if (allOrd2[idx]) { allOrd2[idx].bankSlipPath = slipJson.slip_path; StorageDB.saveOrders(allOrd2); }
+                  }
+                }
+              } catch (slipErr) {
+                console.warn('[D-TEL] Slip upload warning (non-critical):', slipErr.message);
+              }
+            }
           }
         } catch (e) {
-          console.warn("MySQL placeOrder skipped:", e);
+          console.warn('[D-TEL] DB save skipped (continuing):', e.message);
         }
       }
+
 
       const modal = document.getElementById('orderSuccessModal');
       const desc = document.getElementById('orderModalDesc');
       const waBtn = document.getElementById('sendOrderWhatsAppBtn');
 
       const paymentDetailLabel = selectedPaymentMethod === "Online Card Payment" 
-        ? `${selectedCardBrand} (PayHere)` 
+        ? `${selectedCardBrand} (•••• ${cardLast4})` 
         : selectedPaymentMethod === "Bank Transfer" 
           ? `Bank Transfer ${window.uploadedBankSlip ? '(Slip Attached: ' + window.uploadedBankSlip.name + ')' : '(Pending Slip)'}`
           : "Cash on Delivery (COD)";
@@ -857,7 +949,7 @@
         waBtn.onclick = () => {
           const itemsSummary = enrichedItems.map(i => `${i.name} (x${i.qty})`).join(", ");
           const slipNote = window.uploadedBankSlip ? `\nBank Slip Attached: ${window.uploadedBankSlip.name}` : "";
-          const waMsg = `Hi D-TEL! I placed an order.\n\nName: ${name}\nPhone: ${finalPhone}\nAddress: ${address}, ${city}, ${district}\nItems: ${itemsSummary}\nPayment: ${paymentDetailLabel}${slipNote}\nTotal: ${totalDisplayStr}`;
+          const waMsg = `Hi D-TEL! I placed an order.\n\nName: ${name}\nPhone: ${phone}\nAddress: ${address}, ${city}, ${district}\nItems: ${itemsSummary}\nPayment: ${paymentDetailLabel}${slipNote}\nTotal: ${totalDisplayStr}`;
           window.open(`https://wa.me/94771234567?text=${encodeURIComponent(waMsg)}`, '_blank');
         };
       }
@@ -865,6 +957,7 @@
       if (modal) modal.style.display = 'flex';
       StorageDB.clearCart();
       window.uploadedBankSlip = null;
+      window._bankSlipFile = null;
       window.updateHeaderCounters();
     }
 

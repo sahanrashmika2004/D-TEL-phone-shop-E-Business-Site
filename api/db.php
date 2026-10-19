@@ -31,53 +31,29 @@ if (is_file($localConfig)) {
     if (is_array($local)) $config = array_merge($config, $local);
 }
 
-$buildDsn = function($host, $port, $dbname) {
-    $portPart = !empty($port) ? ";port={$port}" : '';
-    return "mysql:host={$host}{$portPart};dbname={$dbname};charset=utf8mb4";
-};
-
-$dbOptions = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
-
 try {
     $conn = new PDO(
-        $buildDsn($config['host'], $config['port'] ?? null, $config['name']),
+        "mysql:host={$config['host']};port={$config['port']};dbname={$config['name']};charset=utf8mb4",
         $config['user'],
         $config['pass'],
-        $dbOptions
+        [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_TIMEOUT            => 3,
+            1001                         => 3,    // MYSQL_ATTR_CONNECT_TIMEOUT - prevents hang
+            2006                         => 'SET NAMES utf8mb4', // MYSQL_ATTR_INIT_COMMAND
+        ]
     );
 } catch (PDOException $exception) {
-    // If connection fails, check alternate port (4307 vs 3306) in case XAMPP uses a non-standard port
-    $candidatePorts = [4307, 3306];
-    $connected = false;
-    foreach ($candidatePorts as $altPort) {
-        if (isset($config['port']) && (string)$config['port'] === (string)$altPort) continue;
-        try {
-            $conn = new PDO(
-                $buildDsn($config['host'], $altPort, $config['name']),
-                $config['user'],
-                $config['pass'],
-                $dbOptions
-            );
-            $connected = true;
-            break;
-        } catch (PDOException $fallbackException) {
-            // keep trying candidates
-        }
-    }
+    http_response_code(500);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Database connection failed. Check MySQL is running on port 4307.',
+        'detail'  => $exception->getMessage()
+    ]);
+    exit();
 
-    if (!$connected) {
-        http_response_code(500);
-        echo json_encode([
-            'status' => 'error',
-            'message' => 'Database connection failed. Check MySQL, database name, and api/config.local.php credentials.',
-            'detail' => $exception->getMessage()
-        ]);
-        exit();
-    }
 }
 
 function parseNumericId($id) {
