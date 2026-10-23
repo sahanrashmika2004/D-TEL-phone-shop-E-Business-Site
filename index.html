@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>D-TEL | Premium Mobile & Accessories Hub</title>
   <meta name="description"
     content="D-TEL - Shop genuine smartphones, fast chargers, back covers, tempered glass, and audio gear in Sri Lanka.">
@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
+  <link rel="stylesheet" href="css/styles.css?v=20261022_hd_crystal_clear_v2">
 
   <!-- Custom CSS for Dropdown Menu on Hover -->
   <style>
@@ -57,8 +57,10 @@
       height: 10px;
     }
 
-    /* Show Dropdown Menu on Hover */
-    .nav-dropdown:hover .dropdown-menu {
+    /* Show Dropdown Menu on Hover and Touch Focus */
+    .nav-dropdown:hover .dropdown-menu,
+    .nav-dropdown:focus-within .dropdown-menu,
+    .nav-dropdown.active .dropdown-menu {
       display: block;
       animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -100,6 +102,7 @@
 <body>
 
   <!-- TOP HEADER BAR (D-TEL Brand Logo) -->
+  <!-- TOP HEADER BAR (D-TEL Brand Logo) -->
   <header class="header-sticky">
     <div class="nav-container">
 
@@ -107,19 +110,16 @@
       <a href="index.html" class="brand-logo" id="brandLogoLink">
         <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
         <div>
-          <span
-            style="font-size:2.1rem; font-weight:900; color:#ffffff; line-height:1; display:block; letter-spacing:0.5px;">D-<span
-              class="accent">TEL</span></span>
-          <span
-            style="font-size:0.85rem; font-weight:800; color:#fb7185; letter-spacing:2px; display:block; margin-top:3px;">CELLULAR</span>
+          <span style="font-size:1.75rem; font-weight:900; color:#ffffff; line-height:1; display:block; letter-spacing:0.5px;">D-<span style="color:#00d2ff;">TEL</span></span>
+          <span style="font-size:0.72rem; font-weight:800; color:#38bdf8; letter-spacing:2px; display:block; margin-top:2px;">CELLULAR</span>
         </div>
       </a>
 
-      <!-- Search Bar with Live Dropdown -->
-      <div class="search-bar-wrap" style="position:relative;" id="searchBarWrapper">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..."
-          aria-label="Search Products" autocomplete="off">
+      <!-- Search Bar with Live Dropdown & Filter Icon -->
+      <div class="search-bar-wrap-modern" id="searchBarWrapper">
+        <i class="fas fa-search" style="color:#64748b; margin-right:0.65rem;"></i>
+        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..." aria-label="Search Products" autocomplete="off">
+        <i class="fas fa-sliders-h search-filter-icon" title="Filter Products" onclick="window.location.href='shop.html'"></i>
         <!-- Live Search Dropdown -->
         <div id="searchDropdown" style="
           display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
@@ -129,27 +129,44 @@
         "></div>
       </div>
 
-      <!-- Header Actions -->
+      <!-- Header Actions (Modern 2-Line Action Items Matching Image 2) -->
       <div class="nav-actions">
-        <a href="shop.html" class="icon-btn" title="Shop Catalog">
-          <i class="fas fa-store"></i>
-          <span>Shop</span>
+        <a href="shop.html" class="nav-action-item" title="Shop Catalog">
+          <span class="nav-action-icon"><i class="fas fa-store"></i></span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Shop</span>
+            <span class="nav-action-sub">All Products</span>
+          </span>
         </a>
 
-        <button class="icon-btn wishlist-trigger" title="Wishlist">
-          <i class="far fa-heart"></i>
-          <span>Wishlist</span>
-          <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+        <button class="nav-action-item wishlist-trigger" title="Wishlist" style="background:none; border:none; cursor:pointer;">
+          <span class="nav-action-icon">
+            <i class="far fa-heart"></i>
+            <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+          </span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Wishlist</span>
+            <span class="nav-action-sub"><span class="wishlist-badge-count-text">0</span> Items</span>
+          </span>
         </button>
 
-        <a href="checkout.html" class="icon-btn cart-trigger" title="Shopping Cart">
-          <i class="fas fa-shopping-cart"></i>
-          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        <a href="checkout.html" class="nav-action-item cart-trigger" title="Shopping Cart">
+          <span class="nav-action-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge-count cart-badge-count" style="display:none;">0</span>
+          </span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Cart (<span class="cart-count-num">0</span>)</span>
+            <span class="nav-action-sub" id="headerCartTotal">Rs. 0.00</span>
+          </span>
         </a>
 
-        <a href="admin.html" class="icon-btn" title="Sign In / Admin Portal">
-          <i class="fas fa-user-circle"></i>
-          <span>Sign In</span>
+        <a href="admin.html" class="nav-action-item" title="Sign In / Admin Portal">
+          <span class="nav-action-icon"><i class="fas fa-user-circle"></i></span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">My Account</span>
+            <span class="nav-action-sub">Sign In</span>
+          </span>
         </a>
       </div>
 
@@ -158,12 +175,21 @@
     <!-- NAVIGATION LINKS BAR WITH HOVER DROPDOWN -->
     <nav class="sub-nav-bar">
       <div class="sub-nav-container">
-        <a href="index.html" class="sub-nav-link active">NEW ARRIVALS</a>
+
+        <!-- All Categories Pill Button -->
+        <a href="shop.html" class="all-categories-pill">
+          <i class="fas fa-th-large"></i> All Categories <i class="fas fa-chevron-down" style="font-size:0.68rem; margin-left:2px;"></i>
+        </a>
+
+        <!-- New Arrivals Link -->
+        <a href="shop.html?sort=newest" class="sub-nav-link sub-nav-link-sparkle active">
+          <i class="fas fa-sparkles" style="color:#00d2ff;"></i> New Arrivals
+        </a>
 
         <!-- Smartphones Dropdown -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Smartphones" class="sub-nav-link">
-            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-mobile-alt" style="font-size:0.85rem; color:#38bdf8;"></i> Smartphones <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
@@ -174,18 +200,15 @@
           </div>
         </div>
 
-
+        <!-- Cases & Glass Dropdown -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Covers" class="sub-nav-link">
-            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-shield-alt" style="font-size:0.85rem; color:#60a5fa;"></i> Cases & Glass <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
-            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑
-              Super D (Best Quality)</a>
-            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+
-              (High Quality)</a>
-            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️
-              MTB (Standard Matte)</a>
+            <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
+            <a href="shop.html?category=Covers&tier=HD%2B"><i class="fas fa-star" style="color:#60a5fa;"></i> ⭐ HD+ (High Quality)</a>
+            <a href="shop.html?category=Covers&tier=MTB"><i class="fas fa-shield-alt" style="color:#34d399;"></i> 🛡️ MTB (Standard Matte)</a>
             <a href="shop.html?category=Covers&brand=Apple"><i class="fab fa-apple"></i> MagSafe Cases</a>
           </div>
         </div>
@@ -193,25 +216,23 @@
         <!-- Dropdown 2: CHARGERS -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Chargers" class="sub-nav-link">
-            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-bolt" style="font-size:0.85rem; color:#eab308;"></i> Chargers <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
             <a href="shop.html?category=Chargers&sub=GaN"><i class="fas fa-plug"></i> GaN Adapters</a>
-            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning
-              Cables</a>
+            <a href="shop.html?category=Chargers&sub=Cable"><i class="fas fa-charging-station"></i> Type-C & Lightning Cables</a>
           </div>
         </div>
 
         <!-- Dropdown 3: AUDIO -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Audio" class="sub-nav-link">
-            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-headphones" style="font-size:0.85rem; color:#a855f7;"></i> Audio <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
-            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth
-              Speakers</a>
+            <a href="shop.html?category=Audio&sub=Bluetooth"><i class="fas fa-broadcast-tower"></i> Bluetooth Speakers</a>
             <a href="shop.html?category=Audio&sub=Handsfree"><i class="fas fa-headset"></i> Wired Handsfree</a>
           </div>
         </div>
@@ -219,7 +240,7 @@
         <!-- Dropdown 4: POWER BANKS -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Power" class="sub-nav-link">
-            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-battery-full" style="font-size:0.85rem; color:#10b981;"></i> Power Banks <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
@@ -228,59 +249,112 @@
           </div>
         </div>
 
-        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
-        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+        <a href="shop.html?category=Accessories" class="sub-nav-link">
+          <i class="fas fa-plug" style="font-size:0.85rem; color:#f97316;"></i> Accessories
+        </a>
+
+        <!-- SALE Pill (Right aligned) -->
+        <a href="shop.html?sale=true" class="sale-badge-pill">
+          <span class="sale-tag">% SALE</span>
+          <span>Up to 50% Off</span>
+        </a>
+
       </div>
     </nav>
   </header>
 
-  <!-- HERO BANNER SECTION (5s Smooth Background Slideshow) -->
-  <section class="hero-section" style="max-width:1680px; margin:1.5rem auto; padding:0 2rem;">
-    <div class="hero-banner">
+  <!-- HERO BANNER SECTION (Modern Cyber Luxury Layout Matching Image 2) -->
+  <section class="hero-section">
+    <div class="hero-banner-modern">
 
-      <!-- Background Image Slideshow Layer -->
-      <div class="hero-slideshow">
-        <div class="hero-slide-bg active" style="background-image: url('images/hero_slide_1.jpg');"></div>
-        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_2.jpg');"></div>
-        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_3.jpg');"></div>
-        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_4.jpg');"></div>
-        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_5.jpg');"></div>
-        <div class="hero-slide-overlay"></div>
+      <!-- Background Image Slideshow Layer (7 Widescreen HD Slides, 5s Auto Transition) -->
+      <div class="hero-slideshow" id="heroSlideshow">
+        <div class="hero-slide-bg active" style="background-image: url('images/hero_slide_1.png?v=20261022_apple_gear');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_2.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_3.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_4.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_5.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_6.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-bg" style="background-image: url('images/hero_slide_7.png?v=2.5k_sharp');"></div>
+        <div class="hero-slide-overlay-modern"></div>
       </div>
 
-      <!-- Hero Text Content -->
-      <div class="hero-content">
-        <span class="hero-tag">
+      <!-- Hero Content (Matching Image 2 Mockup) -->
+      <div class="hero-content-modern">
+        <div class="hero-tag-pill">
           <i class="fas fa-bolt"></i> D-TEL EXCLUSIVE MOBILE STORE
-        </span>
-        <h1 class="hero-title" style="font-size: 2.75rem; line-height: 1.15; margin-bottom: 1rem; color: #ffffff;">
-          Discover Premium Mobile Accessories & Tech Gear
+        </div>
+        <h1 class="hero-headline-modern">
+          Upgrade Your Tech.<br>
+          <span class="gradient-text-cyan">Elevate Your Everyday.</span>
         </h1>
-        <p class="hero-desc" style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem;">
-          Explore original 20W fast chargers, protective armor cases, 9H privacy tempered glass, and high-performance
-          power banks with islandwide delivery.
+        <p class="hero-desc-sub">
+          Premium mobile accessories, cutting-edge tech gear and everyday essentials — all in one place.
         </p>
-        <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-          <a href="shop.html" class="btn-primary" style="padding: 0.85rem 1.75rem; font-size: 1rem;">
-            <i class="fas fa-shopping-bag"></i> Shop Catalog Now
+
+        <!-- 4 Feature Highlights Grid -->
+        <div class="hero-features-strip">
+          <div class="hero-feature-pill">
+            <i class="fas fa-truck-fast"></i>
+            <div>
+              <span class="feat-top">Islandwide</span>
+              <span class="feat-bot">Delivery</span>
+            </div>
+          </div>
+          <div class="hero-feature-pill">
+            <i class="fas fa-shield-alt"></i>
+            <div>
+              <span class="feat-top">100% Genuine</span>
+              <span class="feat-bot">Products</span>
+            </div>
+          </div>
+          <div class="hero-feature-pill">
+            <i class="fas fa-headset"></i>
+            <div>
+              <span class="feat-top">Expert</span>
+              <span class="feat-bot">Support</span>
+            </div>
+          </div>
+          <div class="hero-feature-pill">
+            <i class="fas fa-lock"></i>
+            <div>
+              <span class="feat-top">Secure</span>
+              <span class="feat-bot">Payments</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA Action Buttons -->
+        <div class="hero-actions-row">
+          <a href="shop.html" class="hero-btn-primary">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Shop Now</span>
+            <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i>
           </a>
-          <a href="#mainCategories" class="icon-btn" style="padding: 0.85rem 1.5rem; font-size: 1rem;">
-            <i class="fas fa-th-large"></i> View Categories
+          <a href="#mainCategories" class="hero-btn-secondary">
+            <i class="fas fa-th-large"></i>
+            <span>Explore Categories</span>
+            <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i>
           </a>
         </div>
       </div>
 
-      <!-- Slide Dots Navigation -->
-      <div class="hero-slide-dots">
-        <div class="hero-dot active" onclick="selectHeroSlide(0)" title="Slide 1"></div>
-        <div class="hero-dot" onclick="selectHeroSlide(1)" title="Slide 2"></div>
-        <div class="hero-dot" onclick="selectHeroSlide(2)" title="Slide 3"></div>
-        <div class="hero-dot" onclick="selectHeroSlide(3)" title="Slide 4"></div>
-        <div class="hero-dot" onclick="selectHeroSlide(4)" title="Slide 5"></div>
+      <!-- Bottom Controls: Segmented Progress Bars (Counter & Arrows removed per 2nd image) -->
+      <div class="hero-bottom-controls">
+        <div class="hero-slide-bars" id="heroSlideBars">
+          <div class="hero-slide-bar-item active" onclick="selectHeroSlide(0)" title="Slide 1"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(1)" title="Slide 2"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(2)" title="Slide 3"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(3)" title="Slide 4"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(4)" title="Slide 5"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(5)" title="Slide 6"></div>
+          <div class="hero-slide-bar-item" onclick="selectHeroSlide(6)" title="Slide 7"></div>
+        </div>
       </div>
 
     </div>
   </section>
+
 
   <!-- SECTION 1: NEW ARRIVALS (Latest Products) -->
   <section class="section-container" style="margin-top:2rem;">
@@ -340,7 +414,7 @@
       <div style="flex:1; border-bottom:1px solid var(--border-color);"></div>
     </div>
 
-    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1.25rem;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap:1.25rem;">
 
       <!-- Category 1: Smartphones -->
       <a href="shop.html?category=Smartphones" class="category-card"
@@ -411,10 +485,10 @@
   <!-- FOOTER -->
   <footer style="width:100%; background:var(--bg-primary); border-top:1px solid var(--border-color);">
     <div class="footer-container"
-      style="width:100%; max-width:100%; margin:0; padding:3.5rem clamp(1.5rem, 4vw, 4.5rem) 2.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:2.5rem; align-items:start; box-sizing:border-box;">
+      style="width:100%; max-width:100%; margin:0; padding:3.5rem clamp(1rem, 3vw, 3rem) 2.5rem; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap:2rem; align-items:start; box-sizing:border-box;">
 
       <!-- Col 1: D-TEL Brand, Address & Contacts -->
-      <div class="footer-col" style="min-width:240px;">
+      <div class="footer-col">
         <a href="index.html" class="brand-logo" style="margin-bottom:1rem; display:inline-flex;">
           <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
           <div>
@@ -455,7 +529,7 @@
       </div>
 
       <!-- Col 2: Showroom Live Map -->
-      <div class="footer-col" style="min-width:240px;">
+      <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff; display:flex; align-items:center; gap:0.4rem;">
           <i class="fas fa-map-marked-alt" style="color:var(--accent-cyan);"></i> Showroom Map
         </h4>
@@ -499,7 +573,7 @@
       </div>
 
       <!-- Col 5: Newsletter Sign Up -->
-      <div class="footer-col" style="min-width:220px;">
+      <div class="footer-col">
         <h4 style="font-size:1rem; margin-bottom:0.75rem; color:#ffffff;">Newsletter Sign Up</h4>
         <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">Sign up for exclusive updates &
           discounts</p>
@@ -531,10 +605,10 @@
   </footer>
 
   <!-- CORE SCRIPTS -->
-  <script src="js/data.js?v=20260929_private_cart"></script>
-  <script src="js/api-client.js?v=20260929_private_cart"></script>
-  <script src="js/auth.js?v=20260929_private_cart"></script>
-  <script src="js/app.js?v=20260929_private_cart"></script>
+  <script src="js/data.js?v=20261022_shop_fix_v3"></script>
+  <script src="js/api-client.js?v=20261022_shop_fix_v3"></script>
+  <script src="js/auth.js?v=20261022_shop_fix_v3"></script>
+  <script src="js/app.js?v=20261022_shop_fix_v3"></script>
 
   <script>
     let currentSlideIdx = 0;
@@ -542,15 +616,22 @@
 
     function switchHeroSlide(idx) {
       const slides = document.querySelectorAll('.hero-slide-bg');
-      const dots = document.querySelectorAll('.hero-dot');
+      const bars = document.querySelectorAll('.hero-slide-bar-item');
+      const counter = document.getElementById('heroSlideCounter');
       if (!slides.length) return;
 
       slides.forEach(s => s.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
+      bars.forEach(b => b.classList.remove('active'));
 
       currentSlideIdx = (idx + slides.length) % slides.length;
       slides[currentSlideIdx].classList.add('active');
-      if (dots[currentSlideIdx]) dots[currentSlideIdx].classList.add('active');
+      if (bars[currentSlideIdx]) bars[currentSlideIdx].classList.add('active');
+
+      if (counter) {
+        const curStr = String(currentSlideIdx + 1).padStart(2, '0');
+        const totStr = String(slides.length).padStart(2, '0');
+        counter.textContent = `${curStr} / ${totStr}`;
+      }
     }
 
     function selectHeroSlide(idx) {
@@ -558,11 +639,23 @@
       startAutoSlideshow();
     }
 
+    function prevHeroSlide() {
+      switchHeroSlide(currentSlideIdx - 1);
+      startAutoSlideshow();
+    }
+
+    function nextHeroSlide() {
+      switchHeroSlide(currentSlideIdx + 1);
+      startAutoSlideshow();
+    }
+
     function startAutoSlideshow() {
       if (slideTimer) clearInterval(slideTimer);
+      const slides = document.querySelectorAll('.hero-slide-bg');
+      if (slides.length <= 1) return;
       slideTimer = setInterval(() => {
         switchHeroSlide(currentSlideIdx + 1);
-      }, 5000);
+      }, 5000); // 5 seconds per slide as requested
     }
 
     function renderHomepageProducts() {
@@ -570,71 +663,126 @@
       if (!allProducts || allProducts.length === 0) return;
 
       const newArrivalsGrid = document.getElementById('newArrivalsGrid');
-      if (newArrivalsGrid) {
+      const specialOffersGrid = document.getElementById('specialOffersGrid');
+
+      const buildCard = (p) => {
         if (typeof window.createProductCardHtml === 'function') {
-          newArrivalsGrid.innerHTML = allProducts.slice(0, 8).map(p => window.createProductCardHtml(p)).join('');
-        } else {
-          newArrivalsGrid.innerHTML = allProducts.slice(0, 8).map(p => {
-            const isOutOfStock = (p.stock !== undefined && p.stock !== null && parseInt(p.stock) <= 0) || p.status === 'out_of_stock';
-            const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { name: p.brand, icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
-            return `
-              <div class="product-card" style="background:var(--bg-secondary); border:1px solid ${isOutOfStock ? 'rgba(239,68,68,0.45)' : 'var(--border-color)'}; border-radius:var(--radius-md); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; ${isOutOfStock ? 'opacity:0.88;' : ''}">
-                <div style="position:absolute; top:12px; left:12px; z-index:3;">
-                  ${isOutOfStock ? `<span style="background:linear-gradient(135deg,#dc2626,#991b1b); color:#fff; font-size:0.68rem; font-weight:900; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(220,38,38,0.5);"><i class="fas fa-ban"></i> Out of Stock</span>` : (p.badge ? `<span class="card-badge" style="background:var(--accent-cyan); color:#000; font-size:0.7rem; font-weight:800; padding:0.2rem 0.5rem; border-radius:4px;">${p.badge}</span>` : '')}
-                </div>
-
-                <a href="product-detail.html?id=${p.id}" style="text-decoration:none; text-align:center; margin-bottom:1rem; display:block; position:relative;">
-                  <img src="${p.image}" alt="${p.name}" style="width:100%; height:160px; object-fit:contain; ${isOutOfStock ? 'filter:grayscale(65%) brightness(0.65);' : ''}" onerror="this.src='images/cat-chargers.svg'">
-                  ${isOutOfStock ? `
-                  <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
-                    <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(239,68,68,0.7); border-radius:8px; padding:0.35rem 0.85rem; font-size:0.75rem; font-weight:900; color:#fca5a5; letter-spacing:1px; text-transform:uppercase;">
-                      <i class="fas fa-times-circle" style="color:#ef4444; margin-right:4px;"></i>SOLD OUT
-                    </div>
-                  </div>` : ''}
-                </a>
-
-                <div>
-                  <div style="display:flex; align-items:center; gap:0.35rem; font-size:0.75rem; color:var(--accent-cyan); font-weight:700; margin-bottom:0.25rem;">
-                    <span class="brand-logo-badge" style="width:16px; height:16px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color};"><i class="${brandMeta.icon}"></i></span>
-                    <span>${brandMeta.name || p.brand}</span>
-                    <span style="color:var(--text-dim);">•</span>
-                    <span style="color:var(--text-muted);">${p.category}</span>
-                  </div>
-                  <h4 style="font-size:0.95rem; color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; margin-bottom:0.4rem; height:42px; overflow:hidden;">
-                    <a href="product-detail.html?id=${p.id}" style="color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; text-decoration:none;">${p.name}</a>
-                  </h4>
-                  <div style="color:${isOutOfStock ? '#64748b' : 'var(--accent-cyan)'}; font-size:1.15rem; font-weight:800; margin-bottom:0.85rem;">
-                    Rs. ${(p.price || 0).toLocaleString()}
-                  </div>
-                </div>
-
-                <div style="display:flex; gap:0.5rem;">
-                  ${isOutOfStock ? `
-                    <button disabled style="flex:1; padding:0.6rem; font-size:0.82rem; background:rgba(107,114,128,0.25); border:1.5px solid rgba(239,68,68,0.4); border-radius:var(--radius-sm); font-weight:800; cursor:not-allowed; color:#f87171;">
-                      <i class="fas fa-ban"></i> Out of Stock
-                    </button>
-                  ` : `
-                    <button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="flex:1; padding:0.6rem; font-size:0.82rem;">
-                      <i class="fas fa-cart-plus"></i> Add
-                    </button>
-                  `}
-                  <a href="product-detail.html?id=${p.id}" class="btn-secondary" style="padding:0.6rem 0.85rem; font-size:0.82rem; text-decoration:none; text-align:center;">
-                    View
-                  </a>
-                </div>
-              </div>
-            `;
-          }).join('');
+          return window.createProductCardHtml(p);
         }
+        const isOutOfStock = (p.stock !== undefined && p.stock !== null && parseInt(p.stock) <= 0) || p.status === 'out_of_stock' || (typeof p.status === 'string' && p.status.toLowerCase().includes('out'));
+        const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { name: p.brand, icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
+        const discountPercent = (p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) 
+          ? Math.round(((parseFloat(p.oldPrice) - parseFloat(p.price)) / parseFloat(p.oldPrice)) * 100) 
+          : 0;
+        const isOffer = p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || discountPercent > 0 || (p.badge && (p.badge.includes('OFFER') || p.badge.includes('SPECIAL') || p.badge.includes('🔥')));
+
+        let badgeHtml = '';
+        if (isOutOfStock) {
+          badgeHtml = `<span style="background:linear-gradient(135deg,#dc2626,#991b1b); color:#fff; font-size:0.68rem; font-weight:900; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(220,38,38,0.5);"><i class="fas fa-ban"></i> Out of Stock</span>`;
+        } else if (isOffer) {
+          badgeHtml = `<span class="card-badge" style="background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:0.68rem; font-weight:900; padding:0.26rem 0.6rem; border-radius:5px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(239,68,68,0.5); display:inline-flex; align-items:center; gap:0.35rem;"><i class="fas fa-fire" style="color:#fef08a;"></i> SPECIAL OFFER ${discountPercent > 0 ? `(-${discountPercent}%)` : ''}</span>`;
+        } else if (p.badge) {
+          badgeHtml = `<span class="card-badge" style="background:var(--accent-cyan); color:#000; font-size:0.7rem; font-weight:800; padding:0.2rem 0.5rem; border-radius:4px;">${p.badge}</span>`;
+        }
+
+        const cardBg = isOffer ? 'linear-gradient(180deg, rgba(244,63,94,0.06) 0%, var(--bg-secondary) 100%)' : 'var(--bg-secondary)';
+        const cardBorder = isOutOfStock ? 'rgba(239,68,68,0.45)' : (isOffer ? 'rgba(244,63,94,0.55)' : 'var(--border-color)');
+        const cardShadow = isOffer ? 'box-shadow: 0 4px 20px rgba(244,63,94,0.14);' : '';
+
+        return `
+          <div class="product-card" data-id="${p.id}" style="background:${cardBg}; border:1.5px solid ${cardBorder}; border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; transition:all 0.3s ease; ${cardShadow} ${isOutOfStock ? 'opacity:0.88;' : ''}">
+            <div style="position:absolute; top:12px; left:12px; z-index:3; display:flex; gap:0.35rem; flex-wrap:wrap; max-width:75%;">
+              ${badgeHtml}
+            </div>
+
+            <button onclick="window.handleWishlistToggle ? window.handleWishlistToggle('${p.id}') : null" title="Wishlist" style="position:absolute; top:12px; right:12px; z-index:3; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.9rem; cursor:pointer;">
+              <i class="far fa-heart"></i>
+            </button>
+
+            <a href="product-detail.html?id=${p.id}" style="text-decoration:none; text-align:center; margin-bottom:1rem; display:block; position:relative; height:160px; padding:0.5rem 0;">
+              <img src="${p.image}" alt="${p.name}" style="max-width:100%; height:150px; object-fit:contain; ${isOutOfStock ? 'filter:grayscale(65%) brightness(0.65);' : ''}" onerror="this.src='images/cat-chargers.svg'">
+              ${isOutOfStock ? `
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none;">
+                <div style="background:rgba(15,23,42,0.85); border:1.5px solid rgba(239,68,68,0.7); border-radius:8px; padding:0.35rem 0.85rem; font-size:0.75rem; font-weight:900; color:#fca5a5; letter-spacing:1px; text-transform:uppercase;">
+                  <i class="fas fa-times-circle" style="color:#ef4444; margin-right:4px;"></i>SOLD OUT
+                </div>
+              </div>` : ''}
+            </a>
+
+            <div>
+              <div style="display:flex; align-items:center; justify-content:space-between; font-size:0.75rem; margin-bottom:0.25rem;">
+                <div style="display:flex; align-items:center; gap:0.35rem; font-weight:700; color:var(--accent-cyan);">
+                  <span class="brand-logo-badge" style="width:18px; height:18px; font-size:0.65rem; background:${brandMeta.bg}; color:${brandMeta.color}; border-radius:4px;"><i class="${brandMeta.icon}"></i></span>
+                  <span>${brandMeta.name || p.brand}</span>
+                </div>
+                <span style="color:var(--text-muted); font-size:0.72rem;">${p.category}</span>
+              </div>
+              <h4 style="font-size:0.95rem; font-weight:700; color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; margin-bottom:0.4rem; height:42px; overflow:hidden; line-height:1.35;">
+                <a href="product-detail.html?id=${p.id}" style="color:${isOutOfStock ? '#94a3b8' : '#ffffff'}; text-decoration:none;">${p.name}</a>
+              </h4>
+
+              <!-- Price Row with Highly Visible Red Strikethrough & Savings Chip -->
+              <div style="display:flex; flex-direction:column; gap:0.25rem; margin:0.35rem 0 0.55rem;">
+                <div style="display:flex; align-items:baseline; gap:0.6rem; flex-wrap:wrap;">
+                  <span style="font-size:1.22rem; font-weight:900; color:${isOutOfStock ? '#94a3b8' : (isOffer ? '#f43f5e' : 'var(--accent-cyan)')};">
+                    Rs. ${(p.price || 0).toLocaleString()}
+                  </span>
+                  ${p.oldPrice ? `
+                    <span style="font-size:0.85rem; color:#94a3b8; text-decoration:line-through; text-decoration-color:#ef4444; text-decoration-thickness:2.5px; font-weight:700;">
+                      Rs. ${(p.oldPrice).toLocaleString()}
+                    </span>
+                  ` : ''}
+                </div>
+                ${(isOffer && p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) ? `
+                  <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+                    <span style="background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.35); font-size:0.7rem; font-weight:800; padding:0.16rem 0.45rem; border-radius:4px; display:inline-flex; align-items:center; gap:0.25rem;">
+                      <i class="fas fa-arrow-down" style="color:#ef4444;"></i> SAVE Rs. ${(parseFloat(p.oldPrice) - parseFloat(p.price)).toLocaleString()}
+                    </span>
+                    ${discountPercent > 0 ? `
+                      <span style="background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; font-size:0.68rem; font-weight:900; padding:0.14rem 0.45rem; border-radius:4px;">
+                        -${discountPercent}%
+                      </span>
+                    ` : ''}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+
+            <div style="display:flex; gap:0.5rem;">
+              ${isOutOfStock ? `
+                <button disabled style="flex:1; padding:0.6rem; font-size:0.82rem; background:rgba(107,114,128,0.25); border:1.5px solid rgba(239,68,68,0.4); border-radius:var(--radius-sm); font-weight:800; cursor:not-allowed; color:#f87171;">
+                  <i class="fas fa-ban"></i> Out of Stock
+                </button>
+              ` : (isOffer ? `
+                <button class="btn-primary" onclick="window.handleAddToCart ? window.handleAddToCart('${p.id}') : null" style="flex:1; padding:0.6rem; font-size:0.82rem; background:linear-gradient(135deg, #f43f5e, #dc2626); border:none; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:800; cursor:pointer; box-shadow:0 2px 10px rgba(244,63,94,0.35); color:#ffffff;">
+                  <i class="fas fa-cart-plus"></i> Add
+                </button>
+              ` : `
+                <button class="btn-primary" onclick="window.handleAddToCart ? window.handleAddToCart('${p.id}') : null" style="flex:1; padding:0.6rem; font-size:0.82rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border:none; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:700; cursor:pointer; color:#090d16;">
+                  <i class="fas fa-cart-plus"></i> Add
+                </button>
+              `)}
+              <a href="product-detail.html?id=${p.id}" class="btn-secondary" style="padding:0.6rem 0.85rem; font-size:0.82rem; text-decoration:none; text-align:center;">
+                View
+              </a>
+            </div>
+          </div>
+        `;
+      };
+
+      if (newArrivalsGrid) {
+        newArrivalsGrid.innerHTML = allProducts.slice(0, 8).map(p => buildCard(p)).join('');
       }
 
-      const specialOffersGrid = document.getElementById('specialOffersGrid');
       if (specialOffersGrid) {
-        const offers = allProducts.filter(p => (p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || (p.oldPrice && p.oldPrice > p.price)));
-        const displayOffers = offers.length > 0 ? offers : allProducts.slice(2, 6);
-        if (typeof window.createProductCardHtml === 'function') {
-          specialOffersGrid.innerHTML = displayOffers.map(p => window.createProductCardHtml(p)).join('');
-        }
+        const offers = allProducts.filter(p => (
+          p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' ||
+          (p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) ||
+          (p.original_price && parseFloat(p.original_price) > parseFloat(p.price)) ||
+          (p.badge && (p.badge.includes('OFFER') || p.badge.includes('SPECIAL') || p.badge.includes('🔥')))
+        ));
+        const displayOffers = offers.length > 0 ? offers.slice(0, 4) : allProducts.slice(0, 4);
+        specialOffersGrid.innerHTML = displayOffers.map(p => buildCard(p)).join('');
       }
     }
 

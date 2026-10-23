@@ -11,18 +11,30 @@ const API_BASE_URL = (() => {
 })();
 
 async function apiFetch(url, options = {}) {
-  const response = await fetch(url, options);
-  const text = await response.text();
-  let data = {};
+  const controller = new AbortController();
+  const timeoutMs = options.timeout || 2500;
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
-    data = text ? JSON.parse(text) : {};
-  } catch (e) {
-    throw new Error(`Server returned invalid JSON (HTTP ${response.status}).`);
+    const fetchOptions = { ...options, signal: controller.signal };
+    delete fetchOptions.timeout;
+    const response = await fetch(url, fetchOptions);
+    clearTimeout(timeoutId);
+    const text = await response.text();
+    let data = {};
+    try {
+      data = text ? JSON.parse(text) : {};
+    } catch (e) {
+      throw new Error(`Server returned invalid JSON (HTTP ${response.status}).`);
+    }
+    if (!response.ok || data.status === 'error') {
+      throw new Error(data.message || `Request failed (HTTP ${response.status}).`);
+    }
+    return data;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    throw err;
   }
-  if (!response.ok || data.status === 'error') {
-    throw new Error(data.message || `Request failed (HTTP ${response.status}).`);
-  }
-  return data;
 }
 
 const ApiClient = {

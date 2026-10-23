@@ -40,6 +40,34 @@ try {
     if (!$checkOrigPrice) {
         $conn->exec("ALTER TABLE `product` ADD COLUMN `original_price` DECIMAL(12,2) DEFAULT NULL AFTER `offer_price`");
     }
+    $checkQualityGrade = $conn->query("SHOW COLUMNS FROM `product` LIKE 'quality_grade'")->fetch();
+    if (!$checkQualityGrade) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `quality_grade` VARCHAR(50) DEFAULT 'Original' AFTER `model`");
+    }
+    $checkWattage = $conn->query("SHOW COLUMNS FROM `product` LIKE 'wattage'")->fetch();
+    if (!$checkWattage) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `wattage` VARCHAR(20) DEFAULT NULL AFTER `quality_grade`");
+    }
+    $checkConnector = $conn->query("SHOW COLUMNS FROM `product` LIKE 'connector'")->fetch();
+    if (!$checkConnector) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `connector` VARCHAR(50) DEFAULT 'USB-C' AFTER `wattage`");
+    }
+    $checkQualityTier = $conn->query("SHOW COLUMNS FROM `product` LIKE 'quality_tier'")->fetch();
+    if (!$checkQualityTier) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `quality_tier` VARCHAR(50) DEFAULT NULL AFTER `connector`");
+    }
+    $checkTierRank = $conn->query("SHOW COLUMNS FROM `product` LIKE 'tier_rank'")->fetch();
+    if (!$checkTierRank) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `tier_rank` INT DEFAULT 99 AFTER `quality_tier`");
+    }
+    $checkRating = $conn->query("SHOW COLUMNS FROM `product` LIKE 'rating'")->fetch();
+    if (!$checkRating) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `rating` DECIMAL(2,1) DEFAULT 4.8 AFTER `status`");
+    }
+    $checkReviewsCount = $conn->query("SHOW COLUMNS FROM `product` LIKE 'reviews_count'")->fetch();
+    if (!$checkReviewsCount) {
+        $conn->exec("ALTER TABLE `product` ADD COLUMN `reviews_count` INT DEFAULT 25 AFTER `rating`");
+    }
     // Auto-create product_offer dedicated table
     $conn->exec("
         CREATE TABLE IF NOT EXISTS `product_offer` (
@@ -141,6 +169,58 @@ switch ($method) {
                 }
                 $lowerB = strtolower($b);
                 $prod['brand'] = isset($brandNormalizeMap[$lowerB]) ? $brandNormalizeMap[$lowerB] : ($b ? ucfirst($b) : 'Generic');
+
+                // Rich attribute fallbacks for seamless filtering
+                if (empty($prod['quality_grade'])) {
+                    if (stripos($prod['product_name'], 'budget') !== false || stripos($prod['description'] ?? '', 'budget') !== false || stripos($prod['product_name'], 'compatible') !== false) {
+                        $prod['quality_grade'] = 'Budget';
+                    } elseif (stripos($prod['product_name'], 'original') !== false || intval($prod['category_id']) === 1) {
+                        $prod['quality_grade'] = 'Original';
+                    } else {
+                        $prod['quality_grade'] = 'High Grade';
+                    }
+                }
+
+                if (empty($prod['wattage'])) {
+                    if (preg_match('/(20W|25W|30W|45W|65W|100W|140W)/i', $prod['product_name'] . ' ' . ($prod['specs'] ?? ''), $wm)) {
+                        $prod['wattage'] = strtoupper($wm[1]);
+                    }
+                }
+
+                if (empty($prod['connector'])) {
+                    if (stripos($prod['product_name'], 'lightning') !== false) {
+                        $prod['connector'] = 'Lightning';
+                    } elseif (stripos($prod['product_name'], 'micro') !== false) {
+                        $prod['connector'] = 'Micro USB';
+                    } else {
+                        $prod['connector'] = 'USB-C';
+                    }
+                }
+
+                if (empty($prod['quality_tier']) && intval($prod['category_id']) === 3) {
+                    if (stripos($prod['product_name'], 'Super D') !== false) {
+                        $prod['quality_tier'] = 'Super D';
+                        $prod['tier_rank'] = 1;
+                    } elseif (stripos($prod['product_name'], 'HD+') !== false) {
+                        $prod['quality_tier'] = 'HD+';
+                        $prod['tier_rank'] = 2;
+                    } elseif (stripos($prod['product_name'], 'MTB') !== false) {
+                        $prod['quality_tier'] = 'MTB';
+                        $prod['tier_rank'] = 3;
+                    }
+                }
+
+                if (empty($prod['rating'])) {
+                    $prod['rating'] = 4.8;
+                } else {
+                    $prod['rating'] = floatval($prod['rating']);
+                }
+
+                if (empty($prod['reviews_count'])) {
+                    $prod['reviews_count'] = 25;
+                } else {
+                    $prod['reviews_count'] = intval($prod['reviews_count']);
+                }
             }
             unset($prod);
 
@@ -195,9 +275,17 @@ switch ($method) {
             }
         }
 
+        $qualityGrade = !empty($input['quality_grade']) ? $input['quality_grade'] : (!empty($input['qualityGrade']) ? $input['qualityGrade'] : (intval($input['category_id']) === 1 ? 'Original' : 'High Grade'));
+        $wattage = !empty($input['wattage']) ? $input['wattage'] : null;
+        $connector = !empty($input['connector']) ? $input['connector'] : 'USB-C';
+        $qualityTier = !empty($input['quality_tier']) ? $input['quality_tier'] : (!empty($input['qualityTier']) ? $input['qualityTier'] : null);
+        $tierRank = !empty($input['tier_rank']) ? intval($input['tier_rank']) : (!empty($input['tierRank']) ? intval($input['tierRank']) : 99);
+        $rating = !empty($input['rating']) ? floatval($input['rating']) : 4.8;
+        $reviewsCount = !empty($input['reviews_count']) ? intval($input['reviews_count']) : (!empty($input['reviewsCount']) ? intval($input['reviewsCount']) : 25);
+
         $stmt = $conn->prepare("
-            INSERT INTO product (category_id, admin_id, product_name, brand, model, price, is_offer, offer_price, original_price, stock, description, specs, image, image_2, image_3, status) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO product (category_id, admin_id, product_name, brand, model, quality_grade, wattage, connector, quality_tier, tier_rank, price, is_offer, offer_price, original_price, stock, description, specs, image, image_2, image_3, status, rating, reviews_count) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             intval($input['category_id']),
@@ -205,6 +293,11 @@ switch ($method) {
             $input['product_name'],
             $brand,
             $model,
+            $qualityGrade,
+            $wattage,
+            $connector,
+            $qualityTier,
+            $tierRank,
             $finalPrice,
             $isOffer,
             $offerPrice,
@@ -215,7 +308,9 @@ switch ($method) {
             $image,
             $image_2,
             $image_3,
-            $status
+            $status,
+            $rating,
+            $reviewsCount
         ]);
 
         $newId = $conn->lastInsertId();
@@ -308,9 +403,17 @@ switch ($method) {
             }
         }
 
+        $qualityGrade = !empty($input['quality_grade']) ? $input['quality_grade'] : (!empty($input['qualityGrade']) ? $input['qualityGrade'] : (intval($input['category_id'] ?? 1) === 1 ? 'Original' : 'High Grade'));
+        $wattage = !empty($input['wattage']) ? $input['wattage'] : null;
+        $connector = !empty($input['connector']) ? $input['connector'] : 'USB-C';
+        $qualityTier = !empty($input['quality_tier']) ? $input['quality_tier'] : (!empty($input['qualityTier']) ? $input['qualityTier'] : null);
+        $tierRank = !empty($input['tier_rank']) ? intval($input['tier_rank']) : (!empty($input['tierRank']) ? intval($input['tierRank']) : 99);
+        $rating = !empty($input['rating']) ? floatval($input['rating']) : 4.8;
+        $reviewsCount = !empty($input['reviews_count']) ? intval($input['reviews_count']) : (!empty($input['reviewsCount']) ? intval($input['reviewsCount']) : 25);
+
         $stmt = $conn->prepare("
             UPDATE product 
-            SET category_id = ?, product_name = ?, brand = ?, model = ?, price = ?, is_offer = ?, offer_price = ?, original_price = ?, stock = ?, description = ?, specs = ?, image = ?, image_2 = ?, image_3 = ?, status = ?
+            SET category_id = ?, product_name = ?, brand = ?, model = ?, quality_grade = ?, wattage = ?, connector = ?, quality_tier = ?, tier_rank = ?, price = ?, is_offer = ?, offer_price = ?, original_price = ?, stock = ?, description = ?, specs = ?, image = ?, image_2 = ?, image_3 = ?, status = ?, rating = ?, reviews_count = ?
             WHERE product_id = ?
         ");
         $stmt->execute([
@@ -318,6 +421,11 @@ switch ($method) {
             $input['product_name'] ?? $input['name'],
             $brand,
             $model,
+            $qualityGrade,
+            $wattage,
+            $connector,
+            $qualityTier,
+            $tierRank,
             $finalPrice,
             $isOffer,
             $offerPrice,
@@ -329,6 +437,8 @@ switch ($method) {
             $image_2,
             $image_3,
             $autoStatus,
+            $rating,
+            $reviewsCount,
             $prodId
         ]);
 

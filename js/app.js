@@ -260,19 +260,28 @@ document.addEventListener("DOMContentLoaded", () => {
   function populateBrandFilters(category = "All") {
     if (!dynamicBrandListEl) return;
 
-    let availableBrands = [];
+    // Get currently checked brands to preserve them across re-population
+    const previouslyChecked = Array.from(document.querySelectorAll(".brand-checkbox:checked")).map(cb => cb.value.toLowerCase());
+
+    const allProds = StorageDB.getProducts();
+    const catProds = (category === "All") 
+      ? allProds 
+      : allProds.filter(p => (p.category || p.category_name || "").toLowerCase() === category.toLowerCase());
+
+    const brandSet = new Set();
+    catProds.forEach(p => {
+      const nb = typeof normalizeBrand === "function" ? normalizeBrand(p.brand) : p.brand;
+      if (nb) brandSet.add(nb);
+    });
+
     if (category !== "All" && typeof CATEGORY_BRANDS !== "undefined" && CATEGORY_BRANDS[category]) {
-      availableBrands = CATEGORY_BRANDS[category].map(b => typeof normalizeBrand === "function" ? normalizeBrand(b) : b);
-    } else {
-      const allProds = StorageDB.getProducts();
-      const brandSet = new Set();
-      allProds.forEach(p => {
-        const nb = typeof normalizeBrand === "function" ? normalizeBrand(p.brand) : p.brand;
+      CATEGORY_BRANDS[category].forEach(b => {
+        const nb = typeof normalizeBrand === "function" ? normalizeBrand(b) : b;
         if (nb) brandSet.add(nb);
       });
-      availableBrands = Array.from(brandSet);
     }
 
+    let availableBrands = Array.from(brandSet);
     availableBrands = [...new Set(availableBrands.map(b => typeof normalizeBrand === "function" ? normalizeBrand(b) : b))];
 
     if (activeCatLabel) {
@@ -296,7 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Render Brand Checkboxes with Icons
-    const allProds = StorageDB.getProducts();
     dynamicBrandListEl.innerHTML = availableBrands.map(rawBrand => {
       const brandKey = (typeof normalizeBrand === "function") ? normalizeBrand(rawBrand) : rawBrand;
       const meta = (typeof getBrandMeta === "function") ? getBrandMeta(brandKey) : ((typeof BRAND_META !== "undefined" && BRAND_META[brandKey]) ? BRAND_META[brandKey] : { name: brandKey, icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
@@ -306,10 +314,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return matchCat && matchBrand;
       }).length;
 
+      const brandNameVal = meta.name || brandKey;
+      const isChecked = previouslyChecked.includes(brandNameVal.toLowerCase()) || previouslyChecked.includes(rawBrand.toLowerCase());
+
       return `
         <label class="brand-filter-item">
           <div style="display:flex; align-items:center;">
-            <input type="checkbox" class="brand-checkbox" value="${meta.name || brandKey}" style="margin-right:0.5rem; accent-color:var(--accent-cyan);">
+            <input type="checkbox" class="brand-checkbox" value="${brandNameVal}" ${isChecked ? 'checked' : ''} style="margin-right:0.5rem; accent-color:var(--accent-cyan);">
             <span class="brand-logo-badge" style="background:${meta.bg}; color:${meta.color};">
               <i class="${meta.icon}"></i>
             </span>
@@ -459,16 +470,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const brandMeta = (typeof getBrandMeta === "function") ? getBrandMeta(p.brand) : ((typeof BRAND_META !== "undefined" && BRAND_META[p.brand]) ? BRAND_META[p.brand] : { icon: "fas fa-tag", color: "#38bdf8", bg: "rgba(56,189,248,0.15)" });
     const isWishlisted = wishlist.includes(p.id);
     
-    const discountPercent = (p.oldPrice && p.oldPrice > p.price) 
-      ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) 
+    const discountPercent = (p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) 
+      ? Math.round(((parseFloat(p.oldPrice) - parseFloat(p.price)) / parseFloat(p.oldPrice)) * 100) 
       : 0;
 
-    const isOffer = p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || discountPercent > 0;
+    const isOffer = p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || discountPercent > 0 || (p.badge && (p.badge.includes('OFFER') || p.badge.includes('SPECIAL') || p.badge.includes('🔥')));
 
     // Dynamic Quality Grade Badges (Top Highlight)
     let qualityBadgeHtml = "";
     if (isOffer) {
-      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #f43f5e, #dc2626); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(244,63,94,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-fire"></i> ${discountPercent > 0 ? `-${discountPercent}% OFF` : 'SPECIAL OFFER'}</span>`;
+      qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #ef4444, #dc2626); color:#ffffff; font-size:0.68rem; font-weight:900; padding:0.26rem 0.6rem; border-radius:5px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(220,38,38,0.5); display:inline-flex; align-items:center; gap:0.35rem;"><i class="fas fa-fire" style="color:#fef08a;"></i> SPECIAL OFFER ${discountPercent > 0 ? `(-${discountPercent}%)` : ''}</span>`;
     } else if (p.qualityGrade === "Original") {
       qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #0284c7, #2563eb); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(2,132,199,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-crown"></i> 100% Original</span>`;
     } else if (p.qualityGrade === "High Grade") {
@@ -477,13 +488,17 @@ document.addEventListener("DOMContentLoaded", () => {
       qualityBadgeHtml = `<span style="background:linear-gradient(135deg, #059669, #10b981); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.25rem 0.55rem; border-radius:4px; text-transform:uppercase; box-shadow:0 2px 6px rgba(5,150,105,0.4); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-tag"></i> Budget / Low-Cost</span>`;
     }
 
+    const cardBg = isOffer ? 'linear-gradient(180deg, rgba(244,63,94,0.06) 0%, var(--bg-secondary) 100%)' : 'var(--bg-secondary)';
+    const cardBorder = isOutOfStock ? 'rgba(239,68,68,0.45)' : (isOffer ? 'rgba(244,63,94,0.55)' : 'var(--border-color)');
+    const cardShadow = isOffer ? 'box-shadow: 0 4px 20px rgba(244,63,94,0.14);' : '';
+
     return `
-      <div class="product-card" data-id="${p.id}" style="background:var(--bg-secondary); border:1px solid ${isOutOfStock ? 'rgba(239,68,68,0.45)' : 'var(--border-color)'}; border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; transition:all 0.3s ease; ${isOutOfStock ? 'opacity:0.88;' : ''}">
+      <div class="product-card" data-id="${p.id}" style="background:${cardBg}; border:1.5px solid ${cardBorder}; border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; justify-content:space-between; position:relative; transition:all 0.3s ease; ${cardShadow} ${isOutOfStock ? 'opacity:0.88;' : ''}">
         
         <!-- Badges & Wishlist Overlay (Prominent Quality Badge On Top) -->
         <div style="position:absolute; top:12px; left:12px; z-index:3; display:flex; gap:0.35rem; flex-wrap:wrap; max-width:75%;">
           ${isOutOfStock ? `<span style="background:linear-gradient(135deg,#dc2626,#991b1b); color:#ffffff; font-size:0.68rem; font-weight:900; padding:0.28rem 0.6rem; border-radius:5px; text-transform:uppercase; letter-spacing:0.5px; box-shadow:0 2px 8px rgba(220,38,38,0.5); display:inline-flex; align-items:center; gap:0.3rem;"><i class="fas fa-ban"></i> Out of Stock</span>` : qualityBadgeHtml}
-          ${!isOutOfStock && discountPercent > 0 ? `<span style="background:var(--accent-rose); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.2rem 0.45rem; border-radius:4px;">-${discountPercent}%</span>` : ""}
+          ${!isOutOfStock && !isOffer && discountPercent > 0 ? `<span style="background:var(--accent-rose); color:#ffffff; font-size:0.68rem; font-weight:800; padding:0.2rem 0.45rem; border-radius:4px;">-${discountPercent}%</span>` : ""}
         </div>
 
         <button onclick="window.handleWishlistToggle('${p.id}')" title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}" style="position:absolute; top:12px; right:12px; z-index:3; width:32px; height:32px; border-radius:50%; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); display:flex; align-items:center; justify-content:center; color:${isWishlisted ? '#f43f5e' : 'var(--text-muted)'}; font-size:0.9rem; cursor:pointer; transition:all 0.2s ease;">
@@ -533,10 +548,30 @@ document.addEventListener("DOMContentLoaded", () => {
             </span>
           </div>
 
-          <!-- Price Row -->
-          <div style="display:flex; align-items:baseline; gap:0.5rem; margin:0.35rem 0 0.5rem;">
-            <span style="font-size:1.15rem; font-weight:800; color:${isOutOfStock ? '#94a3b8' : 'var(--accent-cyan)'};">Rs. ${(p.price || 0).toLocaleString()}</span>
-            ${p.oldPrice ? `<span style="font-size:0.8rem; color:var(--text-dim); text-decoration:line-through;">Rs. ${p.oldPrice.toLocaleString()}</span>` : ""}
+          <!-- Price Row with Highly Visible Red Strikethrough & Savings Chip -->
+          <div style="display:flex; flex-direction:column; gap:0.25rem; margin:0.35rem 0 0.55rem;">
+            <div style="display:flex; align-items:baseline; gap:0.6rem; flex-wrap:wrap;">
+              <span style="font-size:1.22rem; font-weight:900; color:${isOutOfStock ? '#94a3b8' : (isOffer ? '#f43f5e' : 'var(--accent-cyan)')};">
+                Rs. ${(p.price || 0).toLocaleString()}
+              </span>
+              ${p.oldPrice ? `
+                <span style="font-size:0.85rem; color:#94a3b8; text-decoration:line-through; text-decoration-color:#ef4444; text-decoration-thickness:2.5px; font-weight:700;">
+                  Rs. ${(p.oldPrice).toLocaleString()}
+                </span>
+              ` : ""}
+            </div>
+            ${(isOffer && p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) ? `
+              <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+                <span style="background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.35); font-size:0.7rem; font-weight:800; padding:0.16rem 0.45rem; border-radius:4px; display:inline-flex; align-items:center; gap:0.25rem;">
+                  <i class="fas fa-arrow-down" style="color:#ef4444;"></i> SAVE Rs. ${(parseFloat(p.oldPrice) - parseFloat(p.price)).toLocaleString()}
+                </span>
+                ${discountPercent > 0 ? `
+                  <span style="background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; font-size:0.68rem; font-weight:900; padding:0.14rem 0.45rem; border-radius:4px;">
+                    -${discountPercent}%
+                  </span>
+                ` : ''}
+              </div>
+            ` : ""}
           </div>
 
           <!-- Action Buttons -->
@@ -545,9 +580,14 @@ document.addEventListener("DOMContentLoaded", () => {
               ? `<button disabled style="padding:0.6rem 0.8rem; font-size:0.82rem; background:rgba(107,114,128,0.25); border:1.5px solid rgba(239,68,68,0.4); border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:800; cursor:not-allowed; color:#f87171;">
                   <i class="fas fa-ban"></i> OUT OF STOCK
                 </button>`
-              : `<button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="padding:0.6rem 0.8rem; font-size:0.82rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border:none; display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:700; cursor:pointer;">
-                  <i class="fas fa-cart-plus"></i> ADD TO CART
-                </button>`}
+              : (isOffer 
+                  ? `<button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="padding:0.6rem 0.8rem; font-size:0.82rem; background:linear-gradient(135deg, #f43f5e, #dc2626); border:none; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:800; cursor:pointer; box-shadow:0 2px 10px rgba(244,63,94,0.35); color:#ffffff;">
+                      <i class="fas fa-cart-plus"></i> ADD TO CART
+                    </button>`
+                  : `<button class="btn-primary" onclick="window.handleAddToCart('${p.id}')" style="padding:0.6rem 0.8rem; font-size:0.82rem; background:linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border:none; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; gap:0.35rem; font-weight:700; cursor:pointer; color:#090d16;">
+                      <i class="fas fa-cart-plus"></i> ADD TO CART
+                    </button>`
+                )}
             <a href="product-detail.html?id=${p.id}" class="icon-btn" title="View Specifications" style="width:38px; height:38px; border-radius:var(--radius-md); background:rgba(255,255,255,0.06); border:1px solid var(--border-color); display:inline-flex; align-items:center; justify-content:center; color:#ffffff;">
               <i class="fas fa-arrow-right" style="font-size:0.85rem;"></i>
             </a>
@@ -571,7 +611,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 0. Special Offer / Sale Filter (e.g. ?sale=true or SALE % pill)
       if (window._activeSaleFilter) {
-        filtered = filtered.filter(p => (p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || (p.oldPrice && p.oldPrice > p.price)));
+        filtered = filtered.filter(p => (
+          p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' ||
+          (p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) ||
+          (p.original_price && parseFloat(p.original_price) > parseFloat(p.price)) ||
+          (p.badge && (p.badge.includes('OFFER') || p.badge.includes('SPECIAL') || p.badge.includes('🔥')))
+        ));
       }
 
       // 1. Search Query
@@ -597,55 +642,89 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // 3. Brand Filter
       const checkedBrandBoxes = document.querySelectorAll(".brand-checkbox:checked");
-      const selectedBrands = Array.from(checkedBrandBoxes).map(cb => cb.value.toLowerCase());
+      const selectedBrands = Array.from(checkedBrandBoxes).map(cb => cb.value.toLowerCase().trim());
       if (selectedBrands.length > 0) {
-        filtered = filtered.filter(p => selectedBrands.some(b => (p.brand || "").toLowerCase().includes(b)));
+        filtered = filtered.filter(p => {
+          const pb = (typeof normalizeBrand === 'function' ? normalizeBrand(p.brand) : (p.brand || '')).toLowerCase().trim();
+          return selectedBrands.some(b => pb === b || pb.includes(b) || b.includes(pb));
+        });
       }
 
       // 3.5 Quality Tier / Grade Filter (Original, High Grade, Budget)
       const checkedGradeBoxes = document.querySelectorAll(".grade-checkbox:checked");
-      const selectedGrades = Array.from(checkedGradeBoxes).map(cb => cb.value.toLowerCase());
+      const selectedGrades = Array.from(checkedGradeBoxes).map(cb => cb.value.toLowerCase().trim());
       if (selectedGrades.length > 0) {
-        filtered = filtered.filter(p => p.qualityGrade && selectedGrades.includes(p.qualityGrade.toLowerCase()));
+        filtered = filtered.filter(p => {
+          const qg = String(p.qualityGrade || p.quality_grade || (p.badge && p.badge.includes('Original') ? 'Original' : (p.badge && p.badge.includes('Budget') ? 'Budget' : 'High Grade'))).toLowerCase();
+          return selectedGrades.some(g => qg.includes(g) || g.includes(qg));
+        });
       }
 
       // 4. Charger Wattage Filter (20W, 25W, 30W, 45W, 65W)
       const checkedWattageBoxes = document.querySelectorAll(".wattage-checkbox:checked");
-      const selectedWattages = Array.from(checkedWattageBoxes).map(cb => cb.value.toLowerCase());
+      const selectedWattages = Array.from(checkedWattageBoxes).map(cb => cb.value.toLowerCase().trim());
       if (selectedWattages.length > 0) {
-        filtered = filtered.filter(p => p.wattage && selectedWattages.includes(p.wattage.toLowerCase()));
+        filtered = filtered.filter(p => {
+          let w = String(p.wattage || "").toLowerCase().trim();
+          if (!w) {
+            const match = (p.name + " " + (p.specs || "")).match(/(20W|25W|30W|45W|65W|100W)/i);
+            if (match) w = match[1].toLowerCase();
+          }
+          return selectedWattages.includes(w);
+        });
       }
 
       // 5. Cable & Connector Filter (USB-C, Lightning, Micro USB)
       const checkedConnectorBoxes = document.querySelectorAll(".connector-checkbox:checked");
-      const selectedConnectors = Array.from(checkedConnectorBoxes).map(cb => cb.value.toLowerCase());
+      const selectedConnectors = Array.from(checkedConnectorBoxes).map(cb => cb.value.toLowerCase().trim());
       if (selectedConnectors.length > 0) {
-        filtered = filtered.filter(p => p.connector && selectedConnectors.some(c => p.connector.toLowerCase().includes(c)));
+        filtered = filtered.filter(p => {
+          let conn = String(p.connector || "").toLowerCase().trim();
+          if (!conn) {
+            const str = (p.name + " " + (p.specs || "")).toLowerCase();
+            if (str.includes("lightning")) conn = "lightning";
+            else if (str.includes("micro")) conn = "micro usb";
+            else conn = "usb-c";
+          }
+          return selectedConnectors.some(c => conn.includes(c));
+        });
       }
 
       // 6. Glass Quality Tier Filter (Super D, HD+, MTB - ONLY for Screen Protectors)
       const checkedTierBoxes = document.querySelectorAll(".tier-checkbox:checked");
-      const selectedTiers = Array.from(checkedTierBoxes).map(cb => cb.value.toLowerCase());
+      const selectedTiers = Array.from(checkedTierBoxes).map(cb => cb.value.toLowerCase().trim());
       if (selectedTiers.length > 0) {
-        filtered = filtered.filter(p => p.qualityTier && selectedTiers.includes(p.qualityTier.toLowerCase()));
+        filtered = filtered.filter(p => {
+          let tier = String(p.qualityTier || p.quality_tier || "").toLowerCase().trim();
+          if (!tier) {
+            const name = String(p.name || "").toLowerCase();
+            if (name.includes("super d")) tier = "super d";
+            else if (name.includes("hd+")) tier = "hd+";
+            else if (name.includes("mtb")) tier = "mtb";
+          }
+          return selectedTiers.includes(tier);
+        });
       }
 
       // 7. Price Range
       if (priceRange) {
         const maxPrice = parseFloat(priceRange.value) || 500000;
-        filtered = filtered.filter(p => p.price <= maxPrice);
+        filtered = filtered.filter(p => (parseFloat(p.price) || 0) <= maxPrice);
       }
 
       // 8. Availability Stock Filter
       const stockInOnlyRadio = document.getElementById("stockInOnly");
+      const stockOutOnlyRadio = document.getElementById("stockOutOnly");
       if (stockInOnlyRadio && stockInOnlyRadio.checked) {
-        filtered = filtered.filter(p => (p.stock > 0 && p.status !== 'out_of_stock'));
+        filtered = filtered.filter(p => (parseInt(p.stock) > 0 && p.status !== 'out_of_stock'));
+      } else if (stockOutOnlyRadio && stockOutOnlyRadio.checked) {
+        filtered = filtered.filter(p => (parseInt(p.stock) <= 0 || p.status === 'out_of_stock'));
       }
 
       // 9. Rating Filter
       const rating4PlusCb = document.getElementById("rating4Plus");
       if (rating4PlusCb && rating4PlusCb.checked) {
-        filtered = filtered.filter(p => p.rating >= 4.0);
+        filtered = filtered.filter(p => (parseFloat(p.rating) || 4.8) >= 4.0);
       }
 
       // 10. Sorting (including Tier Rank: Best to Standard)
@@ -653,16 +732,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const sortVal = sortSelect.value;
         if (sortVal === "tier-best") {
           filtered.sort((a, b) => {
-            const rankA = a.tierRank || 99;
-            const rankB = b.tierRank || 99;
-            return rankA - rankB;
+            const getRank = (p) => {
+              if (p.tierRank) return parseInt(p.tierRank);
+              if (p.tier_rank) return parseInt(p.tier_rank);
+              const t = String(p.qualityTier || p.quality_tier || p.name || "").toLowerCase();
+              if (t.includes("super d")) return 1;
+              if (t.includes("hd+")) return 2;
+              if (t.includes("mtb")) return 3;
+              return 99;
+            };
+            return getRank(a) - getRank(b);
           });
         } else if (sortVal === "price-low") {
-          filtered.sort((a, b) => a.price - b.price);
+          filtered.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
         } else if (sortVal === "price-high") {
-          filtered.sort((a, b) => b.price - a.price);
+          filtered.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
         } else if (sortVal === "rating") {
-          filtered.sort((a, b) => b.rating - a.rating);
+          filtered.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0));
         }
       }
 
@@ -699,17 +785,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (specialOffersGrid) {
-      const offers = allProducts.filter(p => (p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' || (p.oldPrice && p.oldPrice > p.price)));
-      const displayOffers = offers.length > 0 ? offers : allProducts.slice(0, 4);
+      const offers = allProducts.filter(p => (
+        p.is_offer == 1 || p.is_offer === true || p.is_offer === '1' ||
+        (p.oldPrice && parseFloat(p.oldPrice) > parseFloat(p.price)) ||
+        (p.original_price && parseFloat(p.original_price) > parseFloat(p.price)) ||
+        (p.badge && (p.badge.includes('OFFER') || p.badge.includes('SPECIAL') || p.badge.includes('🔥')))
+      ));
+      const displayOffers = offers.length > 0 ? offers.slice(0, 4) : allProducts.slice(0, 4);
       specialOffersGrid.innerHTML = displayOffers.map(p => createProductCardHtml(p)).join("");
     }
   }
+  window.renderProducts = renderProducts;
+
+  // Initial immediate synchronous render
+  renderProducts();
 
   // Event Listeners for Filters
   if (searchInput) searchInput.addEventListener("input", renderProducts);
   if (categoryFilter) {
     categoryFilter.addEventListener("change", (e) => {
       const selected = e.target.value;
+      window._activeCategory = selected;
       populateBrandFilters(selected);
       document.querySelectorAll(".category-pill-btn").forEach(btn => {
         btn.classList.toggle("active", btn.textContent.includes(selected) || (selected === "All" && btn.textContent.includes("All Products")));
@@ -723,6 +819,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (priceRangeValue) priceRangeValue.textContent = `Rs. ${parseInt(e.target.value).toLocaleString()}`;
       renderProducts();
     });
+    priceRange.addEventListener("change", renderProducts);
   }
   document.querySelectorAll(".grade-checkbox").forEach(cb => {
     cb.addEventListener("change", renderProducts);
@@ -736,11 +833,23 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".connector-checkbox").forEach(cb => {
     cb.addEventListener("change", renderProducts);
   });
+  document.querySelectorAll('input[name="availabilityFilter"]').forEach(radio => {
+    radio.addEventListener("change", renderProducts);
+  });
+  const rating4PlusCb = document.getElementById("rating4Plus");
+  if (rating4PlusCb) {
+    rating4PlusCb.addEventListener("change", renderProducts);
+  }
 
   // Global Filter Reset
   window.resetFilters = function() {
     if (searchInput) searchInput.value = "";
     if (categoryFilter) categoryFilter.value = "All";
+    window._activeCategory = "All";
+    window._activeSaleFilter = false;
+    const salePill = document.getElementById("saleFilterPill");
+    if (salePill) salePill.classList.remove("active");
+
     if (sortSelect) sortSelect.value = "featured";
     if (priceRange) {
       priceRange.value = 500000;
@@ -751,6 +860,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".wattage-checkbox").forEach(cb => cb.checked = false);
     document.querySelectorAll(".connector-checkbox").forEach(cb => cb.checked = false);
     document.querySelectorAll(".brand-checkbox").forEach(cb => cb.checked = false);
+    if (rating4PlusCb) rating4PlusCb.checked = false;
+
+    const stockAllRadio = document.getElementById("stockAllRadio");
+    if (stockAllRadio) stockAllRadio.checked = true;
+
     document.querySelectorAll(".category-pill-btn").forEach(btn => {
       btn.classList.toggle("active", btn.textContent.includes("All Products"));
     });
@@ -783,17 +897,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const formatted = liveProducts.map(dbp => {
         const catName = dbp.category_name || CATEGORY_NAMES[dbp.category_id] || "Smartphones";
-        const origPrice = (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : null);
+        const origPrice = (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : (dbp.oldPrice ? parseFloat(dbp.oldPrice) : null));
         const curPrice = parseFloat(dbp.price) || 0;
         const offerPrice = (dbp.offer_price && parseFloat(dbp.offer_price) > 0) ? parseFloat(dbp.offer_price) : null;
         const isOffer = (dbp.is_offer == 1 || dbp.is_offer === true || dbp.is_offer === '1' || (origPrice && origPrice > curPrice)) ? 1 : 0;
         const stockVal = parseInt(dbp.stock ?? 0);
+        const qg = dbp.quality_grade || dbp.qualityGrade || (parseInt(dbp.category_id) === 1 ? "Original" : (catName === 'Covers' ? "High Grade" : "Original"));
+        const qt = dbp.quality_tier || dbp.qualityTier || null;
+        const tr = parseInt(dbp.tier_rank || dbp.tierRank || 99);
+        const wt = dbp.wattage || null;
+        const cn = dbp.connector || "USB-C";
+        const pid = dbp.product_id || (dbp.id ? parseInt(String(dbp.id).replace(/[^0-9]/g, '')) : Date.now());
+        const pName = dbp.product_name || dbp.name || "Mobile Product";
 
         return {
-          id: `prod_${dbp.product_id}`,
-          numericId: parseInt(dbp.product_id),
+          id: `prod_${pid}`,
+          numericId: pid,
+          product_id: pid,
           category_id: parseInt(dbp.category_id) || 1,
-          name: dbp.product_name,
+          name: pName,
+          product_name: pName,
           category: catName,
           category_name: catName,
           brand: (typeof normalizeBrand === 'function') ? normalizeBrand(dbp.brand) : (dbp.brand || "Generic"),
@@ -810,15 +933,25 @@ document.addEventListener("DOMContentLoaded", () => {
           image: dbp.image || "images/cat-chargers.svg",
           image_2: dbp.image_2 || null,
           image_3: dbp.image_3 || null,
-          connector: dbp.connector || "USB-C",
-          rating: dbp.rating || 4.8,
-          reviewsCount: dbp.reviewsCount || 25,
-          qualityGrade: dbp.qualityGrade || (parseInt(dbp.category_id) === 1 ? "Original" : "High Grade")
+          image2: dbp.image_2 || null,
+          image3: dbp.image_3 || null,
+          connector: cn,
+          rating: parseFloat(dbp.rating) || 4.8,
+          reviewsCount: parseInt(dbp.reviews_count || dbp.reviewsCount) || 25,
+          qualityGrade: qg,
+          quality_grade: qg,
+          qualityTier: qt,
+          quality_tier: qt,
+          tierRank: tr,
+          tier_rank: tr,
+          wattage: wt,
+          badge: isOffer ? '🔥 SPECIAL OFFER' : (qt ? `👑 ${qt}` : (qg ? `👑 ${qg}` : 'Featured'))
         };
       });
 
       StorageDB.saveProducts(formatted);
       console.log(`[D-TEL] ✅ Live stock synced: ${formatted.length} products from DB`);
+      populateBrandFilters(window._activeCategory);
       renderProducts();
       window.dispatchEvent(new CustomEvent("productsUpdated", { detail: formatted }));
 
@@ -1310,56 +1443,4 @@ document.addEventListener("DOMContentLoaded", () => {
   updateCartUI();
   updateWishlistUI();
   window.applyStoreSettingsToDOM();
-
-  // Asynchronously fetch fresh products from MySQL API and refresh store
-  async function syncStoreProductsFromApi() {
-    if (typeof ApiClient !== "undefined" && typeof ApiClient.getProducts === "function") {
-      try {
-        const dbProducts = await ApiClient.getProducts();
-        if (Array.isArray(dbProducts) && dbProducts.length > 0) {
-          const CATEGORY_NAMES = {
-            1: "Smartphones",
-            2: "Chargers",
-            3: "Covers",
-            4: "Audio",
-            5: "Power",
-            6: "Accessories"
-          };
-          const formatted = dbProducts.map(dbp => {
-            const catName = dbp.category_name || CATEGORY_NAMES[dbp.category_id] || "Smartphones";
-            return {
-              id: `prod_${dbp.product_id}`,
-              numericId: dbp.product_id,
-              category_id: dbp.category_id || 1,
-              name: dbp.product_name,
-              category: catName,
-              category_name: catName,
-              brand: (typeof normalizeBrand === 'function') ? normalizeBrand(dbp.brand) : (dbp.brand || "Generic"),
-              model: dbp.model || "",
-              price: parseFloat(dbp.price),
-              oldPrice: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : (dbp.old_price ? parseFloat(dbp.old_price) : null),
-              original_price: (dbp.original_price && parseFloat(dbp.original_price) > 0) ? parseFloat(dbp.original_price) : null,
-              offer_price: (dbp.offer_price && parseFloat(dbp.offer_price) > 0) ? parseFloat(dbp.offer_price) : null,
-              is_offer: (dbp.is_offer == 1 || dbp.is_offer === true || dbp.is_offer === '1') ? 1 : 0,
-              stock: parseInt(dbp.stock),
-              description: dbp.description || "",
-              specs: dbp.specs || "",
-              image: dbp.image || "images/cat-chargers.svg",
-              image_2: dbp.image_2 || null,
-              image_3: dbp.image_3 || null,
-              connector: dbp.connector || "USB-C",
-              status: dbp.status || "active"
-            };
-          });
-          StorageDB.saveProducts(formatted);
-          renderProducts();
-          window.dispatchEvent(new CustomEvent('productsUpdated', { detail: formatted }));
-        }
-      } catch (err) {
-        console.warn("Live storefront products sync skipped:", err);
-      }
-    }
-  }
-
-  syncStoreProductsFromApi();
 });

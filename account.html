@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>D-TEL | My Account & Orders</title>
   <meta name="description" content="Manage your D-TEL personal profile, view your order history and tracking securely.">
   
@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
+  <link rel="stylesheet" href="css/styles.css?v=20261021_responsive_v1">
 
   <script>
     // Instant redirect to live website if user is not logged in
@@ -207,63 +207,150 @@
       align-items: center;
       gap: 0.5rem;
     }
+
+    @media (max-width: 768px) {
+      .account-page-wrap {
+        padding: 0 1rem;
+        margin: 1.25rem auto;
+      }
+      .account-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.25rem;
+        gap: 1.25rem;
+      }
+      .account-banner > div:last-child {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+      }
+      .account-banner > div:last-child > * {
+        flex: 1;
+        justify-content: center;
+      }
+      .account-user-info {
+        gap: 0.85rem;
+        width: 100%;
+      }
+      .account-avatar {
+        width: 54px;
+        height: 54px;
+        font-size: 1.4rem;
+      }
+      .account-tab-btn {
+        padding: 0.65rem 0.9rem;
+        font-size: 0.82rem;
+      }
+      .account-stat-card {
+        min-width: 100%;
+      }
+      .order-card {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
 
   <!-- HEADER NAVBAR -->
+  <!-- TOP HEADER BAR (Modern Structure Matching Home Page) -->
   <header class="header-sticky">
     <div class="nav-container">
       
       <!-- Store Logo: D-TEL Cellular -->
-      <a href="index.html" class="brand-logo">
+      <a href="index.html" class="brand-logo" id="brandLogoLink">
         <img src="images/dtel_logo.jpg" alt="D-TEL Cellular Logo" class="brand-logo-img">
         <div>
-          <span style="font-size:1.4rem; font-weight:800; color:#ffffff; line-height:1; display:block;">D-<span class="accent">TEL</span></span>
-          <span style="font-size:0.7rem; font-weight:700; color:#fb7185; letter-spacing:1px; display:block; margin-top:2px;">CELLULAR</span>
+          <span style="font-size:1.75rem; font-weight:900; color:#ffffff; line-height:1; display:block; letter-spacing:0.5px;">D-<span style="color:#00d2ff;">TEL</span></span>
+          <span style="font-size:0.72rem; font-weight:800; color:#38bdf8; letter-spacing:2px; display:block; margin-top:2px;">CELLULAR</span>
         </div>
       </a>
 
-      <!-- Search Bar -->
-      <div class="search-bar-wrap" style="position:relative;" id="searchBarWrapper">
-        <i class="fas fa-search"></i>
-        <input type="text" id="searchInput" placeholder="Search product name, brand, model..." aria-label="Search Products" autocomplete="off">
+      <!-- Search Bar with Live Dropdown & Filter Icon -->
+      <div class="search-bar-wrap-modern" id="searchBarWrapper">
+        <i class="fas fa-search" style="color:#64748b; margin-right:0.65rem;"></i>
+        <input type="text" id="searchInput" placeholder="Search iPhone, Samsung, chargers, audio..." aria-label="Search Products" autocomplete="off">
+        <i class="fas fa-sliders-h search-filter-icon" title="Filter Products" onclick="window.location.href='shop.html'"></i>
+        <!-- Live Search Dropdown -->
+        <div id="searchDropdown" style="
+          display:none; position:absolute; top:calc(100% + 6px); left:0; right:0;
+          background:#131927; border:1px solid rgba(56,189,248,0.25); border-radius:12px;
+          box-shadow:0 16px 40px rgba(0,0,0,0.6); z-index:9999; max-height:380px;
+          overflow-y:auto; padding:0.4rem 0;
+        "></div>
       </div>
 
-      <!-- Header Actions -->
+      <!-- Header Actions (Modern 2-Line Items Preserving My Account & Logout) -->
       <div class="nav-actions">
-        <a href="shop.html" class="icon-btn" title="Shop Catalog">
-          <i class="fas fa-store"></i>
-          <span>Shop</span>
+        <a href="shop.html" class="nav-action-item" title="Shop Catalog">
+          <span class="nav-action-icon"><i class="fas fa-store"></i></span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Shop</span>
+            <span class="nav-action-sub">All Products</span>
+          </span>
         </a>
 
-        <a href="checkout.html" class="icon-btn cart-trigger" title="Shopping Cart">
-          <i class="fas fa-shopping-cart"></i>
-          <span>Cart (<span class="cart-count-num">0</span>)</span>
+        <button class="nav-action-item wishlist-trigger" title="Wishlist" style="background:none; border:none; cursor:pointer;">
+          <span class="nav-action-icon">
+            <i class="far fa-heart"></i>
+            <span class="badge-count wishlist-badge-count" style="display:none;">0</span>
+          </span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Wishlist</span>
+            <span class="nav-action-sub"><span class="wishlist-badge-count-text">0</span> Items</span>
+          </span>
+        </button>
+
+        <a href="checkout.html" class="nav-action-item cart-trigger" title="Shopping Cart">
+          <span class="nav-action-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge-count cart-badge-count" style="display:none;">0</span>
+          </span>
+          <span class="nav-action-text">
+            <span class="nav-action-title">Cart (<span class="cart-count-num">0</span>)</span>
+            <span class="nav-action-sub" id="headerCartTotal">Rs. 0.00</span>
+          </span>
         </a>
 
-        <a href="account.html" class="icon-btn active" id="headerAccountBtn" title="My Account">
-          <i class="fas fa-user-circle"></i>
-          <span id="headerAccountName">My Account</span>
+        <!-- My Account (Active State with Cyan Neon Accent) -->
+        <a href="account.html" class="nav-action-item active" id="headerAccountBtn" title="My Account" style="border-color:rgba(0,210,255,0.45); background:rgba(0,210,255,0.08); box-shadow:0 0 14px rgba(0,210,255,0.2);">
+          <span class="nav-action-icon" style="background:rgba(0,210,255,0.22); color:#00d2ff;"><i class="fas fa-user-circle"></i></span>
+          <span class="nav-action-text">
+            <span class="nav-action-title" id="headerAccountName" style="color:#00d2ff;">My Account</span>
+            <span class="nav-action-sub" style="color:#94a3b8;">Dashboard & Orders</span>
+          </span>
         </a>
 
-        <button onclick="Auth.logout()" class="icon-btn" title="Sign Out" style="background:rgba(239,68,68,0.12); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
+        <!-- Logout Action (Preserved with Rose Red Accents) -->
+        <button onclick="Auth.logout()" class="nav-action-item" title="Sign Out" style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.4); cursor:pointer; transition:all 0.25s ease;">
+          <span class="nav-action-icon" style="background:rgba(239,68,68,0.22); color:#fca5a5;"><i class="fas fa-sign-out-alt"></i></span>
+          <span class="nav-action-text">
+            <span class="nav-action-title" style="color:#fca5a5;">Logout</span>
+            <span class="nav-action-sub" style="color:rgba(252,165,165,0.75);">Sign Out</span>
+          </span>
         </button>
       </div>
 
     </div>
 
-    <!-- SUB-NAV BAR WITH DROPDOWNS -->
+    <!-- SUB-NAV BAR WITH DROPDOWNS (Matching Home Page) -->
     <nav class="sub-nav-bar">
       <div class="sub-nav-container">
-        <a href="index.html" class="sub-nav-link">NEW ARRIVALS</a>
+
+        <!-- All Categories Pill Button -->
+        <a href="shop.html" class="all-categories-pill">
+          <i class="fas fa-th-large"></i> All Categories <i class="fas fa-chevron-down" style="font-size:0.68rem; margin-left:2px;"></i>
+        </a>
+
+        <!-- New Arrivals Link -->
+        <a href="shop.html?sort=newest" class="sub-nav-link sub-nav-link-sparkle">
+          <i class="fas fa-sparkles" style="color:#00d2ff;"></i> New Arrivals
+        </a>
 
         <!-- Smartphones Dropdown -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Smartphones" class="sub-nav-link">
-            SMARTPHONES <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-mobile-alt" style="font-size:0.85rem; color:#38bdf8;"></i> Smartphones <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Smartphones&brand=Apple"><i class="fab fa-apple" style="color:#ffffff;"></i> Apple iPhone</a>
@@ -274,9 +361,10 @@
           </div>
         </div>
 
+        <!-- Cases & Glass Dropdown -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Covers" class="sub-nav-link">
-            CASES & GLASS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-shield-alt" style="font-size:0.85rem; color:#60a5fa;"></i> Cases & Glass <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Covers&tier=Super+D"><i class="fas fa-crown" style="color:#fb7185;"></i> 👑 Super D (Best Quality)</a>
@@ -289,7 +377,7 @@
         <!-- Dropdown 2: CHARGERS -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Chargers" class="sub-nav-link">
-            CHARGERS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-bolt" style="font-size:0.85rem; color:#eab308;"></i> Chargers <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Chargers&sub=Fast"><i class="fas fa-bolt"></i> 20W Fast Chargers</a>
@@ -301,7 +389,7 @@
         <!-- Dropdown 3: AUDIO -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Audio" class="sub-nav-link">
-            AUDIO <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-headphones" style="font-size:0.85rem; color:#a855f7;"></i> Audio <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Audio&sub=Earbuds"><i class="fas fa-headphones-alt"></i> Wireless Earbuds</a>
@@ -313,7 +401,7 @@
         <!-- Dropdown 4: POWER BANKS -->
         <div class="nav-dropdown">
           <a href="shop.html?category=Power" class="sub-nav-link">
-            POWER BANKS <i class="fas fa-chevron-down" style="font-size:0.75rem; margin-left:3px;"></i>
+            <i class="fas fa-battery-full" style="font-size:0.85rem; color:#10b981;"></i> Power Banks <i class="fas fa-chevron-down" style="font-size:0.7rem; margin-left:3px;"></i>
           </a>
           <div class="dropdown-menu">
             <a href="shop.html?category=Power&sub=10000mAh"><i class="fas fa-battery-half"></i> 10000 mAh</a>
@@ -322,8 +410,16 @@
           </div>
         </div>
 
-        <a href="shop.html?category=Accessories" class="sub-nav-link">ACCESSORIES</a>
-        <a href="shop.html?sale=true" class="sub-nav-link" style="color:var(--accent-rose);">SALE %</a>
+        <a href="shop.html?category=Accessories" class="sub-nav-link">
+          <i class="fas fa-plug" style="font-size:0.85rem; color:#f97316;"></i> Accessories
+        </a>
+
+        <!-- SALE Pill (Right aligned) -->
+        <a href="shop.html?sale=true" class="sale-badge-pill">
+          <span class="sale-tag">% SALE</span>
+          <span>Up to 50% Off</span>
+        </a>
+
       </div>
     </nav>
   </header>

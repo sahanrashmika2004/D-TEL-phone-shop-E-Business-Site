@@ -62,11 +62,39 @@ $destination = $targetDir . $newFileName;
 
 if (move_uploaded_file($fileTmp, $destination)) {
     $webPath = 'images/uploads/' . $newFileName;
+    
+    // Auto-save image directly into MySQL database if product_id is provided
+    $autoSaved = false;
+    $targetProductId = null;
+    $targetSlot = 1;
+    if (!empty($_POST['product_id']) || !empty($_REQUEST['product_id'])) {
+        $rawPid = $_POST['product_id'] ?? $_REQUEST['product_id'];
+        $cleanPid = intval(preg_replace('/[^0-9]/', '', (string)$rawPid));
+        $slotNum = intval($_POST['slot'] ?? $_REQUEST['slot'] ?? 1);
+        if ($slotNum < 1 || $slotNum > 3) $slotNum = 1;
+        $targetSlot = $slotNum;
+        
+        if ($cleanPid > 0) {
+            $colName = ($slotNum === 2) ? 'image_2' : (($slotNum === 3) ? 'image_3' : 'image');
+            try {
+                $upStmt = $conn->prepare("UPDATE product SET `$colName` = ? WHERE product_id = ?");
+                $upStmt->execute([$webPath, $cleanPid]);
+                $autoSaved = true;
+                $targetProductId = $cleanPid;
+            } catch (Exception $dbEx) {
+                error_log('[D-TEL Upload Auto-Save Error] ' . $dbEx->getMessage());
+            }
+        }
+    }
+
     echo json_encode([
         "status" => "success",
-        "message" => "Image uploaded successfully",
+        "message" => $autoSaved ? "Image uploaded and auto-saved to database successfully" : "Image uploaded successfully",
         "url" => $webPath,
-        "filename" => $newFileName
+        "filename" => $newFileName,
+        "auto_saved" => $autoSaved,
+        "product_id" => $targetProductId,
+        "slot" => $targetSlot
     ]);
 } else {
     http_response_code(500);

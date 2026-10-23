@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>D-TEL | Sign In & Register</title>
   <meta name="description" content="Sign in or create your D-TEL customer and admin account.">
 
@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css?v=20261018_nav_fix">
+  <link rel="stylesheet" href="css/styles.css?v=20261021_responsive_v1">
 
   <style>
     /* Full-page background layout matching images */
@@ -460,17 +460,45 @@
     }
 
     @media (max-width: 860px) {
+      body.auth-page-body {
+        padding: 1.5rem 1rem;
+        justify-content: flex-start;
+      }
+      .auth-page-top-brand {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-bottom: 1.5rem;
+        align-self: flex-start;
+      }
       .auth-page-card {
         flex-direction: column;
         width: 100%;
-        margin: 20px 10px;
+        max-width: 100%;
+        margin: 0 auto;
         border-radius: 20px;
+        min-height: auto;
       }
       .auth-card-hero {
         display: none;
       }
       .auth-card-side {
-        padding: 2.25rem 1.5rem;
+        padding: 2rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body.auth-page-body {
+        padding: 1rem 0.75rem;
+      }
+      .auth-card-side {
+        padding: 1.5rem 1rem;
+      }
+      .auth-form-input,
+      .auth-submit-btn,
+      .google-auth-btn {
+        min-height: 44px;
+        font-size: 1rem;
       }
     }
   </style>

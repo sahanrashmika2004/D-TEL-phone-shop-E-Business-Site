@@ -424,10 +424,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             </span>
           </td>
           <td>
-            <div style="display:flex; gap:0.35rem;">
+            <div style="display:flex; gap:0.35rem; align-items:center;">
               <a href="product-detail.html?id=${p.id}" target="_blank" class="icon-btn" title="View Store Page" style="padding:0.4rem 0.6rem; font-size:0.8rem;">
                 <i class="fas fa-eye"></i>
               </a>
+              <button class="icon-btn" onclick="document.getElementById('quickImg_${p.id}').click()" title="Change / Upload Photo (Auto-saves to DB)" style="padding:0.4rem 0.6rem; font-size:0.8rem; color:var(--accent-cyan);">
+                <i class="fas fa-camera"></i>
+              </button>
+              <input type="file" id="quickImg_${p.id}" accept="image/*" style="display:none;" onchange="window.handleQuickImageUpload('${p.id}', this)">
               <button class="icon-btn" onclick="window.toggleStockStatus('${p.id}')" title="Quick Toggle Stock" style="padding:0.4rem 0.6rem; font-size:0.8rem;">
                 <i class="fas fa-sync-alt"></i>
               </button>
@@ -443,6 +447,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
     }).join("");
   }
+
+  // Quick Photo Upload & Database Auto-Save
+  window.handleQuickImageUpload = async function(productId, inputEl) {
+    if (!inputEl.files || !inputEl.files[0]) return;
+    const file = inputEl.files[0];
+    const prod = StorageDB.getProductById(productId);
+    if (!prod) return;
+    const numId = prod.numericId || parseInt(String(prod.id).replace(/[^0-9]/g, ''));
+
+    const originalBtn = inputEl.previousElementSibling;
+    if (originalBtn) originalBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`;
+
+    try {
+      const uploadedUrl = await uploadImageFile(file, numId, 1);
+      if (uploadedUrl) {
+        prod.image = uploadedUrl;
+        StorageDB.saveProduct(prod);
+        renderAdminProducts();
+        alert(`✓ Photo for "${prod.name}" successfully updated & auto-saved to database!`);
+      }
+    } catch (e) {
+      alert(`Could not upload photo: ${e.message}`);
+      if (originalBtn) originalBtn.innerHTML = `<i class="fas fa-camera"></i>`;
+    }
+  };
 
   // Keep the admin notification in sync with live MySQL stock.
   // Alerts are not dismissible; they disappear only when stock is updated.
@@ -1382,10 +1411,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (prod) openProductFormModal(prod);
   };
 
-  // Helper for Uploading image file
-  async function uploadImageFile(file) {
+  // Helper for Uploading image file with database auto-save support
+  async function uploadImageFile(file, productId = null, slotNum = 1) {
     const formData = new FormData();
     formData.append('image', file);
+    if (productId) {
+      formData.append('product_id', productId);
+      formData.append('slot', slotNum);
+    }
     try {
       const res = await fetch('./api/upload.php', {
         method: 'POST',
@@ -1706,12 +1739,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         const preview = document.getElementById(`slot${slotNum}Preview`);
         const urlInput = document.getElementById(`slot${slotNum}Url`);
 
-        preview.innerHTML = `<div class="empty-placeholder"><i class="fas fa-spinner fa-spin" style="color:var(--accent-cyan);"></i><span>Loading ${file.name}...</span></div>`;
+        preview.innerHTML = `<div class="empty-placeholder"><i class="fas fa-spinner fa-spin" style="color:var(--accent-cyan);"></i><span>Uploading & saving to DB...</span></div>`;
 
         try {
-          const uploadedUrl = await uploadImageFile(file);
+          const numId = isEdit && product ? (product.numericId || parseInt(String(product.id).replace(/[^0-9]/g, ''))) : null;
+          const uploadedUrl = await uploadImageFile(file, numId, slotNum);
           if (urlInput) urlInput.value = uploadedUrl;
           window.updateSlotPreview(slotNum, uploadedUrl);
+
+          if (isEdit && product) {
+            if (slotNum === 1) product.image = uploadedUrl;
+            if (slotNum === 2) { product.image_2 = uploadedUrl; product.image2 = uploadedUrl; }
+            if (slotNum === 3) { product.image_3 = uploadedUrl; product.image3 = uploadedUrl; }
+            StorageDB.saveProduct(product);
+          }
         } catch (err) {
           alert("Could not process image file. Please paste a valid URL or path instead.");
           window.updateSlotPreview(slotNum, "");
@@ -1806,7 +1847,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         stock: parseInt(document.getElementById("pStock").value),
         connector: document.getElementById("pConnector").value.trim() || 'USB-C',
         badge: isOffer ? (document.getElementById("pBadge").value.trim() || '🔥 SPECIAL OFFER') : (document.getElementById("pBadge").value.trim() || 'New Arrival'),
-        qualityTier: (chosenCategory === 'Covers' && document.getElementById("pBadge").value.trim()) ? document.getElementById("pBadge").value.trim() : (isEdit ? product.qualityTier : null),
+        qualityGrade: (isEdit ? (product.qualityGrade || product.quality_grade) : null) || (categoryId === 1 ? 'Original' : 'High Grade'),
+        quality_grade: (isEdit ? (product.qualityGrade || product.quality_grade) : null) || (categoryId === 1 ? 'Original' : 'High Grade'),
+        wattage: (isEdit ? product.wattage : null),
+        qualityTier: (chosenCategory === 'Covers' && document.getElementById("pBadge").value.trim()) ? document.getElementById("pBadge").value.trim() : (isEdit ? (product.qualityTier || product.quality_tier) : null),
+        quality_tier: (chosenCategory === 'Covers' && document.getElementById("pBadge").value.trim()) ? document.getElementById("pBadge").value.trim() : (isEdit ? (product.qualityTier || product.quality_tier) : null),
+        tierRank: (isEdit ? (product.tierRank || product.tier_rank || 99) : 99),
+        tier_rank: (isEdit ? (product.tierRank || product.tier_rank || 99) : 99),
         specs: document.getElementById("pSpecs").value.trim(),
         description: document.getElementById("pDesc").value.trim() || "High quality guaranteed mobile hardware from D-TEL.",
         image: view1Image,
